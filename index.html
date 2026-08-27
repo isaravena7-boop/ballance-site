@@ -1,926 +1,2541 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 
+<!--
+  ============================================================================
+  BALLANCE ESCOLA DE DANÇA — site institucional (arquivo único, sem build)
+  ============================================================================
+
+  REGRA DA CASA: só vai ao ar o que está confirmado. Não existe tarja
+  "a confirmar" nem célula vazia nesta página — se o dado falta, a seção não
+  existe. O que a página ainda NÃO responde está em PENDENCIAS_ESCOLA.md, ao
+  lado deste arquivo, com quem na escola responde cada item. A lista mora lá e
+  só lá: ela já esteve duplicada aqui, e duplicata de lista é divergência
+  marcada para acontecer.
+
+  ============================================================================
+  REGRA INEGOCIÁVEL: NENHUM NOME DE PROFESSOR NESTA PÁGINA
+  ============================================================================
+  Os professores da Ballance são PJ. Nome de pessoa publicado ao lado de um
+  dia fixo e de um horário fixo, num site institucional, é prova de vínculo
+  aparente — é exatamente a peça que um processo trabalhista procura. E
+  ninguém do cadastro consentiu em ter o nome numa página pública.
+
+  Por isso a linha da turma vende MODALIDADE + DIA + HORA, e mais nada sobre
+  quem dá a aula. Vale para o texto visível, para `aria-label`, para o texto
+  pré-montado dos links wa.me, para o placeholder da busca, para as meta tags,
+  para o JSON-LD e para os comentários — inclusive estes. Se alguém pedir "põe
+  o nome da professora no site", a resposta é não; o lugar dessa informação é
+  a conversa no WhatsApp.
+
+  No lugar do professor a linha diz a FREQUÊNCIA (2× ou 1× por semana): foi o
+  único fato que ainda não estava na linha e que muda a decisão de quem
+  compra, e sai da própria grade, contando os dias. (As 54 turmas têm
+  exatamente 60 minutos; por isso a duração é dita uma vez na abertura da
+  seção, e não repetida em cada linha.)
+
+  ============================================================================
+  ESTA PÁGINA É DERIVADA. NÃO A EDITE NO ESCURO.
+  ============================================================================
+  A seção #grade é o espelho da aba TURMAS da planilha de produção: 68 linhas
+  ATIVAS viram 54 turmas públicas depois de descartar 6 de simulação, 3 aulas
+  particulares e 5 DUPLICATAS (a mesma aula está lançada uma vez por
+  professor). E não é só a grade: as contagens de cada família, os oito
+  degraus da escada de ballet, as faixas de funcionamento e o "54 turmas" que
+  aparece em oito superfícies — meta description, og:description, JSON-LD,
+  herói, abertura da grade, contador, CTA final e rodapé — são todas asserções
+  DERIVADAS da mesma planilha, cravadas aqui à mão. Uma turma que mude de
+  horário lá torna todas elas mentira, e a página não quebra: ela só passa a
+  informar errado.
+
+  Por isso existe o verificador, no repositório principal:
+
+      cd 02-automacoes-python && python3 site/verificar_site.py
+
+  Ele lê a aba TURMAS, deriva a grade de novo e confronta com este arquivo —
+  linha por linha, contador por contador, degrau por degrau — e ainda varre o
+  arquivo inteiro atrás de nome de professor. Sai com código 1 quando diverge.
+  Rode depois de qualquer mexida aqui, e depois de qualquer mexida na planilha.
+
+  O HTML das 54 turmas é estático de propósito: sem JS a grade continua
+  inteira e indexável; o JS só filtra o que já está na página.
+
+  Confirmado e usado aqui: razão social, CNPJ 63.790.156/0001-33, endereço
+  Av. Dermival Bernardes Siqueira 3043 — Swiss Park, Campinas/SP, telefone
+  e WhatsApp (19) 99941-2411, @ballance_escoladedanca, a grade (modalidade,
+  nível, dias, horário) e o fato de a escola inscrever alunos no Exame da
+  Royal Academy of Dance. Note o que esse último item NÃO autoriza dizer:
+  "certificação Royal Academy of Dance", sem qualificador, é uma credencial da
+  escola que ninguém comprovou. O que se prova é que cinco dos oito degraus do
+  ballet levam o nome do syllabus da RAD e que a escola inscreve alunos no
+  exame — e é só isso que a página afirma.
+  ============================================================================
+-->
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Ballance Escola de Dança | Excelência no Ensino da Dança em Campinas</title>
+    <title>Ballance Escola de Dança | Grade de horários — Ballet e Dança em Campinas</title>
     <meta name="description"
-        content="Ballance Escola de Dança em Campinas/SP. Formação técnica e bem-estar com certificação Royal Academy of Dance. Ballet, Jazz, Hip Hop, Sapateado, Teatro e Dança Mix no Swiss Park.">
-    <meta name="keywords"
-        content="escola de dança campinas, ballet campinas, jazz campinas, hip hop campinas, royal academy of dance, swiss park">
-    <meta property="og:title" content="Ballance Escola de Dança">
-    <meta property="og:description"
-        content="Excelência no ensino da dança em Campinas. Certificação Royal Academy of Dance.">
-    <meta property="og:type" content="website">
-    <meta property="og:url" content="https://www.ballanceescoladedanca.com.br/">
+        content="Escola de dança no Swiss Park, Campinas/SP, com ballet no syllabus da Royal Academy of Dance. Veja no site a grade completa: 54 turmas com dia e horário — Ballet, Jazz, Hip Hop, Sapateado, Contemporâneo, Teatro Musical, Dance Mix e PAD, de segunda a sábado, incluindo turmas para adultos.">
+    <meta name="author" content="Ballance Escola de Dança">
+    <meta name="theme-color" content="#1A1A1A">
     <link rel="canonical" href="https://www.ballanceescoladedanca.com.br/">
+
+    <link rel="icon" href="assets/favicon.ico" sizes="any">
+    <link rel="icon" type="image/png" sizes="64x64" href="assets/favicon.png">
+    <link rel="apple-touch-icon" href="assets/apple-touch-icon.png">
+
+    <!-- Cartão de compartilhamento: é assim que o link aparece quando a escola
+         manda no WhatsApp. O X cai no og: quando não acha twitter:, então só
+         o twitter:card fica — o resto seria a mesma string duas vezes. -->
+    <meta property="og:site_name" content="Ballance Escola de Dança">
+    <meta property="og:locale" content="pt_BR">
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="Ballance Escola de Dança | Ballet e Dança em Campinas">
+    <meta property="og:description"
+        content="A grade completa no site: 54 turmas com dia e horário. Swiss Park, Campinas. Ballet no syllabus da Royal Academy of Dance.">
+    <meta property="og:url" content="https://www.ballanceescoladedanca.com.br/">
+    <meta property="og:image" content="https://www.ballanceescoladedanca.com.br/assets/og.jpg">
+    <meta property="og:image:type" content="image/jpeg">
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="630">
+    <meta property="og:image:alt" content="Ballance Escola de Dança — Campinas, ballet no syllabus da Royal Academy of Dance">
+    <meta name="twitter:card" content="summary_large_image">
+
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <!-- O preload TEM de repetir o `media` do <picture> abaixo. Sem ele o
+         celular baixava o hero de desktop (131 KB) e depois o hero-small
+         (40 KB) — pagava os dois e usava um. -->
+    <link rel="preload" as="image" href="assets/hero-small.jpg" fetchpriority="high"
+        media="(max-width: 640px)">
+    <link rel="preload" as="image" href="assets/hero.jpg" fetchpriority="high"
+        media="(min-width: 641px)">
+    <!-- Só as 3 faces que a página realmente desenha. Pedindo 0,400/0,600/1,400
+         a mais, o Google devolvia 12 blocos @font-face que nunca renderizam,
+         em CSS que bloqueia o primeiro pixel. -->
     <link
-        href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&family=Inter:wght@300;400;500;600&display=swap"
+        href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,500;0,700;1,500&family=Inter:wght@300;400;500;600&display=swap"
         rel="stylesheet">
+
+    <!-- Dados estruturados de negócio local: é o que permite ao Google mostrar
+         endereço, telefone e horário direto no resultado de busca. -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": ["LocalBusiness", "EducationalOrganization"],
+      "@id": "https://www.ballanceescoladedanca.com.br/#escola",
+      "name": "Ballance Escola de Dança",
+      "url": "https://www.ballanceescoladedanca.com.br/",
+      "image": "https://www.ballanceescoladedanca.com.br/assets/og.jpg",
+      "logo": "https://www.ballanceescoladedanca.com.br/assets/apple-touch-icon.png",
+      "description": "Escola de dança em Campinas/SP com ballet no syllabus da Royal Academy of Dance. 54 turmas de segunda a sábado: Ballet Clássico, Jazz, Hip Hop, Sapateado, Contemporâneo, Teatro Musical, Dance Mix e PAD, com turmas para adultos.",
+      "telephone": "+55-19-99941-2411",
+      "taxID": "63.790.156/0001-33",
+      "vatID": "63.790.156/0001-33",
+      "address": {
+        "@type": "PostalAddress",
+        "streetAddress": "Avenida Dermival Bernardes Siqueira, 3043",
+        "addressLocality": "Campinas",
+        "addressRegion": "SP",
+        "postalCode": "13049-252",
+        "addressCountry": "BR"
+      },
+      "geo": {
+        "@type": "GeoCoordinates",
+        "latitude": -22.9780274,
+        "longitude": -47.0726155
+      },
+      "areaServed": { "@type": "City", "name": "Campinas" },
+      "sameAs": [ "https://www.instagram.com/ballance_escoladedanca/" ],
+      "openingHoursSpecification": [
+        { "@type": "OpeningHoursSpecification", "dayOfWeek": ["Monday","Wednesday"], "opens": "09:00", "closes": "21:00" },
+        { "@type": "OpeningHoursSpecification", "dayOfWeek": ["Tuesday","Thursday"], "opens": "08:00", "closes": "21:30" },
+        { "@type": "OpeningHoursSpecification", "dayOfWeek": ["Friday"], "opens": "08:30", "closes": "19:30" },
+        { "@type": "OpeningHoursSpecification", "dayOfWeek": ["Saturday"], "opens": "08:30", "closes": "11:30" }
+      ],
+      "hasOfferCatalog": {
+        "@type": "OfferCatalog",
+        "name": "Modalidades",
+        "itemListElement": [
+          { "@type": "Offer", "itemOffered": { "@type": "Course", "name": "Ballet Clássico", "description": "20 turmas de Ballet Clássico na Ballance Escola de Dança, Campinas/SP, de segunda a sábado — níveis Baby, Pre-Primary, Primary, Grade 1, Grade 2 e Intermediate Foundation, além de turmas para adultos.", "provider": { "@id": "https://www.ballanceescoladedanca.com.br/#escola" } } },
+          { "@type": "Offer", "itemOffered": { "@type": "Course", "name": "Jazz", "description": "14 turmas de Jazz na Ballance Escola de Dança, Campinas/SP, incluindo Jazz Adulto e Jazz Adulto Iniciante.", "provider": { "@id": "https://www.ballanceescoladedanca.com.br/#escola" } } },
+          { "@type": "Offer", "itemOffered": { "@type": "Course", "name": "Hip Hop", "description": "9 turmas de Hip Hop na Ballance Escola de Dança, Campinas/SP, de terça a sábado.", "provider": { "@id": "https://www.ballanceescoladedanca.com.br/#escola" } } },
+          { "@type": "Offer", "itemOffered": { "@type": "Course", "name": "Sapateado", "description": "5 turmas de Sapateado na Ballance Escola de Dança, Campinas/SP, incluindo Sapateado Adulto.", "provider": { "@id": "https://www.ballanceescoladedanca.com.br/#escola" } } },
+          { "@type": "Offer", "itemOffered": { "@type": "Course", "name": "Contemporâneo", "description": "2 turmas de Contemporâneo na Ballance Escola de Dança, Campinas/SP, às sextas-feiras, incluindo Contemporâneo Adulto.", "provider": { "@id": "https://www.ballanceescoladedanca.com.br/#escola" } } },
+          { "@type": "Offer", "itemOffered": { "@type": "Course", "name": "Teatro Musical", "description": "Teatro Musical na Ballance Escola de Dança, Campinas/SP, às sextas-feiras em duas horas seguidas.", "provider": { "@id": "https://www.ballanceescoladedanca.com.br/#escola" } } },
+          { "@type": "Offer", "itemOffered": { "@type": "Course", "name": "Dance Mix", "description": "Dance Mix na Ballance Escola de Dança, Campinas/SP, terças e quintas de manhã.", "provider": { "@id": "https://www.ballanceescoladedanca.com.br/#escola" } } },
+          { "@type": "Offer", "itemOffered": { "@type": "Course", "name": "PAD — Preparação Avançada para Dançarinos", "description": "Preparação Avançada para Dançarinos na Ballance Escola de Dança, Campinas/SP, às terças-feiras.", "provider": { "@id": "https://www.ballanceescoladedanca.com.br/#escola" } } }
+        ]
+      }
+    }
+    </script>
+    <!--
+      "openingHoursSpecification" acima declara os horários em que existem
+      aulas na grade — não o expediente da secretaria, que não está confirmado.
+      "geo" veio da geocodificação do endereço; se o portão não bater com o
+      pino, trocar. "postalCode" 13049-252 conferido em duas fontes
+      independentes (geocodificação do Google e ViaCEP/Correios, que lista
+      esse CEP para a Av. Dermival Bernardes Siqueira no Swiss Park) e
+      liberado pela direção em 17/08/2026.
+    -->
+
     <style>
-        /* ==========================================
-           RESET & BASE
-        ========================================== */
-        *,
-        *::before,
-        *::after {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        :root {
-            --accent: #1A1A1A;
-            --accent-hover: #333333;
-            --black: #1A1A1A;
-            --dark: #2C2C2C;
-            --gray: #6B6B6B;
-            --gray-light: #9A9A9A;
-            --gray-subtle: #E8E8E8;
-            --cream: #F7F7F7;
-            --white: #FFFFFF;
-            --font-display: 'Playfair Display', Georgia, serif;
-            --font-body: 'Inter', -apple-system, sans-serif;
-        }
-
-        html {
-            scroll-behavior: smooth;
-            font-size: 16px;
-        }
-
-        body {
-            font-family: var(--font-body);
-            color: var(--black);
-            background: var(--white);
-            line-height: 1.6;
-            overflow-x: hidden;
-        }
-
-        a {
-            text-decoration: none;
-            color: inherit;
-        }
-
-        img {
-            max-width: 100%;
-            height: auto;
-            display: block;
-        }
-
-        /* ==========================================
-           ANIMATIONS
-        ========================================== */
-        @keyframes fadeInUp {
-            from {
-                opacity: 0;
-                transform: translateY(40px);
-            }
-
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
-        @keyframes fadeIn {
-            from {
-                opacity: 0;
-            }
-
-            to {
-                opacity: 1;
-            }
-        }
-
-        @keyframes slideDown {
-            from {
-                opacity: 0;
-                transform: translateY(-20px);
-            }
-
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
-        @keyframes goldShimmer {
-            0% {
-                background-position: -200% center;
-            }
-
-            100% {
-                background-position: 200% center;
-            }
-        }
-
-        .animate-on-scroll {
-            opacity: 0;
-            transform: translateY(40px);
-            transition: all 0.8s cubic-bezier(0.16, 1, 0.3, 1);
-        }
-
-        .animate-on-scroll.visible {
-            opacity: 1;
-            transform: translateY(0);
-        }
-
-        /* ==========================================
-           HEADER
-        ========================================== */
-        header {
-            position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            z-index: 100;
-            padding: 1.2rem 3rem;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            transition: all 0.4s ease;
-            background: transparent;
-        }
-
-        header.scrolled {
-            background: rgba(255, 255, 255, 0.95);
-            backdrop-filter: blur(20px);
-            -webkit-backdrop-filter: blur(20px);
-            box-shadow: 0 1px 0 rgba(0, 0, 0, 0.06);
-            padding: 0.8rem 3rem;
-        }
-
-        .logo {
-            display: flex;
-            align-items: center;
-            gap: 0.75rem;
-            animation: slideDown 0.8s ease;
-        }
-
-        .logo-text {
-            font-family: var(--font-display);
-            font-size: 1.6rem;
-            font-weight: 700;
-            color: var(--black);
-            letter-spacing: -0.02em;
-        }
-
-        .logo-sub {
-            font-family: var(--font-body);
-            font-size: 0.7rem;
-            color: var(--gray);
-            letter-spacing: 0.15em;
-            text-transform: uppercase;
-            margin-top: -0.2rem;
-        }
-
-        .header-cta {
-            display: inline-flex;
-            align-items: center;
-            gap: 0.4rem;
-            padding: 0.55rem 1.3rem;
-            background: var(--black);
-            color: var(--white);
-            font-family: var(--font-body);
-            font-size: 0.72rem;
-            font-weight: 500;
-            letter-spacing: 0.08em;
-            text-transform: uppercase;
-            border: none;
-            border-radius: 50px;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            animation: slideDown 0.8s ease 0.1s both;
-        }
-
-        .header-cta:hover {
-            background: var(--accent-hover);
-            transform: translateY(-2px);
-            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
-        }
-
-        .header-cta svg {
-            width: 14px;
-            height: 14px;
-        }
-
-
-
-        /* ==========================================
-           HERO SECTION
-        ========================================== */
-        .hero {
-            position: relative;
-            min-height: 100vh;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            overflow: hidden;
-            background: var(--cream);
-        }
-
-        .hero-bg {
-            position: absolute;
-            inset: 0;
-            z-index: 1;
-        }
-
-        .hero-bg img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            object-position: center;
-            filter: brightness(0.85);
-        }
-
-        .hero-overlay {
-            position: absolute;
-            inset: 0;
-            background: linear-gradient(180deg,
-                    rgba(255, 255, 255, 0.3) 0%,
-                    rgba(255, 255, 255, 0.6) 40%,
-                    rgba(255, 255, 255, 0.85) 70%,
-                    rgba(255, 255, 255, 0.95) 100%);
-            z-index: 2;
-        }
-
-        .hero-content {
-            position: relative;
-            z-index: 3;
-            text-align: center;
-            padding: 2rem;
-            max-width: 800px;
-            margin-top: 4rem;
-        }
-
-        .hero-badge {
-            display: inline-block;
-            padding: 0.4rem 1.2rem;
-            border: 1px solid var(--gray-light);
-            border-radius: 50px;
-            font-size: 0.7rem;
-            font-weight: 500;
-            letter-spacing: 0.2em;
-            text-transform: uppercase;
-            color: var(--gray);
-            margin-bottom: 2rem;
-            animation: fadeInUp 0.8s ease 0.2s both;
-        }
-
-        .hero h1 {
-            font-family: var(--font-display);
-            font-size: clamp(2.5rem, 5vw, 4rem);
-            font-weight: 500;
-            line-height: 1.15;
-            color: var(--black);
-            margin-bottom: 1.5rem;
-            animation: fadeInUp 0.8s ease 0.3s both;
-        }
-
-        .hero h1 em {
-            font-style: italic;
-            color: var(--gray);
-        }
-
-        .hero-subtitle {
-            font-size: 1.05rem;
-            color: var(--gray);
-            line-height: 1.7;
-            max-width: 560px;
-            margin: 0 auto 2.5rem;
-            font-weight: 300;
-            animation: fadeInUp 0.8s ease 0.45s both;
-        }
-
-        .hero-cta {
-            display: inline-flex;
-            align-items: center;
-            gap: 0.75rem;
-            padding: 1rem 2.5rem;
-            background: var(--black);
-            color: var(--white);
-            font-family: var(--font-body);
-            font-size: 0.85rem;
-            font-weight: 500;
-            letter-spacing: 0.1em;
-            text-transform: uppercase;
-            border-radius: 50px;
-            transition: all 0.3s ease;
-            animation: fadeInUp 0.8s ease 0.6s both;
-        }
-
-        .hero-cta:hover {
-            background: var(--accent-hover);
-            transform: translateY(-3px);
-            box-shadow: 0 12px 35px rgba(0, 0, 0, 0.2);
-        }
-
-        .hero-cta svg {
-            width: 18px;
-            height: 18px;
-        }
-
-        .hero-scroll {
-            position: absolute;
-            bottom: 2.5rem;
-            left: 50%;
-            transform: translateX(-50%);
-            z-index: 3;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 0.5rem;
-            color: var(--gray-light);
-            font-size: 0.65rem;
-            letter-spacing: 0.2em;
-            text-transform: uppercase;
-            animation: fadeIn 1s ease 1s both;
-        }
-
-        .hero-scroll .line {
-            width: 1px;
-            height: 40px;
-            background: linear-gradient(to bottom, var(--black), transparent);
-            animation: slideDown 1.5s ease infinite;
-        }
-
-        /* ==========================================
-           SECTION COMMON
-        ========================================== */
-        section {
-            padding: 6rem 2rem;
-        }
-
-        .section-inner {
-            max-width: 1100px;
-            margin: 0 auto;
-        }
-
-        .section-label {
-            display: inline-block;
-            font-size: 0.68rem;
-            font-weight: 500;
-            letter-spacing: 0.25em;
-            text-transform: uppercase;
-            color: var(--gray);
-            margin-bottom: 1rem;
-        }
-
-        .section-title {
-            font-family: var(--font-display);
-            font-size: clamp(1.8rem, 3.5vw, 2.5rem);
-            font-weight: 500;
-            line-height: 1.2;
-            color: var(--black);
-            margin-bottom: 1rem;
-        }
-
-        .section-subtitle {
-            font-size: 1rem;
-            color: var(--gray);
-            font-weight: 300;
-            max-width: 500px;
-            line-height: 1.7;
-        }
-
-        .gold-divider {
-            width: 50px;
-            height: 1px;
-            background: var(--black);
-            margin: 2rem 0;
-        }
-
-        /* ==========================================
-           MODALIDADES
-        ========================================== */
-        .modalidades {
-            background: var(--white);
-            text-align: center;
-        }
-
-        .modalidades-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
-            gap: 2.5rem;
-            margin-top: 3.5rem;
-        }
-
-        .modalidade-item {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 1rem;
-            padding: 2rem 1rem;
-            border-radius: 16px;
-            transition: all 0.4s ease;
-        }
-
-        .modalidade-item:hover {
-            background: var(--cream);
-            transform: translateY(-5px);
-        }
-
-        .modalidade-icon {
-            width: 48px;
-            height: 48px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            border: 1.5px solid var(--gray-subtle);
-            border-radius: 50%;
-            color: var(--black);
-            transition: all 0.3s ease;
-        }
-
-        .modalidade-item:hover .modalidade-icon {
-            background: var(--black);
-            color: var(--white);
-            border-color: var(--black);
-        }
-
-        .modalidade-icon svg {
-            width: 18px;
-            height: 18px;
-        }
-
-        .modalidade-name {
-            font-family: var(--font-display);
-            font-size: 1.05rem;
-            font-weight: 500;
-            color: var(--black);
-        }
-
-        /* ==========================================
-           INSTAGRAM / SIGA NOSSO MOVIMENTO
-        ========================================== */
-        .instagram {
-            background: var(--cream);
-            text-align: center;
-        }
-
-        .instagram-btn {
-            display: inline-flex;
-            align-items: center;
-            gap: 0.75rem;
-            margin-top: 2.5rem;
-            padding: 1rem 2.5rem;
-            background: linear-gradient(135deg, #833AB4 0%, #E1306C 50%, #F77737 100%);
-            color: var(--white);
-            font-family: var(--font-body);
-            font-size: 0.85rem;
-            font-weight: 500;
-            letter-spacing: 0.08em;
-            text-transform: uppercase;
-            border-radius: 50px;
-            transition: all 0.3s ease;
-        }
-
-        .instagram-btn:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 12px 35px rgba(225, 48, 108, 0.35);
-        }
-
-        .instagram-btn svg {
-            width: 20px;
-            height: 20px;
-        }
-
-        .instagram-feed {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 1rem;
-            margin-top: 3rem;
-            max-width: 900px;
-            margin-left: auto;
-            margin-right: auto;
-        }
-
-        .instagram-placeholder {
-            aspect-ratio: 1;
-            background: linear-gradient(135deg, rgba(131, 58, 180, 0.08), rgba(225, 48, 108, 0.08));
-            border-radius: 12px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: var(--gray-light);
-            font-size: 0.75rem;
-            border: 1px dashed rgba(196, 163, 90, 0.3);
-        }
-
-        /* ==========================================
-           LOCALIZAÇÃO
-        ========================================== */
-        .localizacao {
-            background: var(--white);
-        }
-
-        .loc-wrapper {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 3rem;
-            align-items: center;
-        }
-
-        .loc-info {
-            display: flex;
-            flex-direction: column;
-            gap: 1.5rem;
-        }
-
-        .loc-address {
-            font-size: 1rem;
-            color: var(--gray);
-            line-height: 1.8;
-            font-weight: 300;
-        }
-
-        .loc-address strong {
-            color: var(--black);
-            font-weight: 500;
-        }
-
-        .loc-btn {
-            display: inline-flex;
-            align-items: center;
-            gap: 0.5rem;
-            padding: 0.85rem 2rem;
-            background: transparent;
-            color: var(--black);
-            font-family: var(--font-body);
-            font-size: 0.8rem;
-            font-weight: 500;
-            letter-spacing: 0.1em;
-            text-transform: uppercase;
-            border: 1.5px solid var(--black);
-            border-radius: 50px;
-            transition: all 0.3s ease;
-            width: fit-content;
-        }
-
-        .loc-btn:hover {
-            background: var(--black);
-            color: var(--white);
-            transform: translateY(-2px);
-            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
-        }
-
-        .loc-btn svg {
-            width: 16px;
-            height: 16px;
-        }
-
-        .loc-map {
-            border-radius: 16px;
-            overflow: hidden;
-            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.08);
-        }
-
-        .loc-map iframe {
-            width: 100%;
-            height: 350px;
-            border: none;
-        }
-
-        /* ==========================================
-           FOOTER
-        ========================================== */
-        footer {
-            background: var(--black);
-            color: var(--white);
-            padding: 3.5rem 2rem 2rem;
-        }
-
-        .footer-inner {
-            max-width: 1100px;
-            margin: 0 auto;
-            display: grid;
-            grid-template-columns: 1fr auto 1fr;
-            gap: 3rem;
-            align-items: start;
-        }
-
-        .footer-brand .logo-text {
-            color: var(--white);
-            font-size: 1.4rem;
-        }
-
-        .footer-brand .logo-sub {
-            color: var(--gray-light);
-        }
-
-        .footer-brand p {
-            margin-top: 1rem;
-            font-size: 0.85rem;
-            color: var(--gray-light);
-            font-weight: 300;
-            line-height: 1.7;
-        }
-
-        .footer-contact {
-            text-align: center;
-        }
-
-        .footer-contact h4 {
-            font-family: var(--font-display);
-            font-size: 0.95rem;
-            font-weight: 500;
-            margin-bottom: 1rem;
-        }
-
-        .footer-contact p {
-            font-size: 0.85rem;
-            color: var(--gray-light);
-            font-weight: 300;
-            line-height: 2;
-        }
-
-        .footer-contact a {
-            color: var(--white);
-            transition: color 0.3s;
-        }
-
-        .footer-contact a:hover {
-            color: var(--gray-light);
-        }
-
-        .footer-legal {
-            text-align: right;
-        }
-
-        .footer-legal h4 {
-            font-family: var(--font-display);
-            font-size: 0.95rem;
-            font-weight: 500;
-            margin-bottom: 1rem;
-        }
-
-        .footer-legal p {
-            font-size: 0.8rem;
-            color: var(--gray-light);
-            font-weight: 300;
-            line-height: 1.8;
-        }
-
-        .footer-bottom {
-            max-width: 1100px;
-            margin: 2.5rem auto 0;
-            padding-top: 1.5rem;
-            border-top: 1px solid rgba(255, 255, 255, 0.08);
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            font-size: 0.72rem;
-            color: var(--gray);
-            letter-spacing: 0.05em;
-        }
-
-        /* ==========================================
-           RESPONSIVE
-        ========================================== */
-        @media (max-width: 768px) {
-            header {
-                padding: 1rem 1.5rem;
-            }
-
-            header.scrolled {
-                padding: 0.6rem 1.5rem;
-            }
-
-            .header-cta span {
-                display: none;
-            }
-
-            .hero-content {
-                margin-top: 2rem;
-            }
-
-            section {
-                padding: 4rem 1.5rem;
-            }
-
-            .modalidades-grid {
-                grid-template-columns: repeat(2, 1fr);
-                gap: 1rem;
-            }
-
-            .loc-wrapper {
-                grid-template-columns: 1fr;
-            }
-
-            .footer-inner {
-                grid-template-columns: 1fr;
-                text-align: center;
-                gap: 2rem;
-            }
-
-            .footer-legal {
-                text-align: center;
-            }
-
-            .footer-bottom {
-                flex-direction: column;
-                gap: 0.5rem;
-                text-align: center;
-            }
-
-            .loc-btn {
-                margin: 0 auto;
-            }
-
-            .loc-info {
-                text-align: center;
-                align-items: center;
-            }
-        }
-
-        @media (max-width: 480px) {
-            .modalidades-grid {
-                grid-template-columns: repeat(2, 1fr);
-                gap: 0.5rem;
-            }
-
-            .modalidade-item {
-                padding: 1.5rem 0.5rem;
-            }
-
-            .instagram-feed {
-                grid-template-columns: repeat(2, 1fr);
-            }
-        }
-    </style>
+/* ==========================================
+   RESET & BASE
+   ========================================== */
+*,
+*::before,
+*::after {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+:root {
+  --accent-hover: #333333;
+  --black: #1A1A1A;
+  --dark: #2C2C2C;
+  --gray: #6B6B6B;
+  --gray-light: #9A9A9A;
+  --gray-subtle: #E8E8E8;
+  --cream: #F7F7F7;
+  --white: #FFFFFF;
+  /* dourado da marca, tirado dos ícones originais da identidade */
+  --gold: #C4A35A;
+  --gold-soft: rgba(196, 163, 90, 0.35);
+  --gold-faint: rgba(196, 163, 90, 0.09);
+  --gold-fade: rgba(196, 163, 90, 0.5);
+  --gold-ink: #8A6D1F;
+  /* verde do WhatsApp: --zap é a marca, --zap-ink é a versão que passa
+     4,5:1 sobre branco em texto pequeno, e os dois brilhos são o mesmo
+     verde com alfa. Nenhuma cor da marca é escrita fora daqui — o
+     verificador reprova a página se uma reaparecer literal no CSS. */
+  --zap: #25D366;
+  --zap-ink: #0E7038;
+  --zap-brilho: rgba(37, 211, 102, 0.3);
+  --zap-brilho-forte: rgba(37, 211, 102, 0.45);
+  --tinta-fina: rgba(26, 26, 26, 0.18);
+  --tinta-media: rgba(26, 26, 26, 0.25);
+  --font-display: 'Playfair Display', Georgia, serif;
+  --font-body: 'Inter', -apple-system, sans-serif;
+}
+
+html {
+  scroll-behavior: smooth;
+  font-size: 16px;
+  /* cabeçalho é fixo: âncoras precisam parar abaixo dele */
+  scroll-padding-top: 90px;
+}
+
+body {
+  font-family: var(--font-body);
+  color: var(--black);
+  background: var(--white);
+  line-height: 1.6;
+  overflow-x: hidden;
+}
+
+a {
+  text-decoration: none;
+  color: inherit;
+}
+
+img {
+  max-width: 100%;
+  height: auto;
+  display: block;
+}
+
+/* Foco visível para quem navega por teclado */
+a:focus-visible,
+button:focus-visible {
+  outline: 2px solid var(--gold);
+  outline-offset: 3px;
+  border-radius: 4px;
+}
+
+.skip-link {
+  position: absolute;
+  left: 50%;
+  top: -100px;
+  transform: translateX(-50%);
+  z-index: 200;
+  background: var(--black);
+  color: var(--white);
+  padding: 0.75rem 1.5rem;
+  border-radius: 0 0 10px 10px;
+  font-size: 0.8rem;
+  letter-spacing: 0.05em;
+  transition: top 0.2s ease;
+}
+
+.skip-link:focus {
+  top: 0;
+}
+
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+/* ==========================================
+   ANIMATIONS
+   ========================================== */
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(40px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes slideDown {
+  from {
+    opacity: 0;
+    transform: translateY(-20px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-on-scroll {
+  opacity: 0;
+  transform: translateY(40px);
+  transition: all 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.animate-on-scroll.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* ==========================================
+   HEADER
+   ========================================== */
+header {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 100;
+  padding: 1.2rem 3rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1.5rem;
+  transition: all 0.4s ease;
+  background: transparent;
+}
+
+header.scrolled {
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  box-shadow: 0 1px 0 rgba(0, 0, 0, 0.06);
+  padding: 0.8rem 3rem;
+}
+
+.logo {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  animation: slideDown 0.8s ease;
+}
+
+.logo-text {
+  font-family: var(--font-display);
+  font-size: 1.6rem;
+  font-weight: 700;
+  color: var(--black);
+  letter-spacing: -0.02em;
+  line-height: 1.1;
+}
+
+.logo-sub {
+  font-family: var(--font-body);
+  font-size: 0.7rem;
+  color: var(--gray);
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  margin-top: -0.1rem;
+}
+
+.nav {
+  display: flex;
+  align-items: center;
+  gap: 2rem;
+  margin-left: auto;
+  margin-right: 0.5rem;
+  animation: slideDown 0.8s ease 0.05s both;
+}
+
+.nav a {
+  position: relative;
+  font-size: 0.78rem;
+  font-weight: 500;
+  letter-spacing: 0.06em;
+  color: var(--dark);
+  padding: 0.25rem 0;
+  transition: color 0.25s ease;
+}
+
+.nav a::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 1px;
+  background: var(--gold);
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 0.3s ease;
+}
+
+.nav a:hover {
+  color: var(--black);
+}
+
+.nav a:hover::after {
+  transform: scaleX(1);
+}
+
+.header-cta {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.55rem 1.3rem;
+  background: var(--black);
+  color: var(--white);
+  font-family: var(--font-body);
+  font-size: 0.72rem;
+  font-weight: 500;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  border: none;
+  border-radius: 50px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  animation: slideDown 0.8s ease 0.1s both;
+  white-space: nowrap;
+}
+
+.header-cta:hover {
+  background: var(--accent-hover);
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+}
+
+.header-cta svg {
+  width: 14px;
+  height: 14px;
+  flex-shrink: 0;
+}
+
+/* ==========================================
+   HERO SECTION
+   ========================================== */
+.hero {
+  position: relative;
+  /* teto no 100vh: em monitor alto (ou numa captura de página
+     inteira) a dobra inteira não pode ser só a foto — a grade
+     precisa começar a aparecer. */
+  min-height: min(100vh, 780px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  background: var(--cream);
+}
+
+.hero-bg {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+}
+
+.hero-bg img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+  filter: brightness(0.85);
+}
+
+.hero-overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(180deg,
+      rgba(255, 255, 255, 0.3) 0%,
+      rgba(255, 255, 255, 0.6) 40%,
+      rgba(255, 255, 255, 0.85) 70%,
+      rgba(255, 255, 255, 0.95) 100%);
+  z-index: 2;
+}
+
+.hero-content {
+  position: relative;
+  z-index: 3;
+  text-align: center;
+  padding: 2rem;
+  max-width: 800px;
+  margin-top: 4rem;
+}
+
+.hero-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.4rem 1.2rem;
+  border: 1px solid var(--gold-soft);
+  background: rgba(255, 255, 255, 0.55);
+  border-radius: 50px;
+  font-size: 0.7rem;
+  font-weight: 500;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--gold-ink);
+  margin-bottom: 2rem;
+  animation: fadeInUp 0.8s ease 0.2s both;
+}
+
+.hero-badge svg {
+  width: 13px;
+  height: 13px;
+}
+
+.hero h1 {
+  font-family: var(--font-display);
+  font-size: clamp(2.1rem, 5vw, 4rem);
+  font-weight: 500;
+  line-height: 1.15;
+  color: var(--black);
+  margin-bottom: 1.5rem;
+  animation: fadeInUp 0.8s ease 0.3s both;
+}
+
+.hero h1 em {
+  font-style: italic;
+  color: var(--gray);
+}
+
+.hero-subtitle {
+  font-size: 1.05rem;
+  color: var(--gray);
+  line-height: 1.7;
+  max-width: 560px;
+  margin: 0 auto 2.5rem;
+  font-weight: 300;
+  animation: fadeInUp 0.8s ease 0.45s both;
+}
+
+.hero-actions {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+  flex-wrap: wrap;
+  animation: fadeInUp 0.8s ease 0.6s both;
+}
+
+.hero-cta {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 1rem 2.5rem;
+  background: var(--black);
+  color: var(--white);
+  font-family: var(--font-body);
+  font-size: 0.85rem;
+  font-weight: 500;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  border-radius: 50px;
+  transition: all 0.3s ease;
+}
+
+.hero-cta:hover {
+  background: var(--accent-hover);
+  transform: translateY(-3px);
+  box-shadow: 0 12px 35px rgba(0, 0, 0, 0.2);
+}
+
+.hero-cta svg {
+  width: 18px;
+  height: 18px;
+}
+
+.hero-cta-ghost {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 1rem 2rem;
+  color: var(--black);
+  font-size: 0.85rem;
+  font-weight: 500;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  border: 1px solid var(--tinta-media);
+  border-radius: 50px;
+  background: rgba(255, 255, 255, 0.5);
+  transition: all 0.3s ease;
+}
+
+.hero-cta-ghost:hover {
+  border-color: var(--black);
+  background: var(--white);
+  transform: translateY(-3px);
+}
+
+/* sem isto o SVG do WhatsApp herda o tamanho do viewBox e estoura */
+.hero-cta-ghost svg {
+  width: 17px;
+  height: 17px;
+  flex-shrink: 0;
+}
+
+/* ==========================================
+   SECTION COMMON
+   ========================================== */
+section {
+  padding: 6rem 2rem;
+}
+
+.section-inner {
+  max-width: 1100px;
+  margin: 0 auto;
+}
+
+.section-label {
+  display: inline-block;
+  font-size: 0.68rem;
+  font-weight: 500;
+  letter-spacing: 0.25em;
+  text-transform: uppercase;
+  color: var(--gold-ink);
+  margin-bottom: 1rem;
+}
+
+.section-title {
+  font-family: var(--font-display);
+  font-size: clamp(1.8rem, 3.5vw, 2.5rem);
+  font-weight: 500;
+  line-height: 1.2;
+  color: var(--black);
+  margin-bottom: 1rem;
+}
+
+.section-subtitle {
+  font-size: 1rem;
+  color: var(--gray);
+  font-weight: 300;
+  max-width: 520px;
+  line-height: 1.7;
+}
+
+.gold-divider {
+  width: 50px;
+  height: 1px;
+  background: var(--gold);
+  margin: 2rem 0;
+}
+
+/* ==========================================
+   MODALIDADES
+   ========================================== */
+.modalidades {
+  background: var(--white);
+  text-align: center;
+}
+
+.modalidades-grid {
+  display: grid;
+  /* minmax(0,…): nenhuma célula pode ficar maior que a sua fatia */
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 1.25rem;
+  margin-top: 3.5rem;
+}
+
+.modalidade-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.9rem;
+  padding: 2.25rem 1.25rem;
+  border: 1px solid var(--gray-subtle);
+  border-radius: 16px;
+  background: var(--white);
+  transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.modalidade-item:hover {
+  background: var(--cream);
+  border-color: var(--gold-soft);
+  transform: translateY(-5px);
+  box-shadow: 0 14px 40px rgba(0, 0, 0, 0.07);
+}
+
+.modalidade-icon {
+  width: 56px;
+  height: 56px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 1.5px solid var(--gold-soft);
+  border-radius: 50%;
+  color: var(--black);
+  transition: all 0.3s ease;
+  flex-shrink: 0;
+}
+
+.modalidade-item:hover .modalidade-icon {
+  background: var(--black);
+  color: var(--white);
+  border-color: var(--black);
+}
+
+.modalidade-icon svg {
+  width: 24px;
+  height: 24px;
+}
+
+.modalidade-name {
+  font-family: var(--font-display);
+  font-size: 1.15rem;
+  font-weight: 500;
+  color: var(--black);
+}
+
+.modalidade-meta {
+  font-size: 0.78rem;
+  color: var(--gray);
+  font-weight: 400;
+  line-height: 1.5;
+}
+
+.modalidade-meta b {
+  color: var(--black);
+  font-weight: 600;
+}
+
+/* Sem max-width este selo é a maior palavra da célula: como não
+   quebra linha, ele vira o min-content da coluna e estoura a grade
+   de 2 colunas no celular. */
+.tag-adulto {
+  display: inline-block;
+  max-width: 100%;
+  margin-top: 0.1rem;
+  padding: 0.16rem 0.65rem;
+  border: 1px solid var(--gold-soft);
+  border-radius: 50px;
+  font-size: 0.6rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  line-height: 1.5;
+  color: var(--gold-ink);
+  background: var(--gold-faint);
+}
+
+/* ==========================================
+   GRADE — as 54 turmas reais
+   ========================================== */
+.grade {
+  background: var(--cream);
+}
+
+.grade-head {
+  text-align: center;
+  margin-bottom: 2.25rem;
+}
+
+.grade-head .gold-divider {
+  margin: 1.4rem auto;
+}
+
+.grade-head .section-subtitle {
+  margin: 0 auto;
+  max-width: 620px;
+}
+
+/* --- filtros --- */
+/* 88px = altura do cabeçalho já encolhido (83) + folga. Menos que
+   isso e a barra de filtros desliza por baixo dele. */
+.filtros {
+  position: sticky;
+  top: 88px;
+  z-index: 40;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.6rem 0.75rem;
+  padding: 0.85rem 1rem;
+  margin-bottom: 0.35rem;
+  background: rgba(255, 255, 255, 0.92);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  border: 1px solid var(--gray-subtle);
+  border-radius: 14px;
+  box-shadow: 0 4px 22px rgba(0, 0, 0, 0.05);
+}
+
+.filtro-busca {
+  position: relative;
+  flex: 1 1 15rem;
+  min-width: 0;
+  display: flex;
+  align-items: center;
+}
+
+.filtro-busca svg {
+  position: absolute;
+  left: 0.85rem;
+  width: 15px;
+  height: 15px;
+  color: var(--gray-light);
+  pointer-events: none;
+}
+
+.filtro-busca input {
+  width: 100%;
+  font-family: var(--font-body);
+  font-size: 0.85rem;
+  color: var(--black);
+  padding: 0.6rem 0.9rem 0.6rem 2.35rem;
+  border: 1px solid var(--gray-subtle);
+  border-radius: 50px;
+  background: var(--white);
+  transition: border-color 0.25s ease;
+  -webkit-appearance: none;
+  appearance: none;
+}
+
+.filtro-busca input:focus {
+  outline: none;
+  border-color: var(--gold);
+}
+
+.chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.35rem;
+  border: 0;
+  padding: 0;
+  margin: 0;
+  min-width: 0;
+}
+
+.chip {
+  position: relative;
+  display: inline-flex;
+}
+
+.chip input {
+  position: absolute;
+  opacity: 0;
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  cursor: pointer;
+}
+
+.chip span {
+  display: inline-block;
+  padding: 0.42rem 0.85rem;
+  border: 1px solid var(--gray-subtle);
+  border-radius: 50px;
+  background: var(--white);
+  font-size: 0.73rem;
+  font-weight: 500;
+  letter-spacing: 0.04em;
+  color: var(--gray);
+  white-space: nowrap;
+  transition: all 0.2s ease;
+}
+
+.chip input:hover+span {
+  border-color: var(--gold-soft);
+  color: var(--black);
+}
+
+.chip input:focus-visible+span {
+  outline: 2px solid var(--gold);
+  outline-offset: 2px;
+}
+
+.chip input:checked+span {
+  background: var(--black);
+  border-color: var(--black);
+  color: var(--white);
+}
+
+.chip-adulto input:checked+span {
+  background: var(--gold-ink);
+  border-color: var(--gold-ink);
+}
+
+.grade-contador {
+  font-size: 0.75rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--gray);
+  padding: 0.9rem 0.2rem 0;
+}
+
+.grade-contador b {
+  color: var(--black);
+  font-weight: 600;
+}
+
+/* --- famílias --- */
+/* Os cartões de modalidade apontam para cá. Sem scroll-margin o
+   título da família parava atrás do cabeçalho + barra de filtros. */
+.familia {
+  padding: 2rem 0 0;
+  scroll-margin-top: 172px;
+}
+
+.familia[hidden] {
+  display: none;
+}
+
+.familia-titulo {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 0.35rem 0.9rem;
+  font-family: var(--font-display);
+  font-size: 1.35rem;
+  font-weight: 500;
+  color: var(--black);
+  padding-bottom: 0.7rem;
+  border-bottom: 1px solid var(--gray-subtle);
+  margin-bottom: 0.35rem;
+}
+
+.familia-conta {
+  font-family: var(--font-body);
+  font-size: 0.68rem;
+  font-weight: 500;
+  letter-spacing: 0.13em;
+  text-transform: uppercase;
+  color: var(--gold-ink);
+}
+
+.turmas {
+  list-style: none;
+}
+
+/* --- uma turma --- */
+.turma {
+  display: grid;
+  align-items: center;
+  gap: 0.1rem 1rem;
+  grid-template-columns: 1fr auto;
+  grid-template-areas:
+    "nome zap"
+    "meta zap";
+  padding: 0.8rem 0.2rem;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.055);
+}
+
+.turma[hidden] {
+  display: none;
+}
+
+.turma-nome {
+  grid-area: nome;
+  font-size: 0.97rem;
+  font-weight: 500;
+  color: var(--black);
+  line-height: 1.35;
+}
+
+.turma-meta {
+  grid-area: meta;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 0.15rem 0.55rem;
+  font-size: 0.8rem;
+  color: var(--gray);
+}
+
+.turma-hora b {
+  font-weight: 600;
+  color: var(--dark);
+  font-variant-numeric: tabular-nums;
+}
+
+.turma-hora i {
+  font-style: normal;
+  /* Era --gray-light (#9A9A9A): 2,63:1 sobre o creme da grade, abaixo do
+     mínimo de 4,5:1. E não é enfeite — é a hora em que a aula termina, em
+     todas as 54 linhas. --gray dá 4,97:1 e mantém a hierarquia com o início,
+     que é --dark. */
+  color: var(--gray);
+  font-variant-numeric: tabular-nums;
+}
+
+/* O separador mora DENTRO do item que vem antes (::after), nunca no
+   item seguinte (::before). Com ::before, quando o .turma-meta
+   quebrava linha o "·" ia junto com o pedaço de baixo e a linha
+   começava com um ponto solto — visto em captura de 375px. Como
+   ::after ele é parte da caixa anterior e não tem como iniciar
+   linha nenhuma. */
+.turma-hora::after,
+.turma-dias::after {
+  content: "·";
+  margin-left: 0.55rem;
+  color: var(--gray-light);
+}
+
+.turma-zap {
+  grid-area: zap;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.45rem;
+  width: 40px;
+  height: 40px;
+  border-radius: 50px;
+  border: 1px solid var(--gray-subtle);
+  background: var(--white);
+  color: var(--zap-ink);
+  flex-shrink: 0;
+  transition: all 0.25s ease;
+}
+
+.turma-zap span {
+  display: none;
+  font-size: 0.7rem;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.ico-zap {
+  width: 17px;
+  height: 17px;
+  flex-shrink: 0;
+}
+
+.turma-zap:hover {
+  background: var(--zap);
+  border-color: var(--zap);
+  color: var(--white);
+  transform: translateY(-1px);
+  box-shadow: 0 6px 18px var(--zap-brilho);
+}
+
+.grade-vazio {
+  padding: 3rem 1rem;
+  text-align: center;
+  color: var(--gray);
+  font-weight: 300;
+}
+
+.grade-vazio b {
+  color: var(--black);
+  font-weight: 500;
+}
+
+.grade-nota {
+  margin-top: 2.5rem;
+  padding-top: 1.5rem;
+  border-top: 1px solid var(--gray-subtle);
+  font-size: 0.82rem;
+  color: var(--gray);
+  font-weight: 300;
+  line-height: 1.75;
+}
+
+/* ==========================================
+   ADULTOS
+   ========================================== */
+.adultos {
+  background: var(--black);
+  color: var(--white);
+}
+
+.adultos .section-label {
+  color: var(--gold);
+}
+
+.adultos .section-title {
+  color: var(--white);
+}
+
+.adultos-head {
+  text-align: center;
+  margin-bottom: 2.5rem;
+}
+
+.adultos-head .gold-divider {
+  margin: 1.4rem auto;
+}
+
+.adultos-head p {
+  max-width: 600px;
+  margin: 0 auto;
+  color: var(--gray-light);
+  font-weight: 300;
+  line-height: 1.8;
+}
+
+/* Esta seção listava as 9 turmas de adulto de novo, uma a uma — as
+   mesmas 9 que já estão na grade, com os mesmos 9 links de WhatsApp.
+   Trocado por um botão que leva à grade JÁ FILTRADA em adulto: mesma
+   resposta, sem repetir a página. Sem JS ele ainda leva à grade
+   inteira, que é onde as 9 estão. */
+.adultos-cta {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.7rem;
+  margin-top: 2.2rem;
+  padding: 0.95rem 2.1rem;
+  border: 1px solid var(--gold);
+  border-radius: 50px;
+  color: var(--white);
+  font-size: 0.85rem;
+  font-weight: 500;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  transition: all 0.3s ease;
+}
+
+.adultos-cta:hover {
+  background: var(--gold);
+  color: var(--black);
+  transform: translateY(-2px);
+}
+
+.adultos-cta svg {
+  width: 17px;
+  height: 17px;
+  flex-shrink: 0;
+}
+
+/* ==========================================
+   A ESCOLA / ESCADA RAD
+   ========================================== */
+.escola {
+  background: var(--white);
+}
+
+.escola-head {
+  text-align: center;
+  max-width: 720px;
+  margin: 0 auto 3rem;
+}
+
+.escola-head .gold-divider {
+  margin: 1.4rem auto;
+}
+
+.escola-head p {
+  font-size: 1rem;
+  color: var(--gray);
+  font-weight: 300;
+  line-height: 1.85;
+}
+
+.escola-head p strong {
+  color: var(--black);
+  font-weight: 500;
+}
+
+/* Cartões de altura igual (stretch): assim a única coisa que cresce
+   de um degrau para o outro é a barra. Com align-items:end os
+   cartões subiam e desciam por causa do nome que quebra em duas
+   linhas, e a escada virava serrote. */
+.escada {
+  list-style: none;
+  display: grid;
+  grid-template-columns: repeat(8, minmax(0, 1fr));
+  gap: 0.6rem;
+  align-items: stretch;
+}
+
+.degrau {
+  display: flex;
+  flex-direction: column;
+  gap: 0.45rem;
+  padding: 0.9rem 0.85rem 1rem;
+  background: var(--cream);
+  border-radius: 12px;
+  border: 1px solid var(--gray-subtle);
+}
+
+.degrau-barra {
+  order: 3;
+  display: block;
+  width: 100%;
+  margin-top: auto;
+  height: calc(0.3rem + var(--n) * 0.34rem);
+  border-radius: 4px;
+  background: linear-gradient(180deg, var(--gold) 0%, var(--gold-fade) 100%);
+}
+
+.degrau-nivel {
+  order: 1;
+  font-family: var(--font-display);
+  font-size: 0.95rem;
+  font-weight: 500;
+  color: var(--black);
+  line-height: 1.25;
+}
+
+.degrau-info {
+  order: 2;
+  margin-bottom: 0.7rem;
+  font-size: 0.68rem;
+  color: var(--gray);
+  line-height: 1.5;
+}
+
+/* A distinção que faltava: cinco destes degraus são nome do syllabus
+   da RAD, três são preparação da casa. Antes a página chamava os oito
+   de "o nível é o do syllabus" — e isso era verdade em 5 de 8. */
+.degrau-selo {
+  order: 0;
+  align-self: flex-start;
+  font-size: 0.58rem;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  padding: 0.16rem 0.5rem;
+  border-radius: 50px;
+  margin-bottom: 0.1rem;
+}
+
+.degrau-rad .degrau-selo {
+  background: var(--gold-soft);
+  color: var(--gold-ink);
+}
+
+.degrau-casa .degrau-selo {
+  background: var(--gray-subtle);
+  /* Era --gray: 4,35:1 sobre este cinza — logo abaixo do mínimo de 4,5. É o
+     rótulo que separa "Preparação" de "Syllabus RAD", e a honestidade da
+     seção inteira depende de ele ser lido. --dark dá 11,40:1. */
+  color: var(--dark);
+}
+
+/* Só os degraus RAD ganham a barra dourada; os da casa ficam
+   cinza. A cor passa a significar alguma coisa. */
+.degrau-casa .degrau-barra {
+  background: linear-gradient(180deg, var(--gray-light) 0%, var(--gray-subtle) 100%);
+}
+
+.escada-nota {
+  margin-top: 1.6rem;
+  font-size: 0.85rem;
+  color: var(--gray);
+  font-weight: 300;
+  line-height: 1.75;
+  text-align: center;
+}
+
+.escada-nota a {
+  color: var(--gold-ink);
+  border-bottom: 1px solid var(--gold-soft);
+}
+
+/* A partir de 820px a linha da turma vira tabela de verdade:
+   hora | turma | dias | frequência | ação. O .turma-meta some como
+   caixa (display:contents) e os três filhos viram células. */
+@media (min-width: 820px) {
+  .turma {
+    grid-template-columns: 6.8rem minmax(0, 1fr) 6.5rem 8.5rem 10.5rem;
+    grid-template-areas: "hora nome dias freq zap";
+    gap: 0 1rem;
+    padding: 0.62rem 0.2rem;
+  }
+
+  .turma-meta {
+    display: contents;
+  }
+
+  .turma-hora {
+    grid-area: hora;
+    font-size: 0.86rem;
+  }
+
+  .turma-dias {
+    grid-area: dias;
+    font-size: 0.8rem;
+  }
+
+  .turma-freq {
+    grid-area: freq;
+    font-size: 0.8rem;
+    line-height: 1.35;
+  }
+
+  /* Em coluna cada célula já se separa sozinha: o "·" some. */
+  .turma-hora::after,
+  .turma-dias::after {
+    content: none;
+  }
+
+  .turma-zap {
+    width: auto;
+    height: auto;
+    justify-content: flex-start;
+    padding: 0.45rem 1.05rem;
+  }
+
+  .turma-zap span {
+    display: inline;
+  }
+}
+
+/* ==========================================
+   LOCALIZAÇÃO
+   ========================================== */
+.localizacao {
+  background: var(--white);
+}
+
+.loc-wrapper {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 3rem;
+  align-items: center;
+}
+
+.loc-info {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+/* O `margin: 2rem 0` do divisor NÃO colapsa dentro de um flex column:
+   ele SOMA com o `gap: 1.5rem` dos dois lados. O resultado eram 129px
+   de ar em volta de um traço de 1px, contra 45-49px nos outros
+   divisores da página. Aqui o espaçamento é só o gap. */
+.loc-info .gold-divider {
+  margin: 0;
+}
+
+.loc-address {
+  font-size: 1rem;
+  color: var(--gray);
+  line-height: 1.8;
+  font-weight: 300;
+}
+
+.loc-address strong {
+  color: var(--black);
+  font-weight: 500;
+}
+
+.loc-horas {
+  display: grid;
+  grid-template-columns: auto auto;
+  justify-content: start;
+  gap: 0.4rem 1.4rem;
+  padding: 1.1rem 0 0;
+  border-top: 1px solid var(--gray-subtle);
+  font-size: 0.88rem;
+}
+
+.loc-horas dt {
+  color: var(--gray);
+  font-weight: 400;
+}
+
+.loc-horas dd {
+  color: var(--black);
+  font-weight: 500;
+  font-variant-numeric: tabular-nums;
+}
+
+.loc-horas-nota {
+  margin-top: -0.6rem;
+  font-size: 0.74rem;
+  /* Era --gray-light: 2,81:1 sobre o branco da seção. Esta é a ressalva
+     que torna o horário honesto ("faixas em que há aula") — se ela não
+     for legível, a página promete expediente que não tem. */
+  color: var(--gray);
+}
+
+.loc-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.85rem 2rem;
+  background: transparent;
+  color: var(--black);
+  font-family: var(--font-body);
+  font-size: 0.8rem;
+  font-weight: 500;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  border: 1.5px solid var(--black);
+  border-radius: 50px;
+  transition: all 0.3s ease;
+  width: fit-content;
+}
+
+.loc-btn:hover {
+  background: var(--black);
+  color: var(--white);
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+}
+
+.loc-btn svg {
+  width: 16px;
+  height: 16px;
+}
+
+.loc-map {
+  border-radius: 16px;
+  overflow: hidden;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.08);
+}
+
+.loc-map iframe {
+  width: 100%;
+  height: 350px;
+  border: none;
+  display: block;
+}
+
+/* ==========================================
+   CTA FINAL
+   ========================================== */
+.cta-final {
+  background: var(--black);
+  color: var(--white);
+  text-align: center;
+}
+
+.cta-final .section-label {
+  color: var(--gold);
+}
+
+.cta-final h2 {
+  font-family: var(--font-display);
+  font-size: clamp(1.8rem, 4vw, 2.8rem);
+  font-weight: 500;
+  line-height: 1.2;
+  margin-bottom: 1rem;
+}
+
+.cta-final h2 em {
+  font-style: italic;
+  color: var(--gold);
+}
+
+.cta-final p {
+  color: var(--gray-light);
+  font-weight: 300;
+  max-width: 520px;
+  margin: 0 auto 2.5rem;
+  line-height: 1.8;
+}
+
+.cta-final-actions {
+  display: flex;
+  gap: 1rem;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.cta-white {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.7rem;
+  padding: 1rem 2.5rem;
+  background: var(--white);
+  color: var(--black);
+  font-size: 0.85rem;
+  font-weight: 500;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  border-radius: 50px;
+  transition: all 0.3s ease;
+}
+
+.cta-white:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 12px 35px rgba(255, 255, 255, 0.18);
+}
+
+.cta-white svg {
+  width: 18px;
+  height: 18px;
+}
+
+.cta-outline {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.7rem;
+  padding: 1rem 2.2rem;
+  color: var(--white);
+  font-size: 0.85rem;
+  font-weight: 500;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  border: 1px solid rgba(255, 255, 255, 0.35);
+  border-radius: 50px;
+  transition: all 0.3s ease;
+}
+
+.cta-outline:hover {
+  border-color: var(--white);
+  background: rgba(255, 255, 255, 0.08);
+  transform: translateY(-3px);
+}
+
+.cta-outline svg {
+  width: 18px;
+  height: 18px;
+}
+
+/* ==========================================
+   BOTÃO FLUTUANTE WHATSAPP
+   ========================================== */
+.zap-flutuante {
+  position: fixed;
+  right: 1.25rem;
+  bottom: 1.25rem;
+  z-index: 90;
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  background: var(--zap);
+  color: var(--white);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 8px 28px rgba(0, 0, 0, 0.22);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.zap-flutuante:hover {
+  transform: scale(1.08);
+  box-shadow: 0 12px 34px var(--zap-brilho-forte);
+}
+
+.zap-flutuante svg {
+  width: 28px;
+  height: 28px;
+}
+
+/* ==========================================
+   FOOTER
+   ========================================== */
+footer {
+  background: var(--black);
+  color: var(--white);
+  padding: 3.5rem 2rem 2rem;
+}
+
+/* Duas colunas, não quatro. As colunas "Navegação" e "Modalidades"
+   que existiam aqui eram cópia literal do nav do cabeçalho (que é
+   fixo, sempre à mão) e dos 8 cartões de modalidade. Rodapé de site
+   de uma página só não é lugar de repetir o menu. */
+.footer-inner {
+  max-width: 1100px;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: 1.4fr 1fr;
+  gap: 2.5rem 4rem;
+  align-items: start;
+}
+
+.footer-inner h4 {
+  font-family: var(--font-display);
+  font-size: 0.95rem;
+  font-weight: 500;
+  margin-bottom: 1rem;
+}
+
+.footer-brand .logo-text {
+  color: var(--white);
+  font-size: 1.4rem;
+}
+
+.footer-brand .logo-sub {
+  color: var(--gray-light);
+}
+
+.footer-brand p {
+  margin-top: 1rem;
+  font-size: 0.85rem;
+  color: var(--gray-light);
+  font-weight: 300;
+  line-height: 1.7;
+}
+
+.footer-col ul {
+  list-style: none;
+}
+
+.footer-col li {
+  margin-bottom: 0.55rem;
+}
+
+.footer-col a,
+.footer-col span {
+  font-size: 0.85rem;
+  color: var(--gray-light);
+  font-weight: 300;
+  transition: color 0.3s;
+}
+
+.footer-col a:hover {
+  color: var(--white);
+}
+
+.footer-col .destaque {
+  display: inline-block;
+  font-size: 0.95rem;
+  color: var(--white);
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  border-radius: 50px;
+  padding: 0.45rem 1.1rem;
+  margin-bottom: 0.75rem;
+  transition: all 0.3s;
+}
+
+.footer-col .destaque:hover {
+  background: var(--white);
+  color: var(--black);
+}
+
+.footer-bottom {
+  max-width: 1100px;
+  margin: 2.5rem auto 0;
+  padding-top: 1.5rem;
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 1rem;
+  font-size: 0.72rem;
+  /* Era --gray sobre o preto do rodapé: 3,27:1. Em fundo escuro o cinza tem de
+     ficar mais CLARO, não mais escuro — --gray-light dá 6,19:1 aqui, e é o
+     mesmo tom do resto do rodapé. */
+  color: var(--gray-light);
+  letter-spacing: 0.05em;
+}
+
+.footer-bottom a {
+  color: var(--gray-light);
+}
+
+/* ==========================================
+   RESPONSIVE
+   ========================================== */
+/* O botão de menu nasce escondido; a media query abaixo o liga no
+   celular. A regra base TEM de vir antes — se vier depois, o
+   display:none ganha da media query por ordem e o menu some. */
+.menu-btn {
+  display: none;
+  align-items: center;
+  justify-content: center;
+  width: 38px;
+  height: 38px;
+  flex-shrink: 0;
+  border: 1px solid var(--tinta-fina);
+  border-radius: 50px;
+  background: rgba(255, 255, 255, 0.7);
+  color: var(--black);
+  cursor: pointer;
+  transition: all 0.25s ease;
+}
+
+.menu-btn svg {
+  width: 17px;
+  height: 17px;
+}
+
+.menu-btn .x {
+  display: none;
+}
+
+body.menu-aberto .menu-btn .x {
+  display: block;
+}
+
+body.menu-aberto .menu-btn .linhas {
+  display: none;
+}
+
+@media (max-width: 1180px) {
+  .escada {
+    grid-template-columns: repeat(4, 1fr);
+    gap: 0.7rem;
+  }
+}
+
+@media (max-width: 1000px) {
+
+  /* Sem espaço para a barra: o menu vira painel, aberto no botão.
+     Fechado por padrão — não interfere em nada até alguém tocar. */
+  .nav {
+    position: fixed;
+    inset: 0 0 auto;
+    display: block;
+    margin: 0;
+    padding: 5.5rem 1.5rem 2rem;
+    background: rgba(255, 255, 255, 0.985);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    box-shadow: 0 18px 50px rgba(0, 0, 0, 0.13);
+    border-bottom: 1px solid var(--gray-subtle);
+    animation: none;
+    transform: translateY(-102%);
+    transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+    visibility: hidden;
+  }
+
+  .nav a {
+    display: block;
+    padding: 0.85rem 0;
+    font-size: 1rem;
+    border-bottom: 1px solid var(--gray-subtle);
+  }
+
+  .nav a::after {
+    content: none;
+  }
+
+  body.menu-aberto .nav {
+    transform: translateY(0);
+    visibility: visible;
+  }
+
+  .menu-btn {
+    display: inline-flex;
+    order: 3;
+  }
+
+  /* Com a barra fora do fluxo, o space-between do header largava o
+     botão do WhatsApp sozinho no meio. Encosta ele no menu. */
+  header {
+    gap: 0.6rem;
+  }
+
+  .header-cta {
+    margin-left: auto;
+  }
+}
+
+@media (max-width: 860px) {
+  .modalidades-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 768px) {
+  html {
+    scroll-padding-top: 76px;
+  }
+
+  header {
+    padding: 1rem 1.5rem;
+  }
+
+  header.scrolled {
+    padding: 0.6rem 1.5rem;
+  }
+
+  .header-cta span {
+    display: none;
+  }
+
+  .header-cta {
+    padding: 0.6rem;
+    width: 38px;
+    height: 38px;
+    justify-content: center;
+  }
+
+  .header-cta svg {
+    width: 16px;
+    height: 16px;
+  }
+
+  .hero-content {
+    margin-top: 2rem;
+    padding: 1.5rem 1.25rem;
+  }
+
+  .hero-badge {
+    font-size: 0.6rem;
+    letter-spacing: 0.12em;
+    padding: 0.35rem 0.9rem;
+    margin-bottom: 1.5rem;
+  }
+
+  .hero-subtitle {
+    margin-bottom: 2rem;
+  }
+
+  .hero-actions {
+    flex-direction: column;
+    gap: 0.75rem;
+  }
+
+  .hero-cta,
+  .hero-cta-ghost {
+    width: 100%;
+    justify-content: center;
+    padding: 0.95rem 1.5rem;
+    font-size: 0.76rem;
+    letter-spacing: 0.05em;
+  }
+
+  section {
+    padding: 4rem 1.25rem;
+  }
+
+  /* No celular a barra quebra em três linhas (188px): grudada no
+     topo ela comeria um quarto da tela o tempo todo. Aqui ela rola
+     junto com a página. */
+  .filtros {
+    position: static;
+    padding: 0.7rem 0.75rem;
+    gap: 0.55rem;
+    border-radius: 12px;
+  }
+
+  .familia {
+    scroll-margin-top: 92px;
+  }
+
+  .familia-titulo {
+    font-size: 1.15rem;
+  }
+
+  .escada {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 0.55rem;
+  }
+
+  .degrau {
+    padding: 0.75rem 0.7rem 0.85rem;
+  }
+
+  .degrau-barra {
+    height: calc(0.3rem + var(--n) * 0.28rem);
+  }
+
+  .loc-wrapper {
+    grid-template-columns: 1fr;
+  }
+
+  .footer-inner {
+    grid-template-columns: 1fr;
+    text-align: center;
+    gap: 2rem;
+  }
+
+  .footer-col ul {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .footer-bottom {
+    flex-direction: column;
+    gap: 0.5rem;
+    text-align: center;
+  }
+
+  .loc-btn {
+    margin: 0 auto;
+  }
+
+  .loc-info {
+    text-align: center;
+    align-items: center;
+  }
+
+  .cta-final-actions {
+    flex-direction: column;
+  }
+
+  .cta-white,
+  .cta-outline {
+    width: 100%;
+    justify-content: center;
+  }
+
+  .zap-flutuante {
+    width: 50px;
+    height: 50px;
+    right: 1rem;
+    bottom: 1rem;
+  }
+
+  .zap-flutuante svg {
+    width: 25px;
+    height: 25px;
+  }
+}
+
+@media (max-width: 480px) {
+  .modalidades-grid {
+    gap: 0.75rem;
+  }
+
+  .modalidade-item {
+    padding: 1.5rem 0.75rem;
+    gap: 0.65rem;
+  }
+
+  .modalidade-icon {
+    width: 46px;
+    height: 46px;
+  }
+
+  .modalidade-icon svg {
+    width: 20px;
+    height: 20px;
+  }
+
+  .modalidade-name {
+    font-size: 1rem;
+  }
+}
+
+/* Quem pediu menos movimento no sistema recebe menos movimento */
+@media (prefers-reduced-motion: reduce) {
+
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+  }
+
+  html {
+    scroll-behavior: auto;
+  }
+
+  .animate-on-scroll {
+    opacity: 1;
+    transform: none;
+  }
+}
+</style>
+
+    <!-- Sem JavaScript, o conteúdo com .animate-on-scroll ficaria invisível
+         para sempre. Este bloco garante que a página continue legível. -->
+    <noscript>
+        <style>
+  .animate-on-scroll {
+    opacity: 1 !important;
+    transform: none !important;
+  }
+
+  /* Controles que só existem com JS não ficam de enfeite. */
+  .filtros,
+  .menu-btn {
+    display: none !important;
+  }
+
+  @media (max-width: 1000px) {
+    .nav {
+      display: none !important;
+    }
+  }
+</style>
+    </noscript>
 </head>
 
 <body>
+
+    <a class="skip-link" href="#conteudo">Ir para o conteúdo</a>
+
+    <!-- Os dois ícones que se repetem, definidos uma vez só e usados com
+         <use>: o do WhatsApp serve as 54 turmas, o herói, o CTA final e o
+         botão flutuante; o telefone serve o cabeçalho e o CTA final. -->
+    <svg width="0" height="0" style="position:absolute" aria-hidden="true">
+        <symbol id="i-fone" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path
+                d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z" />
+        </symbol>
+        <symbol id="i-zap" viewBox="0 0 24 24">
+            <path fill="currentColor"
+                d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z" />
+        </symbol>
+    </svg>
 
     <!-- ==========================================
          HEADER
     ========================================== -->
     <header id="header">
-        <div class="logo">
+        <a class="logo" href="#topo" aria-label="Ballance Escola de Dança — início">
             <div>
                 <div class="logo-text">Ballance</div>
                 <div class="logo-sub">Escola de Dança</div>
             </div>
-        </div>
-        <a href="https://wa.me/5519999412411?text=Ol%C3%A1!%20Gostaria%20de%20agendar%20uma%20aula%20experimental."
-            class="header-cta" target="_blank">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                <path
-                    d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z" />
-            </svg>
-            <span>Agendar Aula Experimental</span>
         </a>
+
+        <nav class="nav" id="nav" aria-label="Navegação principal">
+            <a href="#grade">Grade de horários</a>
+            <a href="#modalidades">Modalidades</a>
+            <a href="#adultos">Adultos</a>
+            <a href="#escola">A Escola</a>
+            <a href="#localizacao">Localização</a>
+            <a href="#contato">Contato</a>
+        </nav>
+
+        <a href="https://wa.me/5519999412411?text=Ol%C3%A1!%20Gostaria%20de%20falar%20com%20a%20Ballance."
+            class="header-cta" target="_blank" rel="noopener"
+            aria-label="Falar com a Ballance no WhatsApp — (19) 99941-2411">
+            <svg aria-hidden="true"><use href="#i-fone"></use></svg>
+            <span>Falar no WhatsApp</span>
+        </a>
+
+        <button class="menu-btn" id="menuBtn" type="button" aria-controls="nav" aria-expanded="false"
+            aria-label="Abrir menu de navegação">
+            <svg class="linhas" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                stroke-linecap="round" aria-hidden="true">
+                <path d="M4 7h16M4 12h16M4 17h16" />
+            </svg>
+            <svg class="x" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                aria-hidden="true">
+                <path d="M6 6l12 12M18 6L6 18" />
+            </svg>
+        </button>
     </header>
 
     <!-- ==========================================
          HERO
     ========================================== -->
-    <section class="hero">
-        <div class="hero-bg">
-            <img src="assets/hero.png" alt="Dança Ballet">
-        </div>
-        <div class="hero-overlay"></div>
-        <div class="hero-content">
-            <div class="hero-badge">Royal Academy of Dance</div>
-            <h1>Excelência no ensino<br>da <em>dança</em> em Campinas.</h1>
-            <p class="hero-subtitle">Formação técnica e bem-estar em um ambiente acolhedor no Swiss Park. Certificação
-                Royal Academy of Dance.</p>
-            <a href="https://wa.me/5519999412411?text=Ol%C3%A1!%20Gostaria%20de%20saber%20mais%20sobre%20a%20Ballance."
-                class="hero-cta" target="_blank">
-                <svg viewBox="0 0 24 24" fill="currentColor">
-                    <path
-                        d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z" />
-                </svg>
-                Fale Conosco via WhatsApp
-            </a>
-        </div>
-        <div class="hero-scroll">
-            <span>Descubra</span>
-            <div class="line"></div>
-        </div>
-    </section>
-
-    <!-- ==========================================
-         MODALIDADES
-    ========================================== -->
-    <section class="modalidades" id="modalidades">
-        <div class="section-inner">
-            <div class="animate-on-scroll">
-                <span class="section-label">O que ensinamos</span>
-                <h2 class="section-title">Nossas Modalidades</h2>
-                <div class="gold-divider" style="margin: 1.5rem auto;"></div>
+    <main id="conteudo">
+        <section class="hero" id="topo">
+            <div class="hero-bg">
+                <picture>
+                    <source media="(max-width: 640px)" srcset="assets/hero-small.jpg">
+                    <img src="assets/hero.jpg" width="1600" height="1600" fetchpriority="high"
+                        alt="Bailarina em movimento, com o vestido em suspensão, durante aula na Ballance Escola de Dança">
+                </picture>
             </div>
-            <div class="modalidades-grid">
-                <div class="modalidade-item animate-on-scroll">
-                    <div class="modalidade-icon">
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
-                            <circle cx="12" cy="12" r="3" />
-                        </svg>
-                    </div>
-                    <span class="modalidade-name">Ballet Clássico</span>
-                </div>
-                <div class="modalidade-item animate-on-scroll">
-                    <div class="modalidade-icon">
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
-                            <circle cx="12" cy="12" r="3" />
-                        </svg>
-                    </div>
-                    <span class="modalidade-name">Jazz</span>
-                </div>
-                <div class="modalidade-item animate-on-scroll">
-                    <div class="modalidade-icon">
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
-                            <circle cx="12" cy="12" r="3" />
-                        </svg>
-                    </div>
-                    <span class="modalidade-name">Hip Hop</span>
-                </div>
-                <div class="modalidade-item animate-on-scroll">
-                    <div class="modalidade-icon">
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
-                            <circle cx="12" cy="12" r="3" />
-                        </svg>
-                    </div>
-                    <span class="modalidade-name">Sapateado</span>
-                </div>
-                <div class="modalidade-item animate-on-scroll">
-                    <div class="modalidade-icon">
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
-                            <circle cx="12" cy="12" r="3" />
-                        </svg>
-                    </div>
-                    <span class="modalidade-name">Teatro Musical</span>
-                </div>
-                <div class="modalidade-item animate-on-scroll">
-                    <div class="modalidade-icon">
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
-                            <circle cx="12" cy="12" r="3" />
-                        </svg>
-                    </div>
-                    <span class="modalidade-name">Dance Mix</span>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- ==========================================
-         INSTAGRAM
-    ========================================== -->
-    <section class="instagram" id="instagram">
-        <div class="section-inner">
-            <div class="animate-on-scroll">
-                <span class="section-label">Nosso dia a dia</span>
-                <h2 class="section-title">Siga nosso Movimento</h2>
-                <p class="section-subtitle" style="margin: 0 auto;">Acompanhe nosso dia a dia, ensaios e bastidores em
-                    tempo real.</p>
-            </div>
-            <div class="animate-on-scroll">
-                <a href="https://www.instagram.com/ballance_escoladedanca/" target="_blank" class="instagram-btn">
-                    <svg viewBox="0 0 24 24" fill="currentColor">
-                        <path
-                            d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.052.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98C8.333 23.986 8.741 24 12 24c3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 100 12.324 6.162 6.162 0 000-12.324zM12 16a4 4 0 110-8 4 4 0 010 8zm6.406-11.845a1.44 1.44 0 100 2.881 1.44 1.44 0 000-2.881z" />
+            <div class="hero-overlay"></div>
+            <div class="hero-content">
+                <p class="hero-badge">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true">
+                        <path d="M12 2l2.6 5.9 6.4.6-4.8 4.3 1.4 6.3L12 15.8 6.4 19.1l1.4-6.3L3 8.5l6.4-.6z" />
                     </svg>
-                    Ver nosso Instagram @ballance_escoladedanca
-                </a>
-            </div>
-        </div>
-    </section>
-
-    <!-- ==========================================
-         LOCALIZAÇÃO
-    ========================================== -->
-    <section class="localizacao" id="localizacao">
-        <div class="section-inner">
-            <div class="loc-wrapper">
-                <div class="loc-info animate-on-scroll">
-                    <span class="section-label">Onde estamos</span>
-                    <h2 class="section-title">Localização</h2>
-                    <div class="gold-divider"></div>
-                    <p class="loc-address">
-                        <strong>Ballance Escola de Dança</strong><br>
-                        Avenida Dermival Bernardes Siqueira, n° 3043<br>
-                        Swiss Park — Campinas/SP
-                    </p>
-                    <a href="https://www.google.com/maps/dir//Av.+Dermival+Bernardes+Siqueira,+3043+-+Swiss+Park,+Campinas+-+SP"
-                        target="_blank" class="loc-btn">
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                            <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z" />
-                            <circle cx="12" cy="10" r="3" />
+                    Syllabus Royal Academy of Dance
+                </p>
+                <h1>A grade inteira,<br>aqui. Sem <em>perguntar</em>.</h1>
+                <p class="hero-subtitle">54 turmas de segunda a sábado, com o dia e o horário de cada uma —
+                    do Baby ao adulto, no Swiss Park, em Campinas.</p>
+                <div class="hero-actions">
+                    <a href="#grade" class="hero-cta">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                            stroke-linecap="round" aria-hidden="true">
+                            <rect x="3" y="4.5" width="18" height="16" rx="2.5" />
+                            <path d="M3 9.5h18M8 2.8v3.4M16 2.8v3.4M7.5 13.5h4M7.5 17h7" />
                         </svg>
-                        Como Chegar
+                        Ver a grade de horários
+                    </a>
+                    <a href="https://wa.me/5519999412411?text=Ol%C3%A1!%20Gostaria%20de%20saber%20mais%20sobre%20a%20Ballance."
+                        class="hero-cta-ghost" target="_blank" rel="noopener">
+                        <svg viewBox="0 0 24 24" aria-hidden="true"><use href="#i-zap"></use></svg>
+                        Falar no WhatsApp
                     </a>
                 </div>
-                <div class="loc-map animate-on-scroll">
-                    <iframe
-                        src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3675.0!2d-47.06!3d-22.95!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x94c8c8!2sAv.+Dermival+Bernardes+Siqueira%2C+3043+-+Swiss+Park%2C+Campinas+-+SP!5e0!3m2!1spt-BR!2sbr!4v1111"
-                        loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+            </div>
+        </section>
+
+        <!-- Não repor a faixa de FATOS (54 / 8 / 9 / 6 em ladrilho): os quatro
+             números já são ditos por extenso no lugar onde importam — herói,
+             <h2> das modalidades, seção #adultos e #localizacao. -->
+
+        <!-- ==========================================
+             MODALIDADES
+        ========================================== -->
+        <section class="modalidades" id="modalidades">
+            <div class="section-inner">
+                <div class="animate-on-scroll">
+                    <span class="section-label">O que ensinamos</span>
+                    <h2 class="section-title">Oito modalidades</h2>
+                    <div class="gold-divider" style="margin: 1.5rem auto;"></div>
+                    <p class="section-subtitle" style="margin:0 auto;">Cada cartão leva direto ao pedaço da grade
+                        com as turmas dessa modalidade — dia e horário.</p>
+                </div>
+
+                <div class="modalidades-grid">
+
+                    <!-- Ballet Clássico — sapatilha de ponta -->
+                    <a class="modalidade-item animate-on-scroll"
+                        href="#grade-ballet">
+                        <span class="modalidade-icon">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4"
+                                stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                                <!-- par de sapatilhas de ponta penduradas pelas fitas -->
+                                <path d="M12 3.2v1.9" />
+                                <path d="M12 5.1C10.6 6.1 9.5 6.9 8.8 8.3" />
+                                <path d="M12 5.1c1.4 1 2.5 1.8 3.2 3.2" />
+                                <path d="M8.4 8.5c1.6 0 2.6 1.2 2.6 3.1 0 2.5-.9 4.9-2.6 6.7-1.7-1.8-2.6-4.2-2.6-6.7 0-1.9 1-3.1 2.6-3.1z" />
+                                <path d="M15.6 8.5c1.6 0 2.6 1.2 2.6 3.1 0 2.5-.9 4.9-2.6 6.7-1.7-1.8-2.6-4.2-2.6-6.7 0-1.9 1-3.1 2.6-3.1z" />
+                            </svg>
+                        </span>
+                        <span class="modalidade-name">Ballet Clássico</span>
+                        <span class="modalidade-meta"><b>20 turmas</b><br>Seg a Sáb</span>
+                        <span class="tag-adulto">adultos também</span>
+                    </a>
+
+                    <!-- Jazz — mão aberta (jazz hands) -->
+                    <a class="modalidade-item animate-on-scroll"
+                        href="#grade-jazz">
+                        <span class="modalidade-icon">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4"
+                                stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                                <path d="M8.2 13.2V6.6a1.2 1.2 0 0 1 2.4 0v5.2" />
+                                <path d="M10.6 11.8V5.2a1.2 1.2 0 0 1 2.4 0v6.6" />
+                                <path d="M13 11.8V6.4a1.2 1.2 0 0 1 2.4 0v5.8" />
+                                <path
+                                    d="M15.4 12.4V9a1.2 1.2 0 0 1 2.4 0v5.6a6.2 6.2 0 0 1-6.2 6.2h-.6a4.8 4.8 0 0 1-3.4-1.4l-3-3a1.25 1.25 0 0 1 1.76-1.76l1.84 1.76" />
+                            </svg>
+                        </span>
+                        <span class="modalidade-name">Jazz</span>
+                        <span class="modalidade-meta"><b>14 turmas</b><br>Seg a Qui · Sáb</span>
+                        <span class="tag-adulto">adultos também</span>
+                    </a>
+
+                    <!-- Hip Hop — tênis cano alto -->
+                    <a class="modalidade-item animate-on-scroll"
+                        href="#grade-hiphop">
+                        <span class="modalidade-icon">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4"
+                                stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                                <!-- tênis de cano alto -->
+                                <path
+                                    d="M8.4 4.2h3.1a1 1 0 0 1 1 1v4.4l4.7 2a3.5 3.5 0 0 1 2.1 3.2v1.1H3.3v-4.4a1.5 1.5 0 0 1 1.5-1.5h2.6V5.2a1 1 0 0 1 1-1z" />
+                                <path d="M3.3 15.9v1.6a1.2 1.2 0 0 0 1.2 1.2h14.8a1.2 1.2 0 0 0 1.2-1.2v-1.6" />
+                                <path d="M7.4 11.3h5.1" />
+                                <path d="M8.8 6.6h3.1M8.8 8.6h3.1" />
+                            </svg>
+                        </span>
+                        <span class="modalidade-name">Hip Hop</span>
+                        <span class="modalidade-meta"><b>9 turmas</b><br>Ter · Qui a Sáb</span>
+                    </a>
+
+                    <!-- Sapateado — sapato + ondas de som -->
+                    <a class="modalidade-item animate-on-scroll"
+                        href="#grade-sapateado">
+                        <span class="modalidade-icon">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4"
+                                stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                                <path
+                                    d="M1.8 16.4h8.9a3 3 0 0 0 2.12-.88l1.6-1.6a2 2 0 0 1 1.41-.58h1.37a2 2 0 0 1 2 2v1.06a2 2 0 0 1-2 2H3.8a2 2 0 0 1-2-2z" />
+                                <path d="M1.8 16.4v-3.2" />
+                                <path d="M5.6 13.2v3.2M9.2 13.2v3.2" />
+                                <path d="M18.4 5.6a3.2 3.2 0 0 1 0 4.2" />
+                                <path d="M20.9 3.6a6.4 6.4 0 0 1 0 8.2" />
+                            </svg>
+                        </span>
+                        <span class="modalidade-name">Sapateado</span>
+                        <span class="modalidade-meta"><b>5 turmas</b><br>Seg · Qua · Sex</span>
+                        <span class="tag-adulto">adultos também</span>
+                    </a>
+
+                    <!-- Contemporâneo — pé descalço, a marca da modalidade -->
+                    <a class="modalidade-item animate-on-scroll" href="#grade-contemporaneo">
+                        <span class="modalidade-icon">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4"
+                                stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                                <path
+                                    d="M13.8 12.1c0 4.2-1.4 7.6-3.6 7.6S6.6 17 6.6 14c0-2.9 1.5-5.6 3.6-5.6s3.6 1.2 3.6 3.7z" />
+                                <circle cx="7.3" cy="6.6" r="0.9" />
+                                <circle cx="10" cy="5.1" r="0.85" />
+                                <circle cx="12.7" cy="4.9" r="0.78" />
+                                <circle cx="15.2" cy="5.8" r="0.7" />
+                                <circle cx="17.1" cy="7.5" r="0.62" />
+                            </svg>
+                        </span>
+                        <span class="modalidade-name">Contemporâneo</span>
+                        <span class="modalidade-meta"><b>2 turmas</b><br>Sexta</span>
+                        <span class="tag-adulto">adultos também</span>
+                    </a>
+
+                    <!-- Teatro Musical — máscaras -->
+                    <a class="modalidade-item animate-on-scroll"
+                        href="#grade-teatro">
+                        <span class="modalidade-icon">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4"
+                                stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                                <path d="M10.4 3.6H4.3A1.3 1.3 0 0 0 3 4.9v4.3a4.6 4.6 0 0 0 7.1 3.87" />
+                                <path d="M5.6 7.1h.01M8.2 7.1h.01" />
+                                <path d="M5.7 10.3c.8.7 1.9.8 2.8.2" />
+                                <path d="M13.6 8.9h6.1A1.3 1.3 0 0 1 21 10.2v4.3a4.6 4.6 0 0 1-9.2 0v-4.3a1.3 1.3 0 0 1 1.3-1.3z" />
+                                <path d="M14.9 12.4h.01M17.5 12.4h.01" />
+                                <path d="M14.9 16.8a2.4 2.4 0 0 1 2.8-.2" />
+                            </svg>
+                        </span>
+                        <span class="modalidade-name">Teatro Musical</span>
+                        <span class="modalidade-meta"><b>2 turmas</b><br>Sexta</span>
+                    </a>
+
+                    <!-- Dance Mix — figura em salto -->
+                    <a class="modalidade-item animate-on-scroll"
+                        href="#grade-dancemix">
+                        <span class="modalidade-icon">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4"
+                                stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                                <circle cx="13.6" cy="4.3" r="1.8" />
+                                <path d="M13.2 6.9 10.3 11.6l3.5 2.5.9 3.6" />
+                                <path d="M10.3 11.6 6.6 10.1" />
+                                <path d="M13.8 14.1 9.9 16.6 7.3 20.7" />
+                                <path d="M14.7 17.7 17.4 20.9" />
+                                <path d="M13.2 6.9l3.6 1.2 1.7-1.8" />
+                            </svg>
+                        </span>
+                        <span class="modalidade-name">Dance Mix</span>
+                        <span class="modalidade-meta"><b>1 turma</b><br>Ter e Qui</span>
+                    </a>
+
+                    <!-- PAD — duplo chevron: avanço de nível -->
+                    <a class="modalidade-item animate-on-scroll" href="#grade-pad">
+                        <span class="modalidade-icon">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4"
+                                stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                                <path d="M6 13.4 12 7.9l6 5.5" />
+                                <path d="M6 18.6 12 13.1l6 5.5" />
+                            </svg>
+                        </span>
+                        <span class="modalidade-name">PAD</span>
+                        <span class="modalidade-meta"><b>1 turma</b><br>Terça</span>
+                    </a>
+
                 </div>
             </div>
-        </div>
-    </section>
+        </section>
+
+
+        <!-- ==========================================
+             GRADE — as 54 turmas, estáticas no HTML. O JS só esconde e
+             mostra o que já está aqui: sem JS, sem filtro, mas a grade
+             inteira continua na página e no índice.
+        ========================================== -->
+        <section class="grade" id="grade">
+            <div class="section-inner">
+                <div class="grade-head animate-on-scroll">
+                    <span class="section-label">Grade de horários</span>
+                    <h2 class="section-title">Todas as turmas, com dia e hora</h2>
+                    <div class="gold-divider"></div>
+                    <p class="section-subtitle">Esta é a grade que roda hoje na escola — as 54 turmas, o dia e o
+                        horário. <strong>Toda aula tem 1 hora</strong>; as de dois dias na semana são 2× por semana,
+                        as de um dia são 1×. Ache a sua: o WhatsApp já abre com o nome da turma escrito.</p>
+                </div>
+
+                <div class="filtros" id="filtros" role="group" aria-label="Filtrar a grade de turmas">
+                    <p class="filtro-busca">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                            stroke-linecap="round" aria-hidden="true">
+                            <circle cx="11" cy="11" r="7" />
+                            <path d="M20 20l-3.6-3.6" />
+                        </svg>
+                        <!-- Placeholder curto de propósito: input não põe
+                             reticências quando estoura, ele corta no meio da
+                             palavra. Este cabe inteiro em 375px. -->
+                        <input type="search" id="busca" autocomplete="off"
+                            placeholder="Buscar: jazz, baby, sábado…"
+                            aria-label="Buscar turma por modalidade, nível ou dia da semana">
+                    </p>
+                    <fieldset class="chips">
+                        <legend class="sr-only">Dia da semana</legend>
+                        <label class="chip"><input type="radio" name="dia" value="" checked><span>Todos os dias</span></label>
+                        <label class="chip"><input type="radio" name="dia" value="segunda"><span>Seg</span></label>
+                        <label class="chip"><input type="radio" name="dia" value="terca"><span>Ter</span></label>
+                        <label class="chip"><input type="radio" name="dia" value="quarta"><span>Qua</span></label>
+                        <label class="chip"><input type="radio" name="dia" value="quinta"><span>Qui</span></label>
+                        <label class="chip"><input type="radio" name="dia" value="sexta"><span>Sex</span></label>
+                        <label class="chip"><input type="radio" name="dia" value="sabado"><span>Sáb</span></label>
+                    </fieldset>
+                    <label class="chip chip-adulto">
+                        <input type="checkbox" id="soAdulto">
+                        <span>Só turmas para adultos</span>
+                    </label>
+                </div>
+
+                <p class="grade-contador" id="contador" role="status" aria-live="polite">
+                    Mostrando <b>54</b> de 54 turmas
+                </p>
+
+                <div id="gradeCorpo">
+<section class="familia" id="grade-ballet">
+<h3 class="familia-titulo">Ballet Clássico<span class="familia-conta">20 turmas · Seg a Sáb</span></h3>
+<ul class="turmas">
+<li class="turma" data-dias="segunda quarta" data-adulto="0"><span class="turma-nome">Ballet Grade 1</span><span class="turma-meta"><span class="turma-hora"><b>09:00</b><i>–10:00</i></span><span class="turma-dias">Seg e Qua</span><span class="turma-freq">2× por semana</span></span><a class="turma-zap" href="https://wa.me/5519999412411?text=Ol%C3%A1!%20Quero%20saber%20sobre%20a%20turma%20de%20Ballet%20Grade%201%20(Seg%20e%20Qua,%2009:00)." target="_blank" rel="noopener" aria-label="WhatsApp sobre Ballet Grade 1, Seg e Qua, 09:00"><svg class="ico-zap" aria-hidden="true"><use href="#i-zap"></use></svg><span>Quero esta</span></a></li>
+<li class="turma" data-dias="segunda quarta" data-adulto="0"><span class="turma-nome">Ballet Baby 1</span><span class="turma-meta"><span class="turma-hora"><b>10:00</b><i>–11:00</i></span><span class="turma-dias">Seg e Qua</span><span class="turma-freq">2× por semana</span></span><a class="turma-zap" href="https://wa.me/5519999412411?text=Ol%C3%A1!%20Quero%20saber%20sobre%20a%20turma%20de%20Ballet%20Baby%201%20(Seg%20e%20Qua,%2010:00)." target="_blank" rel="noopener" aria-label="WhatsApp sobre Ballet Baby 1, Seg e Qua, 10:00"><svg class="ico-zap" aria-hidden="true"><use href="#i-zap"></use></svg><span>Quero esta</span></a></li>
+<li class="turma" data-dias="segunda quarta" data-adulto="0"><span class="turma-nome">Ballet Baby 1</span><span class="turma-meta"><span class="turma-hora"><b>15:00</b><i>–16:00</i></span><span class="turma-dias">Seg e Qua</span><span class="turma-freq">2× por semana</span></span><a class="turma-zap" href="https://wa.me/5519999412411?text=Ol%C3%A1!%20Quero%20saber%20sobre%20a%20turma%20de%20Ballet%20Baby%201%20(Seg%20e%20Qua,%2015:00)." target="_blank" rel="noopener" aria-label="WhatsApp sobre Ballet Baby 1, Seg e Qua, 15:00"><svg class="ico-zap" aria-hidden="true"><use href="#i-zap"></use></svg><span>Quero esta</span></a></li>
+<li class="turma" data-dias="segunda quarta" data-adulto="0"><span class="turma-nome">Ballet Pre-Primary</span><span class="turma-meta"><span class="turma-hora"><b>17:00</b><i>–18:00</i></span><span class="turma-dias">Seg e Qua</span><span class="turma-freq">2× por semana</span></span><a class="turma-zap" href="https://wa.me/5519999412411?text=Ol%C3%A1!%20Quero%20saber%20sobre%20a%20turma%20de%20Ballet%20Pre-Primary%20(Seg%20e%20Qua,%2017:00)." target="_blank" rel="noopener" aria-label="WhatsApp sobre Ballet Pre-Primary, Seg e Qua, 17:00"><svg class="ico-zap" aria-hidden="true"><use href="#i-zap"></use></svg><span>Quero esta</span></a></li>
+<li class="turma" data-dias="segunda quarta" data-adulto="0"><span class="turma-nome">Ballet Baby 2</span><span class="turma-meta"><span class="turma-hora"><b>18:00</b><i>–19:00</i></span><span class="turma-dias">Seg e Qua</span><span class="turma-freq">2× por semana</span></span><a class="turma-zap" href="https://wa.me/5519999412411?text=Ol%C3%A1!%20Quero%20saber%20sobre%20a%20turma%20de%20Ballet%20Baby%202%20(Seg%20e%20Qua,%2018:00)." target="_blank" rel="noopener" aria-label="WhatsApp sobre Ballet Baby 2, Seg e Qua, 18:00"><svg class="ico-zap" aria-hidden="true"><use href="#i-zap"></use></svg><span>Quero esta</span></a></li>
+<li class="turma" data-dias="segunda quarta" data-adulto="0"><span class="turma-nome">Ballet Grade 1</span><span class="turma-meta"><span class="turma-hora"><b>18:00</b><i>–19:00</i></span><span class="turma-dias">Seg e Qua</span><span class="turma-freq">2× por semana</span></span><a class="turma-zap" href="https://wa.me/5519999412411?text=Ol%C3%A1!%20Quero%20saber%20sobre%20a%20turma%20de%20Ballet%20Grade%201%20(Seg%20e%20Qua,%2018:00)." target="_blank" rel="noopener" aria-label="WhatsApp sobre Ballet Grade 1, Seg e Qua, 18:00"><svg class="ico-zap" aria-hidden="true"><use href="#i-zap"></use></svg><span>Quero esta</span></a></li>
+<li class="turma" data-dias="segunda quarta" data-adulto="0"><span class="turma-nome">Ballet Grade 2</span><span class="turma-meta"><span class="turma-hora"><b>19:00</b><i>–20:00</i></span><span class="turma-dias">Seg e Qua</span><span class="turma-freq">2× por semana</span></span><a class="turma-zap" href="https://wa.me/5519999412411?text=Ol%C3%A1!%20Quero%20saber%20sobre%20a%20turma%20de%20Ballet%20Grade%202%20(Seg%20e%20Qua,%2019:00)." target="_blank" rel="noopener" aria-label="WhatsApp sobre Ballet Grade 2, Seg e Qua, 19:00"><svg class="ico-zap" aria-hidden="true"><use href="#i-zap"></use></svg><span>Quero esta</span></a></li>
+<li class="turma" data-dias="segunda quarta" data-adulto="1"><span class="turma-nome">Ballet Adulto</span><span class="turma-meta"><span class="turma-hora"><b>19:00</b><i>–20:00</i></span><span class="turma-dias">Seg e Qua</span><span class="turma-freq">2× por semana</span></span><a class="turma-zap" href="https://wa.me/5519999412411?text=Ol%C3%A1!%20Quero%20saber%20sobre%20a%20turma%20de%20Ballet%20Adulto%20(Seg%20e%20Qua,%2019:00)." target="_blank" rel="noopener" aria-label="WhatsApp sobre Ballet Adulto, Seg e Qua, 19:00"><svg class="ico-zap" aria-hidden="true"><use href="#i-zap"></use></svg><span>Quero esta</span></a></li>
+<li class="turma" data-dias="terca quinta" data-adulto="1"><span class="turma-nome">Ballet Adulto</span><span class="turma-meta"><span class="turma-hora"><b>08:00</b><i>–09:00</i></span><span class="turma-dias">Ter e Qui</span><span class="turma-freq">2× por semana</span></span><a class="turma-zap" href="https://wa.me/5519999412411?text=Ol%C3%A1!%20Quero%20saber%20sobre%20a%20turma%20de%20Ballet%20Adulto%20(Ter%20e%20Qui,%2008:00)." target="_blank" rel="noopener" aria-label="WhatsApp sobre Ballet Adulto, Ter e Qui, 08:00"><svg class="ico-zap" aria-hidden="true"><use href="#i-zap"></use></svg><span>Quero esta</span></a></li>
+<li class="turma" data-dias="terca quinta" data-adulto="0"><span class="turma-nome">Ballet Pre-Primary</span><span class="turma-meta"><span class="turma-hora"><b>09:00</b><i>–10:00</i></span><span class="turma-dias">Ter e Qui</span><span class="turma-freq">2× por semana</span></span><a class="turma-zap" href="https://wa.me/5519999412411?text=Ol%C3%A1!%20Quero%20saber%20sobre%20a%20turma%20de%20Ballet%20Pre-Primary%20(Ter%20e%20Qui,%2009:00)." target="_blank" rel="noopener" aria-label="WhatsApp sobre Ballet Pre-Primary, Ter e Qui, 09:00"><svg class="ico-zap" aria-hidden="true"><use href="#i-zap"></use></svg><span>Quero esta</span></a></li>
+<li class="turma" data-dias="terca quinta" data-adulto="0"><span class="turma-nome">Ballet Intermediate Foundation</span><span class="turma-meta"><span class="turma-hora"><b>15:30</b><i>–16:30</i></span><span class="turma-dias">Ter e Qui</span><span class="turma-freq">2× por semana</span></span><a class="turma-zap" href="https://wa.me/5519999412411?text=Ol%C3%A1!%20Quero%20saber%20sobre%20a%20turma%20de%20Ballet%20Intermediate%20Foundation%20(Ter%20e%20Qui,%2015:30)." target="_blank" rel="noopener" aria-label="WhatsApp sobre Ballet Intermediate Foundation, Ter e Qui, 15:30"><svg class="ico-zap" aria-hidden="true"><use href="#i-zap"></use></svg><span>Quero esta</span></a></li>
+<li class="turma" data-dias="terca quinta" data-adulto="0"><span class="turma-nome">Ballet Primary</span><span class="turma-meta"><span class="turma-hora"><b>18:30</b><i>–19:30</i></span><span class="turma-dias">Ter e Qui</span><span class="turma-freq">2× por semana</span></span><a class="turma-zap" href="https://wa.me/5519999412411?text=Ol%C3%A1!%20Quero%20saber%20sobre%20a%20turma%20de%20Ballet%20Primary%20(Ter%20e%20Qui,%2018:30)." target="_blank" rel="noopener" aria-label="WhatsApp sobre Ballet Primary, Ter e Qui, 18:30"><svg class="ico-zap" aria-hidden="true"><use href="#i-zap"></use></svg><span>Quero esta</span></a></li>
+<li class="turma" data-dias="terca quinta" data-adulto="1"><span class="turma-nome">Ballet Adulto</span><span class="turma-meta"><span class="turma-hora"><b>19:30</b><i>–20:30</i></span><span class="turma-dias">Ter e Qui</span><span class="turma-freq">2× por semana</span></span><a class="turma-zap" href="https://wa.me/5519999412411?text=Ol%C3%A1!%20Quero%20saber%20sobre%20a%20turma%20de%20Ballet%20Adulto%20(Ter%20e%20Qui,%2019:30)." target="_blank" rel="noopener" aria-label="WhatsApp sobre Ballet Adulto, Ter e Qui, 19:30"><svg class="ico-zap" aria-hidden="true"><use href="#i-zap"></use></svg><span>Quero esta</span></a></li>
+<li class="turma" data-dias="sexta" data-adulto="0"><span class="turma-nome">Ballet Baby 1</span><span class="turma-meta"><span class="turma-hora"><b>17:30</b><i>–18:30</i></span><span class="turma-dias">Sex</span><span class="turma-freq">1× por semana</span></span><a class="turma-zap" href="https://wa.me/5519999412411?text=Ol%C3%A1!%20Quero%20saber%20sobre%20a%20turma%20de%20Ballet%20Baby%201%20(Sex,%2017:30)." target="_blank" rel="noopener" aria-label="WhatsApp sobre Ballet Baby 1, Sex, 17:30"><svg class="ico-zap" aria-hidden="true"><use href="#i-zap"></use></svg><span>Quero esta</span></a></li>
+<li class="turma" data-dias="sexta" data-adulto="0"><span class="turma-nome">Ballet Baby 2</span><span class="turma-meta"><span class="turma-hora"><b>17:30</b><i>–18:30</i></span><span class="turma-dias">Sex</span><span class="turma-freq">1× por semana</span></span><a class="turma-zap" href="https://wa.me/5519999412411?text=Ol%C3%A1!%20Quero%20saber%20sobre%20a%20turma%20de%20Ballet%20Baby%202%20(Sex,%2017:30)." target="_blank" rel="noopener" aria-label="WhatsApp sobre Ballet Baby 2, Sex, 17:30"><svg class="ico-zap" aria-hidden="true"><use href="#i-zap"></use></svg><span>Quero esta</span></a></li>
+<li class="turma" data-dias="sabado" data-adulto="0"><span class="turma-nome">Ballet Baby 2</span><span class="turma-meta"><span class="turma-hora"><b>08:30</b><i>–09:30</i></span><span class="turma-dias">Sáb</span><span class="turma-freq">1× por semana</span></span><a class="turma-zap" href="https://wa.me/5519999412411?text=Ol%C3%A1!%20Quero%20saber%20sobre%20a%20turma%20de%20Ballet%20Baby%202%20(S%C3%A1b,%2008:30)." target="_blank" rel="noopener" aria-label="WhatsApp sobre Ballet Baby 2, Sáb, 08:30"><svg class="ico-zap" aria-hidden="true"><use href="#i-zap"></use></svg><span>Quero esta</span></a></li>
+<li class="turma" data-dias="sabado" data-adulto="0"><span class="turma-nome">Ballet Baby 1</span><span class="turma-meta"><span class="turma-hora"><b>08:30</b><i>–09:30</i></span><span class="turma-dias">Sáb</span><span class="turma-freq">1× por semana</span></span><a class="turma-zap" href="https://wa.me/5519999412411?text=Ol%C3%A1!%20Quero%20saber%20sobre%20a%20turma%20de%20Ballet%20Baby%201%20(S%C3%A1b,%2008:30)." target="_blank" rel="noopener" aria-label="WhatsApp sobre Ballet Baby 1, Sáb, 08:30"><svg class="ico-zap" aria-hidden="true"><use href="#i-zap"></use></svg><span>Quero esta</span></a></li>
+<li class="turma" data-dias="sabado" data-adulto="0"><span class="turma-nome">Ballet Primary Preparatório</span><span class="turma-meta"><span class="turma-hora"><b>09:30</b><i>–10:30</i></span><span class="turma-dias">Sáb</span><span class="turma-freq">1× por semana</span></span><a class="turma-zap" href="https://wa.me/5519999412411?text=Ol%C3%A1!%20Quero%20saber%20sobre%20a%20turma%20de%20Ballet%20Primary%20Preparat%C3%B3rio%20(S%C3%A1b,%2009:30)." target="_blank" rel="noopener" aria-label="WhatsApp sobre Ballet Primary Preparatório, Sáb, 09:30"><svg class="ico-zap" aria-hidden="true"><use href="#i-zap"></use></svg><span>Quero esta</span></a></li>
+<li class="turma" data-dias="sabado" data-adulto="0"><span class="turma-nome">Ballet Baby 1</span><span class="turma-meta"><span class="turma-hora"><b>10:30</b><i>–11:30</i></span><span class="turma-dias">Sáb</span><span class="turma-freq">1× por semana</span></span><a class="turma-zap" href="https://wa.me/5519999412411?text=Ol%C3%A1!%20Quero%20saber%20sobre%20a%20turma%20de%20Ballet%20Baby%201%20(S%C3%A1b,%2010:30)." target="_blank" rel="noopener" aria-label="WhatsApp sobre Ballet Baby 1, Sáb, 10:30"><svg class="ico-zap" aria-hidden="true"><use href="#i-zap"></use></svg><span>Quero esta</span></a></li>
+<li class="turma" data-dias="sabado" data-adulto="0"><span class="turma-nome">Ballet Infantil</span><span class="turma-meta"><span class="turma-hora"><b>10:30</b><i>–11:30</i></span><span class="turma-dias">Sáb</span><span class="turma-freq">1× por semana</span></span><a class="turma-zap" href="https://wa.me/5519999412411?text=Ol%C3%A1!%20Quero%20saber%20sobre%20a%20turma%20de%20Ballet%20Infantil%20(S%C3%A1b,%2010:30)." target="_blank" rel="noopener" aria-label="WhatsApp sobre Ballet Infantil, Sáb, 10:30"><svg class="ico-zap" aria-hidden="true"><use href="#i-zap"></use></svg><span>Quero esta</span></a></li>
+</ul>
+</section>
+<section class="familia" id="grade-jazz">
+<h3 class="familia-titulo">Jazz<span class="familia-conta">14 turmas · Seg a Qui · Sáb</span></h3>
+<ul class="turmas">
+<li class="turma" data-dias="segunda quarta" data-adulto="1"><span class="turma-nome">Jazz Adulto</span><span class="turma-meta"><span class="turma-hora"><b>09:00</b><i>–10:00</i></span><span class="turma-dias">Seg e Qua</span><span class="turma-freq">2× por semana</span></span><a class="turma-zap" href="https://wa.me/5519999412411?text=Ol%C3%A1!%20Quero%20saber%20sobre%20a%20turma%20de%20Jazz%20Adulto%20(Seg%20e%20Qua,%2009:00)." target="_blank" rel="noopener" aria-label="WhatsApp sobre Jazz Adulto, Seg e Qua, 09:00"><svg class="ico-zap" aria-hidden="true"><use href="#i-zap"></use></svg><span>Quero esta</span></a></li>
+<li class="turma" data-dias="segunda quarta" data-adulto="0"><span class="turma-nome">Jazz Infantil</span><span class="turma-meta"><span class="turma-hora"><b>10:00</b><i>–11:00</i></span><span class="turma-dias">Seg e Qua</span><span class="turma-freq">2× por semana</span></span><a class="turma-zap" href="https://wa.me/5519999412411?text=Ol%C3%A1!%20Quero%20saber%20sobre%20a%20turma%20de%20Jazz%20Infantil%20(Seg%20e%20Qua,%2010:00)." target="_blank" rel="noopener" aria-label="WhatsApp sobre Jazz Infantil, Seg e Qua, 10:00"><svg class="ico-zap" aria-hidden="true"><use href="#i-zap"></use></svg><span>Quero esta</span></a></li>
+<li class="turma" data-dias="segunda quarta" data-adulto="1"><span class="turma-nome">Jazz Adulto Iniciante</span><span class="turma-meta"><span class="turma-hora"><b>10:00</b><i>–11:00</i></span><span class="turma-dias">Seg e Qua</span><span class="turma-freq">2× por semana</span></span><a class="turma-zap" href="https://wa.me/5519999412411?text=Ol%C3%A1!%20Quero%20saber%20sobre%20a%20turma%20de%20Jazz%20Adulto%20Iniciante%20(Seg%20e%20Qua,%2010:00)." target="_blank" rel="noopener" aria-label="WhatsApp sobre Jazz Adulto Iniciante, Seg e Qua, 10:00"><svg class="ico-zap" aria-hidden="true"><use href="#i-zap"></use></svg><span>Quero esta</span></a></li>
+<li class="turma" data-dias="segunda quarta" data-adulto="0"><span class="turma-nome">Jazz Juvenil</span><span class="turma-meta"><span class="turma-hora"><b>16:00</b><i>–17:00</i></span><span class="turma-dias">Seg e Qua</span><span class="turma-freq">2× por semana</span></span><a class="turma-zap" href="https://wa.me/5519999412411?text=Ol%C3%A1!%20Quero%20saber%20sobre%20a%20turma%20de%20Jazz%20Juvenil%20(Seg%20e%20Qua,%2016:00)." target="_blank" rel="noopener" aria-label="WhatsApp sobre Jazz Juvenil, Seg e Qua, 16:00"><svg class="ico-zap" aria-hidden="true"><use href="#i-zap"></use></svg><span>Quero esta</span></a></li>
+<li class="turma" data-dias="segunda quarta" data-adulto="0"><span class="turma-nome">Jazz Infantil 2</span><span class="turma-meta"><span class="turma-hora"><b>17:00</b><i>–18:00</i></span><span class="turma-dias">Seg e Qua</span><span class="turma-freq">2× por semana</span></span><a class="turma-zap" href="https://wa.me/5519999412411?text=Ol%C3%A1!%20Quero%20saber%20sobre%20a%20turma%20de%20Jazz%20Infantil%202%20(Seg%20e%20Qua,%2017:00)." target="_blank" rel="noopener" aria-label="WhatsApp sobre Jazz Infantil 2, Seg e Qua, 17:00"><svg class="ico-zap" aria-hidden="true"><use href="#i-zap"></use></svg><span>Quero esta</span></a></li>
+<li class="turma" data-dias="segunda quarta" data-adulto="0"><span class="turma-nome">Jazz Infantil 1</span><span class="turma-meta"><span class="turma-hora"><b>17:00</b><i>–18:00</i></span><span class="turma-dias">Seg e Qua</span><span class="turma-freq">2× por semana</span></span><a class="turma-zap" href="https://wa.me/5519999412411?text=Ol%C3%A1!%20Quero%20saber%20sobre%20a%20turma%20de%20Jazz%20Infantil%201%20(Seg%20e%20Qua,%2017:00)." target="_blank" rel="noopener" aria-label="WhatsApp sobre Jazz Infantil 1, Seg e Qua, 17:00"><svg class="ico-zap" aria-hidden="true"><use href="#i-zap"></use></svg><span>Quero esta</span></a></li>
+<li class="turma" data-dias="segunda quarta" data-adulto="0"><span class="turma-nome">Jazz Juvenil</span><span class="turma-meta"><span class="turma-hora"><b>19:00</b><i>–20:00</i></span><span class="turma-dias">Seg e Qua</span><span class="turma-freq">2× por semana</span></span><a class="turma-zap" href="https://wa.me/5519999412411?text=Ol%C3%A1!%20Quero%20saber%20sobre%20a%20turma%20de%20Jazz%20Juvenil%20(Seg%20e%20Qua,%2019:00)." target="_blank" rel="noopener" aria-label="WhatsApp sobre Jazz Juvenil, Seg e Qua, 19:00"><svg class="ico-zap" aria-hidden="true"><use href="#i-zap"></use></svg><span>Quero esta</span></a></li>
+<li class="turma" data-dias="segunda quarta" data-adulto="1"><span class="turma-nome">Jazz Adulto</span><span class="turma-meta"><span class="turma-hora"><b>20:00</b><i>–21:00</i></span><span class="turma-dias">Seg e Qua</span><span class="turma-freq">2× por semana</span></span><a class="turma-zap" href="https://wa.me/5519999412411?text=Ol%C3%A1!%20Quero%20saber%20sobre%20a%20turma%20de%20Jazz%20Adulto%20(Seg%20e%20Qua,%2020:00)." target="_blank" rel="noopener" aria-label="WhatsApp sobre Jazz Adulto, Seg e Qua, 20:00"><svg class="ico-zap" aria-hidden="true"><use href="#i-zap"></use></svg><span>Quero esta</span></a></li>
+<li class="turma" data-dias="terca quinta" data-adulto="0"><span class="turma-nome">Jazz Baby</span><span class="turma-meta"><span class="turma-hora"><b>15:30</b><i>–16:30</i></span><span class="turma-dias">Ter e Qui</span><span class="turma-freq">2× por semana</span></span><a class="turma-zap" href="https://wa.me/5519999412411?text=Ol%C3%A1!%20Quero%20saber%20sobre%20a%20turma%20de%20Jazz%20Baby%20(Ter%20e%20Qui,%2015:30)." target="_blank" rel="noopener" aria-label="WhatsApp sobre Jazz Baby, Ter e Qui, 15:30"><svg class="ico-zap" aria-hidden="true"><use href="#i-zap"></use></svg><span>Quero esta</span></a></li>
+<li class="turma" data-dias="terca quinta" data-adulto="0"><span class="turma-nome">Jazz Infanto-Juvenil</span><span class="turma-meta"><span class="turma-hora"><b>16:30</b><i>–17:30</i></span><span class="turma-dias">Ter e Qui</span><span class="turma-freq">2× por semana</span></span><a class="turma-zap" href="https://wa.me/5519999412411?text=Ol%C3%A1!%20Quero%20saber%20sobre%20a%20turma%20de%20Jazz%20Infanto-Juvenil%20(Ter%20e%20Qui,%2016:30)." target="_blank" rel="noopener" aria-label="WhatsApp sobre Jazz Infanto-Juvenil, Ter e Qui, 16:30"><svg class="ico-zap" aria-hidden="true"><use href="#i-zap"></use></svg><span>Quero esta</span></a></li>
+<li class="turma" data-dias="terca quinta" data-adulto="0"><span class="turma-nome">Jazz Juvenil</span><span class="turma-meta"><span class="turma-hora"><b>17:30</b><i>–18:30</i></span><span class="turma-dias">Ter e Qui</span><span class="turma-freq">2× por semana</span></span><a class="turma-zap" href="https://wa.me/5519999412411?text=Ol%C3%A1!%20Quero%20saber%20sobre%20a%20turma%20de%20Jazz%20Juvenil%20(Ter%20e%20Qui,%2017:30)." target="_blank" rel="noopener" aria-label="WhatsApp sobre Jazz Juvenil, Ter e Qui, 17:30"><svg class="ico-zap" aria-hidden="true"><use href="#i-zap"></use></svg><span>Quero esta</span></a></li>
+<li class="turma" data-dias="terca quinta" data-adulto="0"><span class="turma-nome">Jazz Infanto-Juvenil</span><span class="turma-meta"><span class="turma-hora"><b>18:30</b><i>–19:30</i></span><span class="turma-dias">Ter e Qui</span><span class="turma-freq">2× por semana</span></span><a class="turma-zap" href="https://wa.me/5519999412411?text=Ol%C3%A1!%20Quero%20saber%20sobre%20a%20turma%20de%20Jazz%20Infanto-Juvenil%20(Ter%20e%20Qui,%2018:30)." target="_blank" rel="noopener" aria-label="WhatsApp sobre Jazz Infanto-Juvenil, Ter e Qui, 18:30"><svg class="ico-zap" aria-hidden="true"><use href="#i-zap"></use></svg><span>Quero esta</span></a></li>
+<li class="turma" data-dias="terca quinta" data-adulto="1"><span class="turma-nome">Jazz Adulto</span><span class="turma-meta"><span class="turma-hora"><b>20:30</b><i>–21:30</i></span><span class="turma-dias">Ter e Qui</span><span class="turma-freq">2× por semana</span></span><a class="turma-zap" href="https://wa.me/5519999412411?text=Ol%C3%A1!%20Quero%20saber%20sobre%20a%20turma%20de%20Jazz%20Adulto%20(Ter%20e%20Qui,%2020:30)." target="_blank" rel="noopener" aria-label="WhatsApp sobre Jazz Adulto, Ter e Qui, 20:30"><svg class="ico-zap" aria-hidden="true"><use href="#i-zap"></use></svg><span>Quero esta</span></a></li>
+<li class="turma" data-dias="sabado" data-adulto="0"><span class="turma-nome">Jazz Infantil</span><span class="turma-meta"><span class="turma-hora"><b>09:30</b><i>–10:30</i></span><span class="turma-dias">Sáb</span><span class="turma-freq">1× por semana</span></span><a class="turma-zap" href="https://wa.me/5519999412411?text=Ol%C3%A1!%20Quero%20saber%20sobre%20a%20turma%20de%20Jazz%20Infantil%20(S%C3%A1b,%2009:30)." target="_blank" rel="noopener" aria-label="WhatsApp sobre Jazz Infantil, Sáb, 09:30"><svg class="ico-zap" aria-hidden="true"><use href="#i-zap"></use></svg><span>Quero esta</span></a></li>
+</ul>
+</section>
+<section class="familia" id="grade-hiphop">
+<h3 class="familia-titulo">Hip Hop<span class="familia-conta">9 turmas · Ter · Qui a Sáb</span></h3>
+<ul class="turmas">
+<li class="turma" data-dias="terca" data-adulto="0"><span class="turma-nome">Hip Hop Infantil</span><span class="turma-meta"><span class="turma-hora"><b>14:30</b><i>–15:30</i></span><span class="turma-dias">Ter</span><span class="turma-freq">1× por semana</span></span><a class="turma-zap" href="https://wa.me/5519999412411?text=Ol%C3%A1!%20Quero%20saber%20sobre%20a%20turma%20de%20Hip%20Hop%20Infantil%20(Ter,%2014:30)." target="_blank" rel="noopener" aria-label="WhatsApp sobre Hip Hop Infantil, Ter, 14:30"><svg class="ico-zap" aria-hidden="true"><use href="#i-zap"></use></svg><span>Quero esta</span></a></li>
+<li class="turma" data-dias="terca quinta" data-adulto="0"><span class="turma-nome">Hip Hop Infanto-Juvenil</span><span class="turma-meta"><span class="turma-hora"><b>16:30</b><i>–17:30</i></span><span class="turma-dias">Ter e Qui</span><span class="turma-freq">2× por semana</span></span><a class="turma-zap" href="https://wa.me/5519999412411?text=Ol%C3%A1!%20Quero%20saber%20sobre%20a%20turma%20de%20Hip%20Hop%20Infanto-Juvenil%20(Ter%20e%20Qui,%2016:30)." target="_blank" rel="noopener" aria-label="WhatsApp sobre Hip Hop Infanto-Juvenil, Ter e Qui, 16:30"><svg class="ico-zap" aria-hidden="true"><use href="#i-zap"></use></svg><span>Quero esta</span></a></li>
+<li class="turma" data-dias="terca quinta" data-adulto="0"><span class="turma-nome">Hip Hop Infantil</span><span class="turma-meta"><span class="turma-hora"><b>17:30</b><i>–18:30</i></span><span class="turma-dias">Ter e Qui</span><span class="turma-freq">2× por semana</span></span><a class="turma-zap" href="https://wa.me/5519999412411?text=Ol%C3%A1!%20Quero%20saber%20sobre%20a%20turma%20de%20Hip%20Hop%20Infantil%20(Ter%20e%20Qui,%2017:30)." target="_blank" rel="noopener" aria-label="WhatsApp sobre Hip Hop Infantil, Ter e Qui, 17:30"><svg class="ico-zap" aria-hidden="true"><use href="#i-zap"></use></svg><span>Quero esta</span></a></li>
+<li class="turma" data-dias="terca quinta" data-adulto="0"><span class="turma-nome">Hip Hop Juvenil</span><span class="turma-meta"><span class="turma-hora"><b>18:30</b><i>–19:30</i></span><span class="turma-dias">Ter e Qui</span><span class="turma-freq">2× por semana</span></span><a class="turma-zap" href="https://wa.me/5519999412411?text=Ol%C3%A1!%20Quero%20saber%20sobre%20a%20turma%20de%20Hip%20Hop%20Juvenil%20(Ter%20e%20Qui,%2018:30)." target="_blank" rel="noopener" aria-label="WhatsApp sobre Hip Hop Juvenil, Ter e Qui, 18:30"><svg class="ico-zap" aria-hidden="true"><use href="#i-zap"></use></svg><span>Quero esta</span></a></li>
+<li class="turma" data-dias="terca quinta" data-adulto="0"><span class="turma-nome">Hip Hop Juvenil</span><span class="turma-meta"><span class="turma-hora"><b>19:30</b><i>–20:30</i></span><span class="turma-dias">Ter e Qui</span><span class="turma-freq">2× por semana</span></span><a class="turma-zap" href="https://wa.me/5519999412411?text=Ol%C3%A1!%20Quero%20saber%20sobre%20a%20turma%20de%20Hip%20Hop%20Juvenil%20(Ter%20e%20Qui,%2019:30)." target="_blank" rel="noopener" aria-label="WhatsApp sobre Hip Hop Juvenil, Ter e Qui, 19:30"><svg class="ico-zap" aria-hidden="true"><use href="#i-zap"></use></svg><span>Quero esta</span></a></li>
+<li class="turma" data-dias="sexta" data-adulto="0"><span class="turma-nome">Hip Hop Infantil</span><span class="turma-meta"><span class="turma-hora"><b>08:30</b><i>–09:30</i></span><span class="turma-dias">Sex</span><span class="turma-freq">1× por semana</span></span><a class="turma-zap" href="https://wa.me/5519999412411?text=Ol%C3%A1!%20Quero%20saber%20sobre%20a%20turma%20de%20Hip%20Hop%20Infantil%20(Sex,%2008:30)." target="_blank" rel="noopener" aria-label="WhatsApp sobre Hip Hop Infantil, Sex, 08:30"><svg class="ico-zap" aria-hidden="true"><use href="#i-zap"></use></svg><span>Quero esta</span></a></li>
+<li class="turma" data-dias="sabado" data-adulto="0"><span class="turma-nome">Hip Hop Baby</span><span class="turma-meta"><span class="turma-hora"><b>08:30</b><i>–09:30</i></span><span class="turma-dias">Sáb</span><span class="turma-freq">1× por semana</span></span><a class="turma-zap" href="https://wa.me/5519999412411?text=Ol%C3%A1!%20Quero%20saber%20sobre%20a%20turma%20de%20Hip%20Hop%20Baby%20(S%C3%A1b,%2008:30)." target="_blank" rel="noopener" aria-label="WhatsApp sobre Hip Hop Baby, Sáb, 08:30"><svg class="ico-zap" aria-hidden="true"><use href="#i-zap"></use></svg><span>Quero esta</span></a></li>
+<li class="turma" data-dias="sabado" data-adulto="0"><span class="turma-nome">Hip Hop Infanto-Juvenil</span><span class="turma-meta"><span class="turma-hora"><b>09:30</b><i>–10:30</i></span><span class="turma-dias">Sáb</span><span class="turma-freq">1× por semana</span></span><a class="turma-zap" href="https://wa.me/5519999412411?text=Ol%C3%A1!%20Quero%20saber%20sobre%20a%20turma%20de%20Hip%20Hop%20Infanto-Juvenil%20(S%C3%A1b,%2009:30)." target="_blank" rel="noopener" aria-label="WhatsApp sobre Hip Hop Infanto-Juvenil, Sáb, 09:30"><svg class="ico-zap" aria-hidden="true"><use href="#i-zap"></use></svg><span>Quero esta</span></a></li>
+<li class="turma" data-dias="sabado" data-adulto="0"><span class="turma-nome">Hip Hop Baby</span><span class="turma-meta"><span class="turma-hora"><b>10:30</b><i>–11:30</i></span><span class="turma-dias">Sáb</span><span class="turma-freq">1× por semana</span></span><a class="turma-zap" href="https://wa.me/5519999412411?text=Ol%C3%A1!%20Quero%20saber%20sobre%20a%20turma%20de%20Hip%20Hop%20Baby%20(S%C3%A1b,%2010:30)." target="_blank" rel="noopener" aria-label="WhatsApp sobre Hip Hop Baby, Sáb, 10:30"><svg class="ico-zap" aria-hidden="true"><use href="#i-zap"></use></svg><span>Quero esta</span></a></li>
+</ul>
+</section>
+<section class="familia" id="grade-sapateado">
+<h3 class="familia-titulo">Sapateado<span class="familia-conta">5 turmas · Seg · Qua · Sex</span></h3>
+<ul class="turmas">
+<li class="turma" data-dias="segunda quarta" data-adulto="0"><span class="turma-nome">Sapateado Infantil</span><span class="turma-meta"><span class="turma-hora"><b>15:00</b><i>–16:00</i></span><span class="turma-dias">Seg e Qua</span><span class="turma-freq">2× por semana</span></span><a class="turma-zap" href="https://wa.me/5519999412411?text=Ol%C3%A1!%20Quero%20saber%20sobre%20a%20turma%20de%20Sapateado%20Infantil%20(Seg%20e%20Qua,%2015:00)." target="_blank" rel="noopener" aria-label="WhatsApp sobre Sapateado Infantil, Seg e Qua, 15:00"><svg class="ico-zap" aria-hidden="true"><use href="#i-zap"></use></svg><span>Quero esta</span></a></li>
+<li class="turma" data-dias="segunda quarta" data-adulto="0"><span class="turma-nome">Sapateado Infanto-Juvenil</span><span class="turma-meta"><span class="turma-hora"><b>16:00</b><i>–17:00</i></span><span class="turma-dias">Seg e Qua</span><span class="turma-freq">2× por semana</span></span><a class="turma-zap" href="https://wa.me/5519999412411?text=Ol%C3%A1!%20Quero%20saber%20sobre%20a%20turma%20de%20Sapateado%20Infanto-Juvenil%20(Seg%20e%20Qua,%2016:00)." target="_blank" rel="noopener" aria-label="WhatsApp sobre Sapateado Infanto-Juvenil, Seg e Qua, 16:00"><svg class="ico-zap" aria-hidden="true"><use href="#i-zap"></use></svg><span>Quero esta</span></a></li>
+<li class="turma" data-dias="sexta" data-adulto="1"><span class="turma-nome">Sapateado Adulto</span><span class="turma-meta"><span class="turma-hora"><b>09:00</b><i>–10:00</i></span><span class="turma-dias">Sex</span><span class="turma-freq">1× por semana</span></span><a class="turma-zap" href="https://wa.me/5519999412411?text=Ol%C3%A1!%20Quero%20saber%20sobre%20a%20turma%20de%20Sapateado%20Adulto%20(Sex,%2009:00)." target="_blank" rel="noopener" aria-label="WhatsApp sobre Sapateado Adulto, Sex, 09:00"><svg class="ico-zap" aria-hidden="true"><use href="#i-zap"></use></svg><span>Quero esta</span></a></li>
+<li class="turma" data-dias="sexta" data-adulto="0"><span class="turma-nome">Sapateado Infantil</span><span class="turma-meta"><span class="turma-hora"><b>10:00</b><i>–11:00</i></span><span class="turma-dias">Sex</span><span class="turma-freq">1× por semana</span></span><a class="turma-zap" href="https://wa.me/5519999412411?text=Ol%C3%A1!%20Quero%20saber%20sobre%20a%20turma%20de%20Sapateado%20Infantil%20(Sex,%2010:00)." target="_blank" rel="noopener" aria-label="WhatsApp sobre Sapateado Infantil, Sex, 10:00"><svg class="ico-zap" aria-hidden="true"><use href="#i-zap"></use></svg><span>Quero esta</span></a></li>
+<li class="turma" data-dias="sexta" data-adulto="0"><span class="turma-nome">Sapateado Infantil</span><span class="turma-meta"><span class="turma-hora"><b>14:00</b><i>–15:00</i></span><span class="turma-dias">Sex</span><span class="turma-freq">1× por semana</span></span><a class="turma-zap" href="https://wa.me/5519999412411?text=Ol%C3%A1!%20Quero%20saber%20sobre%20a%20turma%20de%20Sapateado%20Infantil%20(Sex,%2014:00)." target="_blank" rel="noopener" aria-label="WhatsApp sobre Sapateado Infantil, Sex, 14:00"><svg class="ico-zap" aria-hidden="true"><use href="#i-zap"></use></svg><span>Quero esta</span></a></li>
+</ul>
+</section>
+<section class="familia" id="grade-contemporaneo">
+<h3 class="familia-titulo">Contemporâneo<span class="familia-conta">2 turmas · Sex</span></h3>
+<ul class="turmas">
+<li class="turma" data-dias="sexta" data-adulto="0"><span class="turma-nome">Contemporâneo</span><span class="turma-meta"><span class="turma-hora"><b>17:30</b><i>–18:30</i></span><span class="turma-dias">Sex</span><span class="turma-freq">1× por semana</span></span><a class="turma-zap" href="https://wa.me/5519999412411?text=Ol%C3%A1!%20Quero%20saber%20sobre%20a%20turma%20de%20Contempor%C3%A2neo%20(Sex,%2017:30)." target="_blank" rel="noopener" aria-label="WhatsApp sobre Contemporâneo, Sex, 17:30"><svg class="ico-zap" aria-hidden="true"><use href="#i-zap"></use></svg><span>Quero esta</span></a></li>
+<li class="turma" data-dias="sexta" data-adulto="1"><span class="turma-nome">Contemporâneo Adulto</span><span class="turma-meta"><span class="turma-hora"><b>18:30</b><i>–19:30</i></span><span class="turma-dias">Sex</span><span class="turma-freq">1× por semana</span></span><a class="turma-zap" href="https://wa.me/5519999412411?text=Ol%C3%A1!%20Quero%20saber%20sobre%20a%20turma%20de%20Contempor%C3%A2neo%20Adulto%20(Sex,%2018:30)." target="_blank" rel="noopener" aria-label="WhatsApp sobre Contemporâneo Adulto, Sex, 18:30"><svg class="ico-zap" aria-hidden="true"><use href="#i-zap"></use></svg><span>Quero esta</span></a></li>
+</ul>
+</section>
+<section class="familia" id="grade-teatro">
+<h3 class="familia-titulo">Teatro Musical<span class="familia-conta">2 turmas · Sex</span></h3>
+<ul class="turmas">
+<li class="turma" data-dias="sexta" data-adulto="0"><span class="turma-nome">Teatro Musical 1</span><span class="turma-meta"><span class="turma-hora"><b>15:30</b><i>–16:30</i></span><span class="turma-dias">Sex</span><span class="turma-freq">1× por semana</span></span><a class="turma-zap" href="https://wa.me/5519999412411?text=Ol%C3%A1!%20Quero%20saber%20sobre%20a%20turma%20de%20Teatro%20Musical%201%20(Sex,%2015:30)." target="_blank" rel="noopener" aria-label="WhatsApp sobre Teatro Musical 1, Sex, 15:30"><svg class="ico-zap" aria-hidden="true"><use href="#i-zap"></use></svg><span>Quero esta</span></a></li>
+<li class="turma" data-dias="sexta" data-adulto="0"><span class="turma-nome">Teatro Musical (2ª hora)</span><span class="turma-meta"><span class="turma-hora"><b>16:30</b><i>–17:30</i></span><span class="turma-dias">Sex</span><span class="turma-freq">1× por semana</span></span><a class="turma-zap" href="https://wa.me/5519999412411?text=Ol%C3%A1!%20Quero%20saber%20sobre%20a%20turma%20de%20Teatro%20Musical%20(2%C2%AA%20hora)%20(Sex,%2016:30)." target="_blank" rel="noopener" aria-label="WhatsApp sobre Teatro Musical (2ª hora), Sex, 16:30"><svg class="ico-zap" aria-hidden="true"><use href="#i-zap"></use></svg><span>Quero esta</span></a></li>
+</ul>
+</section>
+<section class="familia" id="grade-dancemix">
+<h3 class="familia-titulo">Dance Mix<span class="familia-conta">1 turma · Ter · Qui</span></h3>
+<ul class="turmas">
+<li class="turma" data-dias="terca quinta" data-adulto="0"><span class="turma-nome">Dance Mix</span><span class="turma-meta"><span class="turma-hora"><b>08:00</b><i>–09:00</i></span><span class="turma-dias">Ter e Qui</span><span class="turma-freq">2× por semana</span></span><a class="turma-zap" href="https://wa.me/5519999412411?text=Ol%C3%A1!%20Quero%20saber%20sobre%20a%20turma%20de%20Dance%20Mix%20(Ter%20e%20Qui,%2008:00)." target="_blank" rel="noopener" aria-label="WhatsApp sobre Dance Mix, Ter e Qui, 08:00"><svg class="ico-zap" aria-hidden="true"><use href="#i-zap"></use></svg><span>Quero esta</span></a></li>
+</ul>
+</section>
+<section class="familia" id="grade-pad">
+<h3 class="familia-titulo">PAD<span class="familia-conta">1 turma · Ter</span></h3>
+<ul class="turmas">
+<li class="turma" data-dias="terca" data-adulto="0"><span class="turma-nome">PAD – Preparação Avançada para Dançarinos</span><span class="turma-meta"><span class="turma-hora"><b>14:30</b><i>–15:30</i></span><span class="turma-dias">Ter</span><span class="turma-freq">1× por semana</span></span><a class="turma-zap" href="https://wa.me/5519999412411?text=Ol%C3%A1!%20Quero%20saber%20sobre%20a%20turma%20de%20PAD%20%E2%80%93%20Prepara%C3%A7%C3%A3o%20Avan%C3%A7ada%20para%20Dan%C3%A7arinos%20(Ter,%2014:30)." target="_blank" rel="noopener" aria-label="WhatsApp sobre PAD – Preparação Avançada para Dançarinos, Ter, 14:30"><svg class="ico-zap" aria-hidden="true"><use href="#i-zap"></use></svg><span>Quero esta</span></a></li>
+</ul>
+</section>
+</div>
+
+                <p class="grade-vazio" id="gradeVazio" hidden>
+                    <b>Nenhuma turma com esse filtro.</b><br>
+                    Tente outro dia — ou fale com a gente, que a gente procura junto.
+                </p>
+
+                <p class="grade-nota">
+                    Turmas em cartaz nesta temporada. O nome da turma é o nível dela — a escola confirma o encaixe
+                    quando você vem conhecer a turma.
+                </p>
+            </div>
+        </section>
+
+        <!-- ==========================================
+             ADULTO
+        ========================================== -->
+        <section class="adultos" id="adultos">
+            <div class="section-inner">
+                <div class="adultos-head animate-on-scroll">
+                    <span class="section-label">Para você</span>
+                    <h2 class="section-title">Adulto também dança aqui</h2>
+                    <div class="gold-divider"></div>
+                    <p>São 9 turmas de adulto na grade — Ballet, Jazz, Sapateado e Contemporâneo. De manhã, antes
+                        de o dia começar, ou à noite, depois que ele acaba. Uma delas é <strong>Jazz Adulto
+                            Iniciante</strong>: existe para quem está começando agora.</p>
+                    <a class="adultos-cta" href="#grade" data-so-adulto>
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                            stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                            <path d="M3 5h18M6 12h12M10 19h4" />
+                        </svg>
+                        Ver as 9 na grade
+                    </a>
+                </div>
+            </div>
+        </section>
+
+        <!-- ==========================================
+             A ESCOLA — o syllabus, em turma e horário.
+        ========================================== -->
+        <section class="escola" id="escola">
+            <div class="section-inner">
+                <div class="escola-head animate-on-scroll">
+                    <span class="section-label">A Escola</span>
+                    <h2 class="section-title">O syllabus não é um selo.<br>É o nome das turmas.</h2>
+                    <div class="gold-divider"></div>
+                    <p>No ballet da Ballance ninguém fica na “turma da tarde”. Fica em um <strong>nível</strong> —
+                        e em <strong>cinco dos oito degraus</strong> esse nível é o do syllabus da <strong>Royal
+                            Academy of Dance</strong>: o mesmo currículo, na mesma sequência, ensinado do mesmo
+                        jeito em escolas do mundo inteiro. É por isso que a grade diz “Grade 1” e “Intermediate
+                        Foundation” em vez de “iniciante” e “avançado”. Os outros três têm nome da casa e são
+                        preparação — Baby 1 e Baby 2, no começo, e o <strong>Primary Preparatório</strong>, que
+                        fica no meio da escada justamente porque prepara para o Primary. A escola inscreve alunos
+                        no <strong>Exame da Royal Academy of Dance</strong>, inclusive em 2026.</p>
+                </div>
+                <!-- O selo de cada degrau separa os 5 níveis com nome do syllabus
+                     RAD dos 3 de preparação da casa (Baby 1, Baby 2 e Primary
+                     Preparatório). Contagem e dias de cada degrau saem da aba
+                     TURMAS; o verificador reconta os oito. Quais degraus
+                     terminam em exame ainda não está confirmado — item 4 do
+                     PENDENCIAS_ESCOLA.md. -->
+                <ol class="escada animate-on-scroll"
+aria-label="Níveis de ballet na grade, do primeiro contato ao avançado">
+<li class="degrau degrau-casa" style="--n:1"><span class="degrau-barra" aria-hidden="true"></span><span class="degrau-selo">Preparação</span><span class="degrau-nivel">Baby 1</span><span class="degrau-info">5 turmas · Seg · Qua · Sex · Sáb</span></li>
+<li class="degrau degrau-casa" style="--n:2"><span class="degrau-barra" aria-hidden="true"></span><span class="degrau-selo">Preparação</span><span class="degrau-nivel">Baby 2</span><span class="degrau-info">3 turmas · Seg · Qua · Sex · Sáb</span></li>
+<li class="degrau degrau-rad" style="--n:3"><span class="degrau-barra" aria-hidden="true"></span><span class="degrau-selo">Syllabus RAD</span><span class="degrau-nivel">Pre-Primary</span><span class="degrau-info">2 turmas · Seg a Qui</span></li>
+<li class="degrau degrau-casa" style="--n:4"><span class="degrau-barra" aria-hidden="true"></span><span class="degrau-selo">Preparação</span><span class="degrau-nivel">Primary Preparatório</span><span class="degrau-info">1 turma · Sáb</span></li>
+<li class="degrau degrau-rad" style="--n:5"><span class="degrau-barra" aria-hidden="true"></span><span class="degrau-selo">Syllabus RAD</span><span class="degrau-nivel">Primary</span><span class="degrau-info">1 turma · Ter · Qui</span></li>
+<li class="degrau degrau-rad" style="--n:6"><span class="degrau-barra" aria-hidden="true"></span><span class="degrau-selo">Syllabus RAD</span><span class="degrau-nivel">Grade 1</span><span class="degrau-info">2 turmas · Seg · Qua</span></li>
+<li class="degrau degrau-rad" style="--n:7"><span class="degrau-barra" aria-hidden="true"></span><span class="degrau-selo">Syllabus RAD</span><span class="degrau-nivel">Grade 2</span><span class="degrau-info">1 turma · Seg · Qua</span></li>
+<li class="degrau degrau-rad" style="--n:8"><span class="degrau-barra" aria-hidden="true"></span><span class="degrau-selo">Syllabus RAD</span><span class="degrau-nivel">Intermediate Foundation</span><span class="degrau-info">1 turma · Ter · Qui</span></li>
+</ol>
+                <!-- Não repor a legenda de cor (dourado = RAD, cinza = casa): cada
+                     degrau já escreve o selo por extenso. -->
+                <p class="escada-nota">
+                    Fora da escada graduada, o ballet ainda tem 1 turma Infantil aos sábados e 3 turmas para
+                    adultos. <a href="#grade-ballet">Ver as 20 turmas de ballet na grade</a>.
+                </p>
+            </div>
+        </section>
+
+        <!-- ==========================================
+             LOCALIZAÇÃO
+        ========================================== -->
+        <section class="localizacao" id="localizacao">
+            <div class="section-inner">
+                <div class="loc-wrapper">
+                    <div class="loc-info animate-on-scroll">
+                        <span class="section-label">Onde estamos</span>
+                        <h2 class="section-title">Localização</h2>
+                        <div class="gold-divider"></div>
+                        <p class="loc-address">
+                            <strong>Ballance Escola de Dança</strong><br>
+                            Avenida Dermival Bernardes Siqueira, n° 3043<br>
+                            Swiss Park — Campinas/SP<br>
+                            CEP 13049-252
+                        </p>
+                        <!-- Faixas contadas da própria grade: são os horários
+                             em que existe aula, não o expediente da secretaria. -->
+                        <dl class="loc-horas">
+<dt>Seg e Qua</dt>
+<dd>09h00 – 21h00</dd>
+<dt>Ter e Qui</dt>
+<dd>08h00 – 21h30</dd>
+<dt>Sexta</dt>
+<dd>08h30 – 19h30</dd>
+<dt>Sábado</dt>
+<dd>08h30 – 11h30</dd>
+</dl>
+                        <p class="loc-horas-nota">Faixas em que há aula na grade.</p>
+                        <a href="https://www.google.com/maps/dir//Av.+Dermival+Bernardes+Siqueira,+3043+-+Swiss+Park,+Campinas+-+SP"
+                            target="_blank" rel="noopener" class="loc-btn">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                                aria-hidden="true">
+                                <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z" />
+                                <circle cx="12" cy="10" r="3" />
+                            </svg>
+                            Como Chegar
+                        </a>
+                    </div>
+                    <div class="loc-map animate-on-scroll">
+                        <iframe title="Mapa com a localização da Ballance Escola de Dança na Avenida Dermival Bernardes Siqueira, 3043 — Swiss Park, Campinas/SP"
+                            src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3675.0!2d-47.06!3d-22.95!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x94c8c8!2sAv.+Dermival+Bernardes+Siqueira%2C+3043+-+Swiss+Park%2C+Campinas+-+SP!5e0!3m2!1spt-BR!2sbr!4v1111"
+                            loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ==========================================
+             CTA FINAL
+        ========================================== -->
+        <section class="cta-final" id="contato">
+            <div class="section-inner animate-on-scroll">
+                <span class="section-label">Próximo passo</span>
+                <h2>Escolha a turma.<br>O resto a gente <em>combina</em>.</h2>
+                <p>Você já viu o que a escola tem: as 54 turmas, o dia, a hora e a frequência de cada uma. Falta
+                    marcar a visita — este é o telefone e o WhatsApp da Ballance.</p>
+                <div class="cta-final-actions">
+                    <a href="https://wa.me/5519999412411?text=Ol%C3%A1!%20Vi%20a%20grade%20no%20site%20e%20gostaria%20de%20conhecer%20a%20escola."
+                        class="cta-white" target="_blank" rel="noopener">
+                        <svg viewBox="0 0 24 24" aria-hidden="true"><use href="#i-zap"></use></svg>
+                        Falar no WhatsApp
+                    </a>
+                    <a href="tel:+5519999412411" class="cta-outline">
+                        <svg aria-hidden="true"><use href="#i-fone"></use></svg>
+                        (19) 99941-2411
+                    </a>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Botão flutuante de WhatsApp: canal principal da escola, sempre à mão -->
+    <a class="zap-flutuante"
+        href="https://wa.me/5519999412411?text=Ol%C3%A1!%20Gostaria%20de%20saber%20mais%20sobre%20a%20Ballance."
+        target="_blank" rel="noopener" aria-label="Falar com a Ballance no WhatsApp — (19) 99941-2411">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><use href="#i-zap"></use></svg>
+    </a>
 
     <!-- ==========================================
          FOOTER
@@ -932,33 +2547,27 @@
                     <div class="logo-text">Ballance</div>
                     <div class="logo-sub">Escola de Dança</div>
                 </div>
-                <p>Excelência no ensino da dança<br>em Campinas desde a sua fundação.</p>
+                <p>54 turmas, de segunda a sábado,<br>no Swiss Park, em Campinas.<br>Ballet no syllabus da Royal
+                    Academy of Dance.</p>
             </div>
 
-            <div class="footer-contact">
+            <div class="footer-col">
                 <h4>Contato</h4>
-                <p>
-                    <a href="https://wa.me/5519999412411">📱 (19) 99941-2411</a><br>
-                    <a href="https://www.instagram.com/ballance_escoladedanca/">📸 @ballance_escoladedanca</a><br>
-                    Swiss Park — Campinas/SP
-                </p>
-            </div>
-
-            <div class="footer-legal">
-                <h4>Institucional</h4>
-                <p>
-                    CNPJ: 63.790.156/0001-33<br>
-                    Av. Dermival Bernardes Siqueira, 3043<br>
-                    Swiss Park — Campinas/SP
-                </p>
+                <a class="destaque" href="tel:+5519999412411">(19) 99941-2411</a>
+                <ul>
+                    <li><a href="https://www.instagram.com/ballance_escoladedanca/" target="_blank"
+                            rel="noopener">@ballance_escoladedanca</a></li>
+                    <li><span>Av. Dermival Bernardes Siqueira, 3043</span></li>
+                    <li><span>Swiss Park — Campinas/SP</span></li>
+                    <li><span>CNPJ 63.790.156/0001-33</span></li>
+                </ul>
             </div>
         </div>
 
         <div class="footer-bottom">
             <span>© 2026 Ballance Escola de Dança. Todos os direitos reservados.</span>
-            <span><a href="https://www.ballanceescoladedanca.com.br"
-                    style="color: var(--white);">ballanceescoladedanca.com.br</a> · Certificação Royal Academy of
-                Dance</span>
+            <span><a href="https://www.ballanceescoladedanca.com.br">ballanceescoladedanca.com.br</a> · Ballet no
+                syllabus da Royal Academy of Dance</span>
         </div>
     </footer>
 
@@ -966,49 +2575,204 @@
          SCRIPTS
     ========================================== -->
     <script>
-        // Header scroll effect
-        const header = document.getElementById('header');
-        window.addEventListener('scroll', () => {
-            header.classList.toggle('scrolled', window.scrollY > 50);
+(function () {
+  'use strict';
+
+  // Todo elemento buscado aqui é literal deste mesmo arquivo — não
+  // vem de fetch, de template nem de rota. Guardar contra `null`
+  // seria proteger de uma condição que não existe, e ainda esconder
+  // o dia em que o id sumisse de verdade: o script seguiria calado.
+  // (A única guarda que ficou é a de `#âncora inexistente`, mais
+  // abaixo, porque essa depende de um href e pode mudar.)
+  var header = document.getElementById('header');
+  var aplicaScroll = function () {
+    header.classList.toggle('scrolled', window.scrollY > 50);
+  };
+  window.addEventListener('scroll', aplicaScroll, { passive: true });
+  aplicaScroll();
+
+  var alvos = document.querySelectorAll('.animate-on-scroll');
+
+  // Se o navegador não tiver IntersectionObserver, ou se a pessoa
+  // pediu menos movimento, o conteúdo aparece direto — nunca fica
+  // preso em opacity:0.
+  var semMovimento = window.matchMedia
+    && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  function revelaTudo() {
+    Array.prototype.forEach.call(alvos, function (el) {
+      el.classList.add('visible');
+    });
+  }
+
+  if (!('IntersectionObserver' in window) || semMovimento) {
+    // Sem observer (ou com menos movimento pedido) tudo aparece
+    // já revelado — mas o resto do script SEGUE. A grade não pode
+    // ficar sem filtro só porque a animação foi dispensada.
+    revelaTudo();
+  } else {
+    var observer = new IntersectionObserver(function (entries) {
+      entries.forEach(function (entry) {
+        if (!entry.isIntersecting) return;
+        var grid = entry.target.parentNode;
+        var emGrade = entry.target.closest('.modalidades-grid');
+        var delay = emGrade
+          ? Array.prototype.indexOf.call(grid.children, entry.target) * 90
+          : 0;
+        setTimeout(function () {
+          entry.target.classList.add('visible');
+        }, delay);
+        observer.unobserve(entry.target);
+      });
+    }, { root: null, rootMargin: '0px 0px -80px 0px', threshold: 0.1 });
+
+    Array.prototype.forEach.call(alvos, function (el) {
+      observer.observe(el);
+    });
+
+    // Rede de segurança: se por qualquer motivo algo não for
+    // revelado em 4s (observer falho, elemento fora de fluxo),
+    // revela tudo.
+    setTimeout(revelaTudo, 4000);
+  }
+
+  // Smooth scroll para âncoras internas
+  Array.prototype.forEach.call(
+    document.querySelectorAll('a[href^="#"]'),
+    function (anchor) {
+      anchor.addEventListener('click', function (e) {
+        var id = this.getAttribute('href');
+        var target = document.querySelector(id);
+        if (!target) return;
+        e.preventDefault();
+        fechaMenu();
+        // Um link pode pedir que a grade chegue já filtrada
+        // (é o caso do "Ver as 9 na grade", em #adultos).
+        // Tem de ser ANTES do scroll: filtrar encurta a
+        // página, e um scroll suave mirado na altura antiga
+        // para no lugar errado.
+        if (this.hasAttribute('data-so-adulto')) marcaSoAdulto();
+        target.scrollIntoView({
+          behavior: semMovimento ? 'auto' : 'smooth',
+          block: 'start'
         });
+      });
+    }
+  );
 
-        // Scroll animations (Intersection Observer)
-        const observerOptions = {
-            root: null,
-            rootMargin: '0px 0px -80px 0px',
-            threshold: 0.1
-        };
+  // ------------------------------------------------------------
+  // MENU DE CELULAR
+  // ------------------------------------------------------------
+  var menuBtn = document.getElementById('menuBtn');
 
-        const observer = new IntersectionObserver((entries) => {
-            entries.forEach((entry, index) => {
-                if (entry.isIntersecting) {
-                    // Staggered delay for grid items
-                    const delay = entry.target.closest('.modalidades-grid')
-                        ? Array.from(entry.target.parentNode.children).indexOf(entry.target) * 100
-                        : 0;
-                    setTimeout(() => {
-                        entry.target.classList.add('visible');
-                    }, delay);
-                    observer.unobserve(entry.target);
-                }
-            });
-        }, observerOptions);
+  function fechaMenu() {
+    document.body.classList.remove('menu-aberto');
+    menuBtn.setAttribute('aria-expanded', 'false');
+    menuBtn.setAttribute('aria-label', 'Abrir menu de navegação');
+  }
 
-        document.querySelectorAll('.animate-on-scroll').forEach(el => {
-            observer.observe(el);
-        });
+  menuBtn.addEventListener('click', function () {
+    var abrindo = !document.body.classList.contains('menu-aberto');
+    document.body.classList.toggle('menu-aberto', abrindo);
+    menuBtn.setAttribute('aria-expanded', abrindo ? 'true' : 'false');
+    menuBtn.setAttribute('aria-label',
+      abrindo ? 'Fechar menu de navegação' : 'Abrir menu de navegação');
+  });
+  document.addEventListener('keydown', function (e) {
+    if (e.key === 'Escape') fechaMenu();
+  });
 
-        // Smooth scroll for anchor links
-        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-            anchor.addEventListener('click', function (e) {
-                e.preventDefault();
-                const target = document.querySelector(this.getAttribute('href'));
-                if (target) {
-                    target.scrollIntoView({ behavior: 'smooth', block: 'start' });
-                }
-            });
-        });
-    </script>
+  // ------------------------------------------------------------
+  // FILTRO DA GRADE
+  // As 54 turmas já estão no HTML. Aqui só se decide quem aparece:
+  // dia (radio) + só-adulto (checkbox) + busca livre. Uma família
+  // sem nenhuma turma visível some inteira, para não sobrar título
+  // sozinho — e o contador diz em voz alta quantas restaram.
+  // ------------------------------------------------------------
+  var corpo = document.getElementById('gradeCorpo');
+  var filtros = document.getElementById('filtros');
+  var busca = document.getElementById('busca');
+  var soAdulto = document.getElementById('soAdulto');
+  var contador = document.getElementById('contador');
+  var vazio = document.getElementById('gradeVazio');
+  var familias = corpo.querySelectorAll('.familia');
+  var TOTAL = corpo.querySelectorAll('.turma').length;
+
+  // Quem digita "sabado" tem de achar "sábado", e "contemporaneo"
+  // tem de achar "Contemporâneo": tira o acento dos dois lados
+  // antes de comparar. NFKD e não NFD para que "2ª" ache
+  // "Teatro Musical (2ª hora)" — com NFD o "ª" sobrevive de um lado
+  // só. O "×" de "2× por semana" vira "x" para quem digita "2x".
+  function semAcento(txt) {
+    return String(txt).toLowerCase().replace(/\u00d7/g, 'x')
+      .normalize('NFKD').replace(/[\u0300-\u036f]/g, '');
+  }
+
+  // O que a busca casa é a PRÓPRIA LINHA publicada — nome, hora,
+  // dias, frequência — mais o nome da família e os dias por
+  // extenso, que já estão em `data-dias`. Isto já foi um atributo
+  // `data-busca` escrito à mão ao lado de cada turma, e foi por
+  // essa porta que o primeiro nome de um professor chegou ao site
+  // público: o atributo dizia o que a linha não dizia. Índice
+  // derivado do texto visível não tem como carregar o que a página
+  // não publica.
+  function indexa(fam) {
+    var titulo = fam.querySelector('.familia-titulo').firstChild.textContent;
+    Array.prototype.forEach.call(fam.querySelectorAll('.turma'), function (t) {
+      t.busca = semAcento(titulo + ' ' + t.textContent + ' '
+        + t.getAttribute('data-dias'));
+    });
+  }
+
+  function aplica() {
+    var dia = filtros.querySelector('input[name="dia"]:checked');
+    dia = dia ? dia.value : '';
+    var adulto = soAdulto.checked;
+    var termos = semAcento(busca.value).split(/\s+/).filter(Boolean);
+    var vistas = 0;
+
+    Array.prototype.forEach.call(familias, function (fam) {
+      var naFamilia = 0;
+      Array.prototype.forEach.call(fam.querySelectorAll('.turma'), function (t) {
+        var ok = true;
+        if (dia && t.getAttribute('data-dias').indexOf(dia) === -1) ok = false;
+        if (ok && adulto && t.getAttribute('data-adulto') !== '1') ok = false;
+        if (ok && termos.length) {
+          var alvo = t.busca;
+          for (var i = 0; i < termos.length; i++) {
+            if (alvo.indexOf(termos[i]) === -1) { ok = false; break; }
+          }
+        }
+        t.hidden = !ok;
+        if (ok) naFamilia++;
+      });
+      fam.hidden = naFamilia === 0;
+      vistas += naFamilia;
+    });
+
+    vazio.hidden = vistas > 0;
+    contador.innerHTML =
+      'Mostrando <b>' + vistas + '</b> de ' + TOTAL + ' turmas';
+  }
+
+  // Liga o filtro de adulto por fora — é o que substituiu a lista
+  // que repetia as 9 turmas de adulto que já estão na grade.
+  function marcaSoAdulto() {
+    if (soAdulto.checked) return;
+    soAdulto.checked = true;
+    aplica();
+  }
+
+  Array.prototype.forEach.call(familias, indexa);
+  filtros.addEventListener('change', aplica);
+  busca.addEventListener('input', aplica);
+  // Enter numa busca não deve recarregar nem pular a página.
+  busca.addEventListener('keydown', function (e) {
+    if (e.key === 'Enter') e.preventDefault();
+  });
+  aplica();
+})();
+</script>
 </body>
 
 </html>
