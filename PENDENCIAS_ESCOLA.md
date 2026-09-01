@@ -54,14 +54,25 @@ confunda com buraco e "resolva" preenchendo.
 Aqui sim é buraco: a escola tem a informação, ela só não chegou. Cada item traz
 o que exatamente precisa vir de volta e o que acontece na página quando chegar.
 
-## 1. Aula experimental
+## 1. Aula experimental — RESPONDIDA em 01/09/2026, com quatro pontas soltas
+
+A direção respondeu, e a resposta virou conteúdo: seção `#experimental` (entre
+localização e o CTA final), item no menu, segundo botão do herói e uma linha no
+fim da grade. Publicado: que existe, que é **paga e o valor volta na primeira
+mensalidade** quando a família fecha o plano, que dura uma aula inteira, que se
+agenda até a véspera conforme a disponibilidade, que vale para qualquer turma da
+grade, o que levar, que o responsável assiste de fora, e que é uma por
+modalidade.
+
+**O valor não foi publicado, e não é esquecimento:** D1 vale para ele também. O
+fato forte — é paga e volta como desconto — se diz inteiro sem citar número.
 
 | | |
 |---|---|
-| **Quem responde** | Secretaria |
-| **O que precisa vir** | Existe? É gratuita? Quanto dura? Precisa agendar com quanto tempo? O que a criança leva (roupa, sapatilha, cabelo)? Pode assistir da porta? |
-| **Por que trava** | É o degrau mais baixo do funil. Hoje o único caminho é "falar no WhatsApp", que é um degrau alto para quem só quer experimentar |
-| **Quando chegar** | Vira o segundo botão do herói e um bloco de 4 linhas antes do CTA final |
+| **Quem responde as pontas** | Secretaria |
+| **O que ainda falta** | (a) **Cabelo**: precisa ir preso? (b) **Sapatilha**: a meia antiderrapante serve nos níveis do syllabus também, ou dali para cima já se pede sapatilha? (c) **Prazo do desconto**: a experimental de hoje ainda abate a mensalidade de daqui a dois meses? (d) **Quando a família não fecha**, o valor fica com a escola? |
+| **Por que não viraram texto** | Nenhuma das quatro estava na resposta, e nenhuma se adivinha. A de sapatilha muda o que a mãe compra **antes** de vir; a de prazo muda se ela marca hoje ou depois das férias |
+| **Quando chegar** | (a) e (b) entram na caixa "O que levar"; (c) e (d), na caixa "É paga — e o valor volta" |
 
 ## 2. Uniforme e sapatilha
 
@@ -140,7 +151,15 @@ o que exatamente precisa vir de volta e o que acontece na página quando chegar.
 | **Quem responde** | Direção |
 | **O que precisa vir** | 6 a 9 fotos com autorização de uso de imagem — sala, barra, espelho, aula acontecendo — **sem rosto identificável de aluno menor**, salvo autorização assinada |
 | **Por que trava** | Havia uma seção "Siga nosso Movimento" com rótulo, título, subtítulo e um botão — e **nenhuma foto**. Um convite para ver o dia a dia sem nada para ver. Foi removida; o @ continua no rodapé |
-| **Quando chegar** | A seção volta, com as fotos. Não antes |
+| **Quando chegar** | A seção volta, com as fotos. E a **primeira** troca é a do herói, não a seção nova |
+
+> **A foto do herói é banco de imagem** — uma bailarina profissional num
+> ciclorama branco — e até 01/09/2026 o `alt` dela afirmava "durante aula na
+> Ballance Escola de Dança". A página declarava que uma foto comprada era uma
+> aula daqui: era isso que o leitor de tela lia em voz alta e o Google
+> indexava. O `alt` agora descreve só o que está no quadro. A imagem em si
+> continua sendo a comprada, e é a primeira que sai quando as fotos reais
+> chegarem — aí o `alt` volta a poder dizer onde ela foi feita.
 
 ---
 
@@ -249,10 +268,11 @@ acima existe para lembrar.
 ## Como usar isto
 
 Cada item da **Parte II** é uma mensagem pronta. O caminho mais curto é levar um
-por vez a quem responde, e a ordem que rende mais é **aula experimental
-primeiro** — é o degrau mais baixo do funil, e hoje o único caminho para
-experimentar é abrir o WhatsApp. Uniforme vem em seguida, porque é custo de
-entrada invisível: quem descobre depois se sente enganado.
+por vez a quem responde. A **aula experimental**, que era o primeiro da fila, foi
+respondida em 01/09/2026 e está no ar; do item 1 sobraram quatro pontas curtas,
+que cabem numa única pergunta à secretaria. A partir daí a ordem que rende mais é
+**uniforme** — é custo de entrada invisível, e quem descobre depois se sente
+enganado.
 
 Quando uma resposta chegar, ela entra como **conteúdo** — e o item sai daqui.
 

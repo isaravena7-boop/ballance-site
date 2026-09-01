@@ -63,8 +63,15 @@
   Confirmado e usado aqui: razão social, CNPJ 63.790.156/0001-33, endereço
   Av. Dermival Bernardes Siqueira 3043 — Swiss Park, Campinas/SP, telefone
   e WhatsApp (19) 99941-2411, @ballance_escoladedanca, a grade (modalidade,
-  nível, dias, horário) e o fato de a escola inscrever alunos no Exame da
-  Royal Academy of Dance. Note o que esse último item NÃO autoriza dizer:
+  nível, dias, horário), o fato de a escola inscrever alunos no Exame da
+  Royal Academy of Dance e, desde 01/09/2026, os oito fatos da aula
+  experimental (existe; é paga e o valor é descontado da primeira
+  mensalidade quando a família fecha o plano; dura uma aula inteira; agenda
+  até a véspera conforme a disponibilidade; vale para qualquer turma da
+  grade; roupa confortável e meia antiderrapante, com tênis apropriado
+  recomendado no hip hop; o responsável assiste de fora; uma por
+  modalidade). O VALOR dela não está aqui e não vai estar: preço é a
+  decisão D1, e ela não abre exceção para o número pequeno. Note o que esse último item NÃO autoriza dizer:
   "certificação Royal Academy of Dance", sem qualificador, é uma credencial da
   escola que ninguém comprovou. O que se prova é que cinco dos oito degraus do
   ballet levam o nome do syllabus da RAD e que a escola inscreve alunos no
@@ -580,10 +587,16 @@ header.scrolled {
   height: 18px;
 }
 
+/* Este NÃO é o "Falar no WhatsApp" que saiu daqui. Aquele era o terceiro
+   atalho para o mesmo canal — cabeçalho, botão flutuante e CTA final já
+   oferecem o WhatsApp, e ele custava altura para não responder nada. Este
+   leva a uma resposta que a página não dava em lugar nenhum: como funciona
+   a aula experimental. É o degrau mais baixo do funil, e é o único ponto da
+   dobra em que a pessoa descobre que dá para experimentar sem assinar nada.
+   Fica fantasma de propósito: o botão preto continua sendo a grade. */
 .hero-cta-ghost {
   display: inline-flex;
   align-items: center;
-  gap: 0.5rem;
   padding: 1rem 2rem;
   color: var(--black);
   font-size: 0.85rem;
@@ -602,18 +615,14 @@ header.scrolled {
   transform: translateY(-3px);
 }
 
-/* sem isto o SVG do WhatsApp herda o tamanho do viewBox e estoura */
-.hero-cta-ghost svg {
-  width: 17px;
-  height: 17px;
-  flex-shrink: 0;
-}
-
 /* ==========================================
    SECTION COMMON
    ========================================== */
+/* 6rem em cima e embaixo de oito seções eram 1.536px de página em branco
+   no desktop — mais do que a grade inteira de uma modalidade. 4,75rem ainda
+   separa duas seções sem que uma precise sair da tela para a outra começar. */
 section {
-  padding: 6rem 2rem;
+  padding: 4.75rem 2rem;
 }
 
 .section-inner {
@@ -621,16 +630,11 @@ section {
   margin: 0 auto;
 }
 
-.section-label {
-  display: inline-block;
-  font-size: 0.68rem;
-  font-weight: 500;
-  letter-spacing: 0.25em;
-  text-transform: uppercase;
-  color: var(--gold-ink);
-  margin-bottom: 1rem;
-}
-
+/* Não repor a sobrancelha (.section-label) nem o traço dourado
+   (.gold-divider): as seis sobrancelhas eram o <h2> logo abaixo dito com
+   menos palavras, e os cinco traços custavam ~45px de página cada um para
+   desenhar 50x1px de ouro. Juntos, 420px de celular sem uma resposta
+   dentro. O <h2> abre a seção sozinho. */
 .section-title {
   font-family: var(--font-display);
   font-size: clamp(1.8rem, 3.5vw, 2.5rem);
@@ -648,13 +652,6 @@ section {
   line-height: 1.7;
 }
 
-.gold-divider {
-  width: 50px;
-  height: 1px;
-  background: var(--gold);
-  margin: 2rem 0;
-}
-
 /* ==========================================
    MODALIDADES
    ========================================== */
@@ -668,7 +665,7 @@ section {
   /* minmax(0,…): nenhuma célula pode ficar maior que a sua fatia */
   grid-template-columns: repeat(3, minmax(0, 1fr));
   gap: 1.25rem;
-  margin-top: 3.5rem;
+  margin-top: 2.25rem;
 }
 
 .modalidade-item {
@@ -762,10 +759,6 @@ section {
 .grade-head {
   text-align: center;
   margin-bottom: 2.25rem;
-}
-
-.grade-head .gold-divider {
-  margin: 1.4rem auto;
 }
 
 .grade-head .section-subtitle {
@@ -1055,6 +1048,15 @@ section {
   font-weight: 500;
 }
 
+/* O link daqui NÃO pode ser --gold-ink como o da .escada-nota: aquele mora
+   sobre branco (4,73:1) e este, sobre o creme da grade, cairia para 4,42:1 —
+   abaixo do mínimo de 4,5. Quem carrega o dourado é o sublinhado. */
+.grade-nota a {
+  color: var(--black);
+  font-weight: 500;
+  border-bottom: 1px solid var(--gold);
+}
+
 .grade-nota {
   margin-top: 2.5rem;
   padding-top: 1.5rem;
@@ -1073,10 +1075,6 @@ section {
   color: var(--white);
 }
 
-.adultos .section-label {
-  color: var(--gold);
-}
-
 .adultos .section-title {
   color: var(--white);
 }
@@ -1084,10 +1082,6 @@ section {
 .adultos-head {
   text-align: center;
   margin-bottom: 2.5rem;
-}
-
-.adultos-head .gold-divider {
-  margin: 1.4rem auto;
 }
 
 .adultos-head p {
@@ -1142,10 +1136,6 @@ section {
   text-align: center;
   max-width: 720px;
   margin: 0 auto 3rem;
-}
-
-.escola-head .gold-divider {
-  margin: 1.4rem auto;
 }
 
 .escola-head p {
@@ -1326,14 +1316,6 @@ section {
   gap: 1.5rem;
 }
 
-/* O `margin: 2rem 0` do divisor NÃO colapsa dentro de um flex column:
-   ele SOMA com o `gap: 1.5rem` dos dois lados. O resultado eram 129px
-   de ar em volta de um traço de 1px, contra 45-49px nos outros
-   divisores da página. Aqui o espaçamento é só o gap. */
-.loc-info .gold-divider {
-  margin: 0;
-}
-
 .loc-address {
   font-size: 1rem;
   color: var(--gray);
@@ -1420,16 +1402,111 @@ section {
 }
 
 /* ==========================================
+   AULA EXPERIMENTAL
+   ========================================== */
+/* Esta seção responde o degrau mais baixo do funil, e mora entre "onde
+   fica" e "fale com a gente" de propósito: é a última coisa que a pessoa lê
+   antes de decidir se abre o WhatsApp. Quem não chega até aqui encontra o
+   mesmo destino no menu, no botão do herói e no fim da grade.
+
+   O QUE NÃO ENTRA AQUI: o valor. A decisão D1 da direção (preço não se
+   publica) vale para a experimental também — e o fato forte se diz inteiro
+   sem número: ela é paga e o valor volta na primeira mensalidade. O
+   verificador reprova a página se um preço aparecer — cifrão, "N reais" ou
+   "N por mês" — em qualquer superfície, inclusive nas que ninguém lê na tela. */
+.experimental {
+  background: var(--cream);
+}
+
+.exp-head {
+  text-align: center;
+  max-width: 660px;
+  margin: 0 auto 2.25rem;
+}
+
+/* Seis fatos, seis caixas, duas colunas: a mãe com pressa varre os títulos
+   em negrito e para só no que interessa a ela. Em coluna única (celular) a
+   ordem é a das perguntas que ela faz primeiro — quanto custa, quanto dura. */
+.exp-lista {
+  list-style: none;
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.75rem;
+  max-width: 880px;
+  margin: 0 auto;
+}
+
+.exp-item {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  padding: 1rem 1.15rem;
+  background: var(--white);
+  border: 1px solid var(--gray-subtle);
+  border-radius: 12px;
+}
+
+.exp-item b {
+  font-size: 0.93rem;
+  font-weight: 600;
+  color: var(--black);
+  line-height: 1.3;
+}
+
+.exp-item span {
+  font-size: 0.85rem;
+  color: var(--gray);
+  font-weight: 300;
+  line-height: 1.6;
+}
+
+.exp-acao {
+  margin-top: 1.9rem;
+  text-align: center;
+}
+
+.exp-cta {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.7rem;
+  padding: 1rem 2.3rem;
+  background: var(--black);
+  color: var(--white);
+  font-size: 0.85rem;
+  font-weight: 500;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  border-radius: 50px;
+  transition: all 0.3s ease;
+}
+
+.exp-cta:hover {
+  background: var(--accent-hover);
+  transform: translateY(-3px);
+  box-shadow: 0 12px 35px rgba(0, 0, 0, 0.2);
+}
+
+.exp-cta svg {
+  width: 18px;
+  height: 18px;
+  flex-shrink: 0;
+}
+
+.exp-nota {
+  margin-top: 0.9rem;
+  font-size: 0.82rem;
+  color: var(--gray);
+  font-weight: 300;
+  line-height: 1.7;
+}
+
+/* ==========================================
    CTA FINAL
    ========================================== */
 .cta-final {
   background: var(--black);
   color: var(--white);
   text-align: center;
-}
-
-.cta-final .section-label {
-  color: var(--gold);
 }
 
 .cta-final h2 {
@@ -1790,7 +1867,8 @@ body.menu-aberto .menu-btn .linhas {
   }
 
   .hero-subtitle {
-    margin-bottom: 2rem;
+    line-height: 1.55;
+    margin-bottom: 1.4rem;
   }
 
   .hero-actions {
@@ -1808,7 +1886,18 @@ body.menu-aberto .menu-btn .linhas {
   }
 
   section {
-    padding: 4rem 1.25rem;
+    padding: 2.5rem 1.25rem;
+  }
+
+  /* O herói tinha 780px de caixa para 440px de conteúdo: 340px em que a
+     foto só empurrava a grade para baixo. A foto continua sendo a
+     primeira coisa; ela só para de cobrar aluguel. */
+  .hero {
+    min-height: 505px;
+  }
+
+  .hero h1 {
+    margin-bottom: 1rem;
   }
 
   /* No celular a barra quebra em três linhas (188px): grudada no
@@ -1817,16 +1906,114 @@ body.menu-aberto .menu-btn .linhas {
   .filtros {
     position: static;
     padding: 0.7rem 0.75rem;
-    gap: 0.55rem;
+    gap: 0.45rem 0.4rem;
     border-radius: 12px;
+  }
+
+  .chips {
+    display: contents;
+  }
+
+  .chip span {
+    padding: 0.42rem 0.6rem;
+  }
+
+  .modalidades-grid {
+    margin-top: 1.5rem;
+  }
+
+  .grade-head {
+    margin-bottom: 1.1rem;
+  }
+
+  .section-subtitle,
+  .escola-head p,
+  .adultos-head p,
+  .cta-final p,
+  .loc-address {
+    line-height: 1.6;
+  }
+
+  .filtros {
+    margin-bottom: 0;
+  }
+
+  .grade-contador {
+    padding-top: 0.7rem;
   }
 
   .familia {
     scroll-margin-top: 92px;
+    padding-top: 1.1rem;
   }
 
   .familia-titulo {
     font-size: 1.15rem;
+    padding-bottom: 0.5rem;
+  }
+
+  /* A linha da turma repete 54 vezes: cada píxel aqui vale 54. O que
+     encolheu foi o ar (0,8rem de respiro viraram 0,5rem) e o corpo do
+     meta o suficiente para "09:00–10:00 · Seg e Qua · 2× por semana"
+     caber em UMA linha — antes ele quebrava em 25 das 54 e cada quebra
+     custava mais 23px. Nada saiu da linha. */
+  .turma {
+    padding: 0.5rem 0.2rem;
+    gap: 0.05rem 0.75rem;
+  }
+
+  .turma-nome {
+    font-size: 0.94rem;
+    line-height: 1.3;
+  }
+
+  .turma-meta {
+    font-size: 0.775rem;
+    gap: 0.1rem 0.38rem;
+    line-height: 1.45;
+  }
+
+  .turma-hora::after,
+  .turma-dias::after {
+    margin-left: 0.32rem;
+  }
+
+  /* 38px e não menos: abaixo disso o alvo de toque fica pequeno demais
+     para o polegar, e a linha não encolhe nada — quem manda na altura da
+     linha é o texto (55px), não o botão. */
+  .turma-zap {
+    width: 38px;
+    height: 38px;
+  }
+
+  .grade-nota {
+    margin-top: 1.4rem;
+    padding-top: 1rem;
+    line-height: 1.6;
+  }
+
+  /* Último filho da seção: o margin-bottom era ar morto contra o padding
+     da própria seção. */
+  .adultos-head {
+    margin-bottom: 0;
+  }
+
+  .adultos-cta {
+    margin-top: 1.3rem;
+  }
+
+  .escola-head {
+    margin-bottom: 1.4rem;
+  }
+
+  .escola-head p,
+  .adultos-head p {
+    text-align: left;
+    font-size: 0.96rem;
+  }
+
+  .footer-col li {
+    margin-bottom: 0.35rem;
   }
 
   .escada {
@@ -1835,21 +2022,91 @@ body.menu-aberto .menu-btn .linhas {
   }
 
   .degrau {
-    padding: 0.75rem 0.7rem 0.85rem;
+    padding: 0.6rem 0.65rem 0.7rem;
+    gap: 0.3rem;
   }
 
+  /* Empilhada em 2 colunas a barra não desenha escada nenhuma — ela lê
+     de cima para baixo em pares. E a cor dela era a mesma distinção que
+     o selo já escreve por extenso ("Preparação" / "Syllabus RAD"). No
+     desktop, onde os 8 degraus ficam lado a lado, ela continua. */
   .degrau-barra {
-    height: calc(0.3rem + var(--n) * 0.28rem);
+    display: none;
+  }
+
+  .degrau-info {
+    margin-bottom: 0;
+  }
+
+  .escada-nota {
+    margin-top: 1.1rem;
   }
 
   .loc-wrapper {
     grid-template-columns: 1fr;
+    gap: 1.75rem;
+  }
+
+  .loc-info {
+    gap: 1rem;
+  }
+
+  /* O mapa não responde nada que o endereço, o CEP e o botão "Como
+     Chegar" já não respondam — ele mostra. 350px de moldura para isso,
+     no celular, é caro; 200px mostram a mesma esquina. */
+  .loc-map iframe {
+    height: 200px;
+  }
+
+  /* Coluna única: as seis caixas viram uma lista que se lê de cima para
+     baixo. O ar entre elas encolhe porque o que separa duas respostas aqui
+     é a moldura, não o vazio. */
+  .exp-lista {
+    grid-template-columns: 1fr;
+    gap: 0.5rem;
+  }
+
+  .exp-head {
+    margin-bottom: 1.3rem;
+  }
+
+  .exp-item {
+    padding: 0.7rem 0.85rem;
+  }
+
+  .exp-acao {
+    margin-top: 1.4rem;
+  }
+
+  .exp-cta {
+    width: 100%;
+    justify-content: center;
+    padding: 0.95rem 1.5rem;
+    font-size: 0.8rem;
+    letter-spacing: 0.06em;
+  }
+
+  .cta-final h2 {
+    margin-bottom: 0.7rem;
+  }
+
+  .cta-final p {
+    margin-bottom: 1.5rem;
+  }
+
+  footer {
+    padding: 2.25rem 1.25rem 1.5rem;
+  }
+
+  .footer-bottom {
+    margin-top: 1.5rem;
+    padding-top: 1rem;
   }
 
   .footer-inner {
     grid-template-columns: 1fr;
     text-align: center;
-    gap: 2rem;
+    gap: 1.5rem;
   }
 
   .footer-col ul {
@@ -1898,26 +2155,58 @@ body.menu-aberto .menu-btn .linhas {
 
 @media (max-width: 480px) {
   .modalidades-grid {
-    gap: 0.75rem;
+    gap: 0.6rem;
   }
 
+  /* Cartão deitado: o ícone sai de cima do nome e vai para o lado dele.
+     As quatro informações (ícone, nome, "N turmas", dias, e o selo de
+     adulto quando existe) são as mesmas — muda só a direção em que se
+     empilham. Vertical eram 214px por cartão; deitado, ~105px. */
   .modalidade-item {
-    padding: 1.5rem 0.75rem;
-    gap: 0.65rem;
+    display: grid;
+    grid-template-columns: 30px minmax(0, 1fr);
+    grid-template-areas:
+      "ico nome"
+      "ico meta"
+      "tag tag";
+    justify-content: start;
+    align-content: center;
+    column-gap: 0.5rem;
+    row-gap: 0.1rem;
+    padding: 0.7rem 0.6rem;
+    text-align: left;
   }
 
   .modalidade-icon {
-    width: 46px;
-    height: 46px;
+    grid-area: ico;
+    align-self: center;
+    width: 30px;
+    height: 30px;
   }
 
   .modalidade-icon svg {
-    width: 20px;
-    height: 20px;
+    width: 17px;
+    height: 17px;
   }
 
   .modalidade-name {
-    font-size: 1rem;
+    grid-area: nome;
+    font-size: 0.9rem;
+    line-height: 1.25;
+  }
+
+  .modalidade-meta {
+    grid-area: meta;
+    font-size: 0.76rem;
+    line-height: 1.35;
+  }
+
+  .tag-adulto {
+    grid-area: tag;
+    justify-self: start;
+    margin-top: 0.25rem;
+    font-size: 0.6rem;
+    padding: 0.1rem 0.45rem;
   }
 }
 
@@ -1998,6 +2287,7 @@ body.menu-aberto .menu-btn .linhas {
 
         <nav class="nav" id="nav" aria-label="Navegação principal">
             <a href="#grade">Grade de horários</a>
+            <a href="#experimental">Aula experimental</a>
             <a href="#modalidades">Modalidades</a>
             <a href="#adultos">Adultos</a>
             <a href="#escola">A Escola</a>
@@ -2033,8 +2323,15 @@ body.menu-aberto .menu-btn .linhas {
             <div class="hero-bg">
                 <picture>
                     <source media="(max-width: 640px)" srcset="assets/hero-small.jpg">
+                    <!-- Esta foto é BANCO DE IMAGEM: uma bailarina profissional num
+                         ciclorama branco. O alt dizia "durante aula na Ballance Escola de
+                         Dança" — a página afirmava que uma foto comprada era uma aula
+                         daqui, e era isso que o leitor de tela lia em voz alta e o Google
+                         indexava. O alt agora descreve só o que está no quadro. Quando as
+                         fotos reais chegarem do Drive, troca-se a IMAGEM e o alt volta a
+                         poder dizer onde ela foi feita — nem antes, nem sem elas. -->
                     <img src="assets/hero.jpg" width="1600" height="1600" fetchpriority="high"
-                        alt="Bailarina em movimento, com o vestido em suspensão, durante aula na Ballance Escola de Dança">
+                        alt="Bailarina em salto, de costas, com o vestido longo em suspensão, sobre fundo claro">
                 </picture>
             </div>
             <div class="hero-overlay"></div>
@@ -2057,11 +2354,7 @@ body.menu-aberto .menu-btn .linhas {
                         </svg>
                         Ver a grade de horários
                     </a>
-                    <a href="https://wa.me/5519999412411?text=Ol%C3%A1!%20Gostaria%20de%20saber%20mais%20sobre%20a%20Ballance."
-                        class="hero-cta-ghost" target="_blank" rel="noopener">
-                        <svg viewBox="0 0 24 24" aria-hidden="true"><use href="#i-zap"></use></svg>
-                        Falar no WhatsApp
-                    </a>
+                    <a href="#experimental" class="hero-cta-ghost">Aula experimental</a>
                 </div>
             </div>
         </section>
@@ -2076,9 +2369,7 @@ body.menu-aberto .menu-btn .linhas {
         <section class="modalidades" id="modalidades">
             <div class="section-inner">
                 <div class="animate-on-scroll">
-                    <span class="section-label">O que ensinamos</span>
                     <h2 class="section-title">Oito modalidades</h2>
-                    <div class="gold-divider" style="margin: 1.5rem auto;"></div>
                     <p class="section-subtitle" style="margin:0 auto;">Cada cartão leva direto ao pedaço da grade
                         com as turmas dessa modalidade — dia e horário.</p>
                 </div>
@@ -2240,9 +2531,7 @@ body.menu-aberto .menu-btn .linhas {
         <section class="grade" id="grade">
             <div class="section-inner">
                 <div class="grade-head animate-on-scroll">
-                    <span class="section-label">Grade de horários</span>
                     <h2 class="section-title">Todas as turmas, com dia e hora</h2>
-                    <div class="gold-divider"></div>
                     <p class="section-subtitle">Esta é a grade que roda hoje na escola — as 54 turmas, o dia e o
                         horário. <strong>Toda aula tem 1 hora</strong>; as de dois dias na semana são 2× por semana,
                         as de um dia são 1×. Ache a sua: o WhatsApp já abre com o nome da turma escrito.</p>
@@ -2386,7 +2675,8 @@ body.menu-aberto .menu-btn .linhas {
 
                 <p class="grade-nota">
                     Turmas em cartaz nesta temporada. O nome da turma é o nível dela — a escola confirma o encaixe
-                    quando você vem conhecer a turma.
+                    quando você vem conhecer a turma. E <a href="#experimental">dá para experimentar qualquer uma
+                        delas</a> antes de decidir.
                 </p>
             </div>
         </section>
@@ -2397,9 +2687,7 @@ body.menu-aberto .menu-btn .linhas {
         <section class="adultos" id="adultos">
             <div class="section-inner">
                 <div class="adultos-head animate-on-scroll">
-                    <span class="section-label">Para você</span>
                     <h2 class="section-title">Adulto também dança aqui</h2>
-                    <div class="gold-divider"></div>
                     <p>São 9 turmas de adulto na grade — Ballet, Jazz, Sapateado e Contemporâneo. De manhã, antes
                         de o dia começar, ou à noite, depois que ele acaba. Uma delas é <strong>Jazz Adulto
                             Iniciante</strong>: existe para quem está começando agora.</p>
@@ -2420,9 +2708,7 @@ body.menu-aberto .menu-btn .linhas {
         <section class="escola" id="escola">
             <div class="section-inner">
                 <div class="escola-head animate-on-scroll">
-                    <span class="section-label">A Escola</span>
                     <h2 class="section-title">O syllabus não é um selo.<br>É o nome das turmas.</h2>
-                    <div class="gold-divider"></div>
                     <p>No ballet da Ballance ninguém fica na “turma da tarde”. Fica em um <strong>nível</strong> —
                         e em <strong>cinco dos oito degraus</strong> esse nível é o do syllabus da <strong>Royal
                             Academy of Dance</strong>: o mesmo currículo, na mesma sequência, ensinado do mesmo
@@ -2465,9 +2751,7 @@ aria-label="Níveis de ballet na grade, do primeiro contato ao avançado">
             <div class="section-inner">
                 <div class="loc-wrapper">
                     <div class="loc-info animate-on-scroll">
-                        <span class="section-label">Onde estamos</span>
                         <h2 class="section-title">Localização</h2>
-                        <div class="gold-divider"></div>
                         <p class="loc-address">
                             <strong>Ballance Escola de Dança</strong><br>
                             Avenida Dermival Bernardes Siqueira, n° 3043<br>
@@ -2506,15 +2790,76 @@ aria-label="Níveis de ballet na grade, do primeiro contato ao avançado">
             </div>
         </section>
 
+
+        <!-- ==========================================
+             AULA EXPERIMENTAL
+        ========================================== -->
+        <!-- Os oito fatos abaixo são os confirmados pela direção em 01/09/2026, e
+             são só esses. O que a direção NÃO confirmou não vira palpite aqui: vira
+             pergunta no PENDENCIAS_ESCOLA.md, ao lado deste arquivo.
+
+             O VALOR DA EXPERIMENTAL NÃO ENTRA NESTA PÁGINA. A decisão D1 (preço não
+             se publica) vale para ele também. "É paga, e o valor volta na primeira
+             mensalidade" é o fato forte, e ele se diz inteiro sem citar número — quem
+             quiser o número abre o WhatsApp, que é o degrau que a escola escolheu
+             manter. Se alguém pedir "põe só o valor da experimental, que é baixo", a
+             resposta é não, e o verificador reprova a página se um preço aparecer. -->
+        <section class="experimental" id="experimental">
+            <div class="section-inner">
+                <div class="exp-head animate-on-scroll">
+                    <h2 class="section-title">Antes de decidir, você faz a aula.</h2>
+                    <p class="section-subtitle">Vale para qualquer uma das 54 turmas da grade — você
+                        escolhe qual.</p>
+                </div>
+
+                <ul class="exp-lista animate-on-scroll">
+                    <li class="exp-item">
+                        <b>É paga — e o valor volta</b>
+                        <span>Ele é descontado da primeira mensalidade quando a família fecha o plano.</span>
+                    </li>
+                    <li class="exp-item">
+                        <b>É a aula inteira</b>
+                        <span>Do começo ao fim, junto com a turma, no dia e no horário dela.</span>
+                    </li>
+                    <li class="exp-item">
+                        <b>Uma por modalidade</b>
+                        <span>Dá para experimentar ballet e jazz, por exemplo — uma vez em cada.</span>
+                    </li>
+                    <li class="exp-item">
+                        <b>Marca até a véspera</b>
+                        <span>O agendamento vai até o dia anterior, conforme a disponibilidade.</span>
+                    </li>
+                    <li class="exp-item">
+                        <b>O que levar</b>
+                        <span>Roupa confortável e meia antiderrapante. No hip hop, tênis apropriado é
+                            recomendado.</span>
+                    </li>
+                    <li class="exp-item">
+                        <b>Quem acompanha assiste</b>
+                        <span>O responsável pode ficar assistindo de fora da sala.</span>
+                    </li>
+                </ul>
+
+                <div class="exp-acao animate-on-scroll">
+                    <a class="exp-cta"
+                        href="https://wa.me/5519999412411?text=Ol%C3%A1!%20Quero%20agendar%20uma%20aula%20experimental."
+                        target="_blank" rel="noopener">
+                        <svg viewBox="0 0 24 24" aria-hidden="true"><use href="#i-zap"></use></svg>
+                        Agendar a aula experimental
+                    </a>
+                    <p class="exp-nota">Diga qual turma da grade você quer experimentar.</p>
+                </div>
+            </div>
+        </section>
+
         <!-- ==========================================
              CTA FINAL
         ========================================== -->
         <section class="cta-final" id="contato">
             <div class="section-inner animate-on-scroll">
-                <span class="section-label">Próximo passo</span>
                 <h2>Escolha a turma.<br>O resto a gente <em>combina</em>.</h2>
-                <p>Você já viu o que a escola tem: as 54 turmas, o dia, a hora e a frequência de cada uma. Falta
-                    marcar a visita — este é o telefone e o WhatsApp da Ballance.</p>
+                <p>Para agendar a experimental ou tirar qualquer dúvida: este é o telefone e o WhatsApp
+                    da Ballance.</p>
                 <div class="cta-final-actions">
                     <a href="https://wa.me/5519999412411?text=Ol%C3%A1!%20Vi%20a%20grade%20no%20site%20e%20gostaria%20de%20conhecer%20a%20escola."
                         class="cta-white" target="_blank" rel="noopener">
@@ -2566,8 +2911,7 @@ aria-label="Níveis de ballet na grade, do primeiro contato ao avançado">
 
         <div class="footer-bottom">
             <span>© 2026 Ballance Escola de Dança. Todos os direitos reservados.</span>
-            <span><a href="https://www.ballanceescoladedanca.com.br">ballanceescoladedanca.com.br</a> · Ballet no
-                syllabus da Royal Academy of Dance</span>
+            <span><a href="https://www.ballanceescoladedanca.com.br">ballanceescoladedanca.com.br</a></span>
         </div>
     </footer>
 
