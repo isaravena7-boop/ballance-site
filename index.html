@@ -215,15 +215,21 @@
   --gold-faint: rgba(196, 163, 90, 0.09);
   --gold-fade: rgba(196, 163, 90, 0.5);
   --gold-ink: #8A6D1F;
-  /* Verde do WhatsApp: --zap é a marca, --zap-ink é a versão que passa
-     4,5:1 sobre branco em texto pequeno, --zap-brilho é o mesmo verde com
+  /* Verde do WhatsApp: --zap é a marca, --zap-ink é a mesma marca na
+     versão que passa 4,5:1 sobre claro, --zap-brilho é o mesmo verde com
      alfa. Nenhuma cor da marca é escrita fora daqui — o verificador
      reprova a página se uma reaparecer literal no CSS.
-     REGRA NOVA DE ONDE ELE APARECE: o verde vivo era a única cor da página
-     fora da paleta desenhada, e estava aceso o tempo todo num círculo
-     flutuante que não respondia nada. Agora ele só acende no INSTANTE em
-     que alguém toca uma turma específica — o hover da linha. Aceso o
-     tempo todo era adesivo; aceso no toque é confirmação.
+
+     A REGRA DE ONDE ELE APARECE — uma só, cumprida nos quatro lugares:
+     o verde é a cor de um serviço de TERCEIRO, não da Ballance. Em
+     repouso a marca do WhatsApp não é colorida por nós nem se colore
+     sozinha: ela é a TINTA DA SUPERFÍCIE em que está — preta sobre claro,
+     branca sobre tinta, currentColor sempre. O verde só acende no INSTANTE
+     do contato (hover/foco), e sempre na TINTA, nunca no fundo: --zap
+     sobre superfície escura, --zap-ink sobre clara. Aceso o tempo todo era
+     adesivo — e eram 54 adesivos descendo a grade; aceso no toque é
+     confirmação. Encher o fundo de --zap e escrever em branco por cima,
+     que era o hover antigo da linha, dava 1,98:1 no rótulo "QUERO ESTA".
      (--zap-brilho-forte saiu junto com o botão flutuante verde.) */
   --zap: #25D366;
   --zap-ink: #0E7038;
@@ -764,22 +770,27 @@ section {
    Seis seções abriam com a mesma pilha centrada: título no meio,
    subtítulo no meio, botão no meio. Pilha centrada é o desenho que
    aparece quando ninguém decidiu nada. Aqui o título e o texto de apoio
-   dividem a largura e se encontram pela BASE das duas caixas — e isso
-   ainda DEVOLVE altura, porque lado a lado eles ocupam a altura do mais
-   alto e não a soma dos dois.
-   --alto é para o cabeçalho cujo texto é longo demais para casar base
-   com base (o da escola tem dez linhas); lá os dois alinham pelo topo. */
+   dividem a largura — e isso ainda DEVOLVE altura, porque lado a lado
+   eles ocupam a altura do mais alto e não a soma dos dois.
+
+   O QUE AS DUAS COLUNAS COMPARTILHAM É A PRIMEIRA LINHA DE ESCRITA.
+   Alinhar pela BASE das caixas (align-items:end) parece alinhamento e não
+   é: casa a borda de baixo de duas caixas de altura diferente, e a
+   escrita dentro delas não encosta em linha nenhuma — o título abria
+   10,6px abaixo da primeira tinta do apoio, e cada cabeçalho errava por
+   um número diferente (10,6 / 19,5 / 21,0 / 62,3), porque o erro dependia
+   de quantas linhas o apoio tinha. `baseline` é a primeira baseline de um
+   contra a primeira baseline do outro: exata em qualquer largura, sem
+   número mágico, e a mesma conta para os cinco cabeçalhos.
+   (Foi por isso que --alto saiu: ele existia para fugir do end quando o
+   apoio tinha dez linhas. Com baseline não há de que fugir.) */
 .section-head {
   display: grid;
   grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
   gap: var(--s3) var(--s6);
-  align-items: end;
+  align-items: baseline;
   margin-bottom: var(--s5);
   text-align: left;
-}
-
-.section-head--alto {
-  align-items: start;
 }
 
 /* Não repor a sobrancelha (.section-label) nem o traço dourado
@@ -1190,7 +1201,9 @@ section {
   border-radius: 50px;
   border: 1px solid var(--gray-subtle);
   background: var(--cream);
-  color: var(--zap-ink);
+  /* em repouso a marca é a tinta da superfície, como em todo o resto da
+     página — o verde era o único matiz saturado, repetido 54 vezes */
+  color: var(--black);
   flex-shrink: 0;
   transition: all 0.25s ease;
 }
@@ -1209,10 +1222,13 @@ section {
   flex-shrink: 0;
 }
 
-.turma-zap:hover {
-  background: var(--zap);
-  border-color: var(--zap);
-  color: var(--white);
+/* CONTATO: o verde acende na tinta, não no fundo. Esta superfície é
+   clara, então é --zap-ink (6,1:1 sobre branco; o fundo cheio de --zap
+   com rótulo branco por cima dava 1,98:1). */
+.turma-zap:hover,
+.turma-zap:focus-visible {
+  border-color: var(--zap-brilho);
+  color: var(--zap-ink);
   transform: translateY(-1px);
   box-shadow: 0 6px 18px var(--zap-brilho);
 }
@@ -1263,12 +1279,13 @@ section {
 
 /* Mesma composição de duas colunas do resto da página: título à
    esquerda, o que ele explica à direita, e o botão embaixo do texto que
-   o justifica — não no meio da tela. */
+   o justifica — não no meio da tela. Mesma regra de encontro também:
+   as duas colunas dividem a PRIMEIRA baseline, como em .section-head. */
 .adultos-head {
   display: grid;
   grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
   gap: var(--s3) var(--s6);
-  align-items: start;
+  align-items: baseline;
   margin-bottom: 0;
   text-align: left;
 }
@@ -1552,8 +1569,12 @@ section {
     background: var(--white);
   }
 
+  /* Na tabela o alvo é a linha inteira, então tocar a linha JÁ é tocar o
+     WhatsApp: acende o mesmo verde do contato, e não um dourado que
+     concorreria com ele. Sem o lift, que é do chip. */
   .turma:hover .turma-zap {
-    border-color: var(--gold-soft);
+    border-color: var(--zap-brilho);
+    color: var(--zap-ink);
   }
 
   .turma-zap span {
@@ -1765,6 +1786,12 @@ section {
   flex-shrink: 0;
 }
 
+/* Contato: o verde acende na tinta. Superfície escura, então é --zap. */
+.exp-cta:hover svg,
+.exp-cta:focus-visible svg {
+  color: var(--zap);
+}
+
 .exp-nota {
   margin-top: 0;
   font-size: 0.82rem;
@@ -1856,6 +1883,12 @@ section {
   height: 18px;
 }
 
+/* Contato: o verde acende na tinta. Superfície clara, então é --zap-ink. */
+.cta-white:hover svg,
+.cta-white:focus-visible svg {
+  color: var(--zap-ink);
+}
+
 .cta-outline {
   display: inline-flex;
   align-items: center;
@@ -1903,11 +1936,14 @@ section {
   transition: transform 0.3s ease, background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease;
 }
 
-.zap-flutuante:hover {
+/* Contato: o verde acende na tinta, não no fundo — o disco continua
+   preto. Era o único dos quatro que respondia em dourado; agora responde
+   como os outros três. */
+.zap-flutuante:hover,
+.zap-flutuante:focus-visible {
   transform: scale(1.06);
-  background: var(--gold);
-  color: var(--black);
-  border-color: var(--gold);
+  color: var(--zap);
+  border-color: var(--zap-brilho);
 }
 
 .zap-flutuante svg {
@@ -2191,7 +2227,15 @@ body.menu-aberto .menu-btn .linhas {
      Isto valia só abaixo de 480px, e entre 480 e 900 o cartão em pé
      ficava com 240px de altura para quatro linhas de texto: metade da
      caixa era ar preso, porque a linha da grade estica todos os cartões
-     até o mais alto. Deitado a partir de 900 o ar some sozinho. */
+     até o mais alto. Deitado a partir de 900 o ar some sozinho.
+
+     UMA POLÍTICA DE CARTÃO, e é a da escada RAD: a linha estica todos
+     até o mais alto e o conteúdo começa NO TOPO. Com align-content:center
+     o cartão sem o selo "ADULTOS TAMBÉM" centrava o que tinha dentro da
+     altura emprestada pelo vizinho que tem, e os dois títulos da mesma
+     linha saíam 11,8px um do outro — visível justamente porque a escada,
+     logo abaixo, alinha certo. Sobra de altura fica onde não se lê: em
+     baixo. */
   .modalidade-item {
     display: grid;
     grid-template-columns: 30px minmax(0, 1fr);
@@ -2200,7 +2244,7 @@ body.menu-aberto .menu-btn .linhas {
       "ico meta"
       "tag tag";
     justify-content: start;
-    align-content: center;
+    align-content: start;
     column-gap: 0.5rem;
     row-gap: 0.1rem;
     padding: 0.7rem 0.6rem;
@@ -3108,7 +3152,7 @@ body.menu-aberto .menu-btn .linhas {
         ========================================== -->
         <section class="escola" id="escola">
             <div class="section-inner">
-                <div class="escola-head section-head section-head--alto animate-on-scroll">
+                <div class="escola-head section-head animate-on-scroll">
                     <h2 class="section-title">O syllabus não é um selo.<br>É o nome das turmas.</h2>
                     <p>No ballet da Ballance ninguém fica na “turma da tarde”. Fica em um <strong>nível</strong> —
                         e em <strong>cinco dos oito degraus</strong> esse nível é o do syllabus da <strong>Royal
