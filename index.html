@@ -215,16 +215,43 @@
   --gold-faint: rgba(196, 163, 90, 0.09);
   --gold-fade: rgba(196, 163, 90, 0.5);
   --gold-ink: #8A6D1F;
-  /* verde do WhatsApp: --zap é a marca, --zap-ink é a versão que passa
-     4,5:1 sobre branco em texto pequeno, e os dois brilhos são o mesmo
-     verde com alfa. Nenhuma cor da marca é escrita fora daqui — o
-     verificador reprova a página se uma reaparecer literal no CSS. */
+  /* Verde do WhatsApp: --zap é a marca, --zap-ink é a versão que passa
+     4,5:1 sobre branco em texto pequeno, --zap-brilho é o mesmo verde com
+     alfa. Nenhuma cor da marca é escrita fora daqui — o verificador
+     reprova a página se uma reaparecer literal no CSS.
+     REGRA NOVA DE ONDE ELE APARECE: o verde vivo era a única cor da página
+     fora da paleta desenhada, e estava aceso o tempo todo num círculo
+     flutuante que não respondia nada. Agora ele só acende no INSTANTE em
+     que alguém toca uma turma específica — o hover da linha. Aceso o
+     tempo todo era adesivo; aceso no toque é confirmação.
+     (--zap-brilho-forte saiu junto com o botão flutuante verde.) */
   --zap: #25D366;
   --zap-ink: #0E7038;
   --zap-brilho: rgba(37, 211, 102, 0.3);
-  --zap-brilho-forte: rgba(37, 211, 102, 0.45);
-  --tinta-fina: rgba(26, 26, 26, 0.18);
   --tinta-media: rgba(26, 26, 26, 0.25);
+  /* Branco quente para texto secundário SOBRE TINTA. --gray sobre #1A1A1A
+     dá 3,27:1 e reprova; este dá 11,87:1 e não é branco puro, então a
+     hierarquia continua existindo em vez de virar tudo branco. */
+  --branco-suave: #D8D5CE;
+  /* UMA família de espaçamentos, e só ela. Antes cada seção inventava o
+     próprio respiro (2rem, 2.25rem, 2.5rem, 2.2rem, 1.9rem…) e o olho lia
+     isso como tremido — "sobra", não "decisão". Todo ar da página agora
+     sai destes seis degraus. */
+  --s1: 0.4rem;
+  --s2: 0.75rem;
+  --s3: 1.15rem;
+  --s4: 1.75rem;
+  --s5: 2.75rem;
+  --s6: 4.5rem;
+  --gutter: 2.5rem;
+  /* A MARGEM DA PÁGINA, calculada UMA vez. O mastro, a dobra e as oito
+     seções começavam em x diferentes (40px o herói, 70px as seções): 30
+     pixels de desencontro que ninguém nomeia e todo mundo sente. Agora os
+     três leem a mesma conta, então o logotipo, o título do herói e o
+     primeiro caractere de cada seção caem na MESMA vertical em qualquer
+     largura de tela. */
+  --medida: 1140px;
+  --margem: max(var(--gutter), calc((100vw - var(--medida)) / 2));
   --font-display: 'Playfair Display', Georgia, serif;
   --font-body: 'Inter', -apple-system, sans-serif;
 }
@@ -233,7 +260,7 @@ html {
   scroll-behavior: smooth;
   font-size: 16px;
   /* cabeçalho é fixo: âncoras precisam parar abaixo dele */
-  scroll-padding-top: 90px;
+  scroll-padding-top: 84px;
 }
 
 body {
@@ -334,27 +361,37 @@ button:focus-visible {
 /* ==========================================
    HEADER
    ========================================== */
+/* MASTRO DE TINTA, sempre o mesmo. Antes ele era transparente no topo e
+   virava branco leitoso ao rolar: duas aparências para a mesma barra, e
+   nenhuma das duas convivia com um herói escuro. Sendo tinta o tempo
+   todo, ele SOME dentro do herói (mesmo valor, mesma cor) e vira uma
+   faixa firme quando a grade clara chega por baixo — uma decisão só,
+   visível o tempo inteiro.
+   E resolve o contraste na raiz: branco sobre #1A1A1A é 17,4:1 contra um
+   fundo OPACO, que é a única coisa que o medidor de contraste sabe ler.
+   Altura fixa (e não padding+conteúdo) porque a barra de filtros da grade
+   gruda logo abaixo dela: `top` só pode ser um número confiável se a
+   altura for um número. */
 header {
   position: fixed;
   top: 0;
   left: 0;
   right: 0;
   z-index: 100;
-  padding: 1.2rem 3rem;
+  height: 78px;
+  padding: 0 var(--margem);
   display: flex;
   align-items: center;
-  justify-content: space-between;
-  gap: 1.5rem;
-  transition: all 0.4s ease;
-  background: transparent;
+  gap: var(--s4);
+  transition: height 0.35s ease, box-shadow 0.35s ease;
+  background: var(--black);
+  color: var(--white);
 }
 
 header.scrolled {
-  background: rgba(255, 255, 255, 0.95);
-  backdrop-filter: blur(20px);
-  -webkit-backdrop-filter: blur(20px);
-  box-shadow: 0 1px 0 rgba(0, 0, 0, 0.06);
-  padding: 0.8rem 3rem;
+  height: 64px;
+  padding: 0 var(--margem);
+  box-shadow: 0 16px 44px rgba(0, 0, 0, 0.28);
 }
 
 .logo {
@@ -366,37 +403,44 @@ header.scrolled {
 
 .logo-text {
   font-family: var(--font-display);
-  font-size: 1.6rem;
+  font-size: 1.3rem;
   font-weight: 700;
-  color: var(--black);
-  letter-spacing: -0.02em;
-  line-height: 1.1;
+  color: var(--white);
+  letter-spacing: -0.01em;
+  line-height: 1.05;
 }
 
+/* A entrelinha larga do subtítulo é o que faz o lockup parecer marca e não
+   duas linhas de texto empilhadas por acaso. */
 .logo-sub {
   font-family: var(--font-body);
-  font-size: 0.7rem;
-  color: var(--gray);
-  letter-spacing: 0.15em;
+  font-size: 0.6rem;
+  color: var(--branco-suave);
+  letter-spacing: 0.26em;
   text-transform: uppercase;
-  margin-top: -0.1rem;
+  margin-top: 0.2rem;
 }
 
 .nav {
   display: flex;
   align-items: center;
-  gap: 2rem;
+  gap: 1.4rem;
   margin-left: auto;
-  margin-right: 0.5rem;
+  margin-right: var(--s1);
   animation: slideDown 0.8s ease 0.05s both;
 }
 
+/* Versalete estreito e recuado (--branco-suave, não branco): sete itens em
+   peso cheio brigavam entre si e com o botão. Recuar a cor é o que põe a
+   navegação atrás do conteúdo sem tirá-la da mão de ninguém. */
 .nav a {
   position: relative;
-  font-size: 0.78rem;
+  font-size: 0.7rem;
   font-weight: 500;
-  letter-spacing: 0.06em;
-  color: var(--dark);
+  letter-spacing: 0.13em;
+  text-transform: uppercase;
+  white-space: nowrap;
+  color: var(--branco-suave);
   padding: 0.25rem 0;
   transition: color 0.25s ease;
 }
@@ -415,7 +459,7 @@ header.scrolled {
 }
 
 .nav a:hover {
-  color: var(--black);
+  color: var(--white);
 }
 
 .nav a:hover::after {
@@ -426,15 +470,15 @@ header.scrolled {
   display: inline-flex;
   align-items: center;
   gap: 0.4rem;
-  padding: 0.55rem 1.3rem;
-  background: var(--black);
+  padding: 0.55rem 1.25rem;
+  background: transparent;
   color: var(--white);
   font-family: var(--font-body);
-  font-size: 0.72rem;
+  font-size: 0.7rem;
   font-weight: 500;
-  letter-spacing: 0.08em;
+  letter-spacing: 0.11em;
   text-transform: uppercase;
-  border: none;
+  border: 1px solid rgba(255, 255, 255, 0.32);
   border-radius: 50px;
   cursor: pointer;
   transition: all 0.3s ease;
@@ -443,9 +487,10 @@ header.scrolled {
 }
 
 .header-cta:hover {
-  background: var(--accent-hover);
+  background: var(--white);
+  color: var(--black);
+  border-color: var(--white);
   transform: translateY(-2px);
-  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
 }
 
 .header-cta svg {
@@ -457,51 +502,77 @@ header.scrolled {
 /* ==========================================
    HERO SECTION
    ========================================== */
+/* A DOBRA. A lição da barra é uma só: A IMAGEM É O DESIGN.
+   Aqui ela estava sob um véu branco de 30%→95% que apagava a bailarina
+   (metade da tela ocupada, energia zero) e, pior, recortada numa faixa
+   1280×800 que decapitava o salto — a única coisa que a foto tem.
+
+   Agora a dobra é um CAMPO DE TINTA com a fotografia inteira dentro dele:
+   coluna de texto à esquerda, no eixo esquerdo da página; retrato à
+   direita, sangrando até a borda. Sem véu, sem filtro, num quadro de
+   proporção retrato onde a original 1600×1600 entra quase sem corte —
+   mão, cabeça e sapatilha dentro do mesmo enquadramento. O ciclorama
+   claro contra a tinta faz o recorte da bailarina saltar; era exatamente
+   isso que o véu vinha impedindo. */
 .hero {
   position: relative;
-  /* teto no 100vh: em monitor alto (ou numa captura de página
-     inteira) a dobra inteira não pode ser só a foto — a grade
-     precisa começar a aparecer. */
-  min-height: min(100vh, 780px);
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  display: grid;
+  /* 47% × 620px dá, num monitor de 1280, um quadro de 601×620 — quase
+     exatamente 1:1, que é a proporção do arquivo. A foto entra INTEIRA:
+     mão esquerda, cabeça e as duas sapatilhas dentro do quadro.
+     E 620 (não 700, e nunca 100vh) é o teto porque a dobra tem de deixar
+     a próxima seção espiar por baixo: 150px de tinta vazia embaixo dos
+     botões era o mesmo buraco de antes, só que preto. */
+  grid-template-columns: minmax(0, 1fr) minmax(0, 47%);
+  min-height: min(100vh, 620px);
+  padding: 0;
   overflow: hidden;
-  background: var(--cream);
+  background: var(--black);
+  color: var(--white);
 }
 
 .hero-bg {
-  position: absolute;
-  inset: 0;
+  grid-area: 1 / 2 / 2 / 3;
+  position: relative;
   z-index: 1;
+  overflow: hidden;
 }
 
 .hero-bg img {
   width: 100%;
   height: 100%;
   object-fit: cover;
-  object-position: center;
-  filter: brightness(0.85);
+  object-position: 50% 45%;
+  filter: none;
 }
 
+/* Deixou de ser véu: é só o beijo de sombra na emenda entre a tinta e a
+   foto, para que a costura não pareça corte de tesoura. Acaba em 26%. */
 .hero-overlay {
-  position: absolute;
-  inset: 0;
-  background: linear-gradient(180deg,
-      rgba(255, 255, 255, 0.3) 0%,
-      rgba(255, 255, 255, 0.6) 40%,
-      rgba(255, 255, 255, 0.85) 70%,
-      rgba(255, 255, 255, 0.95) 100%);
+  grid-area: 1 / 2 / 2 / 3;
+  position: relative;
   z-index: 2;
+  background: linear-gradient(90deg,
+      rgba(0, 0, 0, 0.75) 0%,
+      rgba(0, 0, 0, 0.24) 12%,
+      rgba(0, 0, 0, 0) 26%);
+  pointer-events: none;
 }
 
 .hero-content {
+  grid-area: 1 / 1 / 2 / 2;
   position: relative;
   z-index: 3;
-  text-align: center;
-  padding: 2rem;
-  max-width: 800px;
-  margin-top: 4rem;
+  align-self: center;
+  text-align: left;
+  /* Sem max-width: quem define a largura do texto é a COLUNA da dobra.
+     Com 40rem de teto, a caixa ficava 54px mais estreita do que a coluna
+     e isso bastava para o título quebrar em três linhas e os dois botões
+     empilharem — duas quebras que ninguém pediu, causadas por um número
+     que não conversava com o resto do desenho. */
+  max-width: none;
+  padding: 7rem var(--s4) 3.5rem var(--margem);
+  margin: 0;
 }
 
 .hero-badge {
@@ -510,14 +581,15 @@ header.scrolled {
   gap: 0.5rem;
   padding: 0.4rem 1.2rem;
   border: 1px solid var(--gold-soft);
-  background: rgba(255, 255, 255, 0.55);
+  background: rgba(255, 255, 255, 0.05);
   border-radius: 50px;
-  font-size: 0.7rem;
+  font-size: 0.68rem;
   font-weight: 500;
-  letter-spacing: 0.2em;
+  letter-spacing: 0.22em;
   text-transform: uppercase;
-  color: var(--gold-ink);
-  margin-bottom: 2rem;
+  /* sobre tinta o dourado tem de ser o CLARO: --gold-ink daria 3,55:1 */
+  color: var(--gold);
+  margin-bottom: var(--s4);
   animation: fadeInUp 0.8s ease 0.2s both;
 }
 
@@ -526,27 +598,31 @@ header.scrolled {
   height: 13px;
 }
 
+/* Entrelinha 1,02 e -0,025em de entreletra: no corpo do texto isso seria
+   apertado demais, num display de 60px é o que separa "título grande" de
+   "título composto". A itálica de --gold é o único ponto de cor da dobra. */
 .hero h1 {
   font-family: var(--font-display);
-  font-size: clamp(2.1rem, 5vw, 4rem);
+  font-size: clamp(2.3rem, 4.3vw, 3.5rem);
   font-weight: 500;
-  line-height: 1.15;
-  color: var(--black);
-  margin-bottom: 1.5rem;
+  line-height: 1.02;
+  letter-spacing: -0.025em;
+  color: var(--white);
+  margin-bottom: var(--s3);
   animation: fadeInUp 0.8s ease 0.3s both;
 }
 
 .hero h1 em {
   font-style: italic;
-  color: var(--gray);
+  color: var(--gold);
 }
 
 .hero-subtitle {
-  font-size: 1.05rem;
-  color: var(--gray);
-  line-height: 1.7;
-  max-width: 560px;
-  margin: 0 auto 2.5rem;
+  font-size: 1.02rem;
+  color: var(--branco-suave);
+  line-height: 1.65;
+  max-width: 31rem;
+  margin: 0 0 var(--s5);
   font-weight: 300;
   animation: fadeInUp 0.8s ease 0.45s both;
 }
@@ -554,8 +630,8 @@ header.scrolled {
 .hero-actions {
   display: flex;
   align-items: center;
-  justify-content: center;
-  gap: 1rem;
+  justify-content: flex-start;
+  gap: var(--s2);
   flex-wrap: wrap;
   animation: fadeInUp 0.8s ease 0.6s both;
 }
@@ -564,11 +640,11 @@ header.scrolled {
   display: inline-flex;
   align-items: center;
   gap: 0.75rem;
-  padding: 1rem 2.5rem;
-  background: var(--black);
-  color: var(--white);
+  padding: 1rem 2.3rem;
+  background: var(--white);
+  color: var(--black);
   font-family: var(--font-body);
-  font-size: 0.85rem;
+  font-size: 0.82rem;
   font-weight: 500;
   letter-spacing: 0.1em;
   text-transform: uppercase;
@@ -577,9 +653,10 @@ header.scrolled {
 }
 
 .hero-cta:hover {
-  background: var(--accent-hover);
+  background: var(--gold);
+  color: var(--black);
   transform: translateY(-3px);
-  box-shadow: 0 12px 35px rgba(0, 0, 0, 0.2);
+  box-shadow: 0 14px 38px rgba(0, 0, 0, 0.45);
 }
 
 .hero-cta svg {
@@ -598,21 +675,74 @@ header.scrolled {
   display: inline-flex;
   align-items: center;
   padding: 1rem 2rem;
-  color: var(--black);
-  font-size: 0.85rem;
+  color: var(--white);
+  font-size: 0.82rem;
   font-weight: 500;
   letter-spacing: 0.1em;
   text-transform: uppercase;
-  border: 1px solid var(--tinta-media);
+  border: 1px solid rgba(255, 255, 255, 0.3);
   border-radius: 50px;
-  background: rgba(255, 255, 255, 0.5);
+  background: transparent;
   transition: all 0.3s ease;
 }
 
 .hero-cta-ghost:hover {
-  border-color: var(--black);
-  background: var(--white);
+  border-color: var(--white);
+  background: rgba(255, 255, 255, 0.09);
   transform: translateY(-3px);
+}
+
+/* No celular a dobra empilha na mesma ordem em que se lê: primeiro a
+   promessa, depois a fotografia — e a fotografia INTEIRA, num quadrado de
+   375×375 que é exatamente a proporção do arquivo. É a única tela em que
+   dá para ver o salto sem corte nenhum, e ela cabe na dobra junto com o
+   título e os dois botões. */
+@media (max-width: 900px) {
+  .hero {
+    grid-template-columns: minmax(0, 1fr);
+    min-height: 0;
+  }
+
+  .hero-content {
+    grid-area: 1 / 1 / 2 / 2;
+    max-width: none;
+    padding: 6.5rem var(--gutter) var(--s5);
+  }
+
+  .hero-bg,
+  .hero-overlay {
+    grid-area: 2 / 1 / 3 / 2;
+  }
+
+  .hero-bg {
+    aspect-ratio: 1 / 1;
+  }
+
+  .hero-overlay {
+    background: linear-gradient(180deg,
+        rgba(0, 0, 0, 0.5) 0%,
+        rgba(0, 0, 0, 0.12) 10%,
+        rgba(0, 0, 0, 0) 24%);
+  }
+}
+
+/* O intervalo do tablet. A foto é QUADRADA: sangrando de borda a borda
+   num iPad de 860, ela pediria 860px de altura — meia tela de rolagem
+   para uma imagem só. Aqui ela vira chapa: 520 de lado, pendurada na
+   MESMA vertical em que começa o texto, com a tinta seguindo até a borda
+   direita. Continua inteira e continua no eixo. */
+@media (min-width: 620px) and (max-width: 900px) {
+
+  .hero-bg,
+  .hero-overlay {
+    justify-self: start;
+    width: min(100%, 520px);
+    margin-left: var(--margem);
+  }
+
+  .hero-overlay {
+    background: none;
+  }
 }
 
 /* ==========================================
@@ -622,12 +752,34 @@ header.scrolled {
    no desktop — mais do que a grade inteira de uma modalidade. 4,75rem ainda
    separa duas seções sem que uma precise sair da tela para a outra começar. */
 section {
-  padding: 4.75rem 2rem;
+  padding: var(--s6) var(--margem);
 }
 
 .section-inner {
-  max-width: 1100px;
+  max-width: var(--medida);
   margin: 0 auto;
+}
+
+/* O CABEÇALHO DE SEÇÃO — o eixo da página inteira.
+   Seis seções abriam com a mesma pilha centrada: título no meio,
+   subtítulo no meio, botão no meio. Pilha centrada é o desenho que
+   aparece quando ninguém decidiu nada. Aqui o título e o texto de apoio
+   dividem a largura e se encontram pela BASE das duas caixas — e isso
+   ainda DEVOLVE altura, porque lado a lado eles ocupam a altura do mais
+   alto e não a soma dos dois.
+   --alto é para o cabeçalho cujo texto é longo demais para casar base
+   com base (o da escola tem dez linhas); lá os dois alinham pelo topo. */
+.section-head {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  gap: var(--s3) var(--s6);
+  align-items: end;
+  margin-bottom: var(--s5);
+  text-align: left;
+}
+
+.section-head--alto {
+  align-items: start;
 }
 
 /* Não repor a sobrancelha (.section-label) nem o traço dourado
@@ -637,18 +789,20 @@ section {
    dentro. O <h2> abre a seção sozinho. */
 .section-title {
   font-family: var(--font-display);
-  font-size: clamp(1.8rem, 3.5vw, 2.5rem);
+  font-size: clamp(1.8rem, 3.4vw, 2.85rem);
   font-weight: 500;
-  line-height: 1.2;
+  line-height: 1.06;
+  letter-spacing: -0.02em;
   color: var(--black);
-  margin-bottom: 1rem;
+  margin: 0;
 }
 
 .section-subtitle {
   font-size: 1rem;
   color: var(--gray);
   font-weight: 300;
-  max-width: 520px;
+  max-width: 34rem;
+  margin: 0;
   line-height: 1.7;
 }
 
@@ -657,26 +811,29 @@ section {
    ========================================== */
 .modalidades {
   background: var(--white);
-  text-align: center;
 }
 
+/* Oito cartões em TRÊS colunas deixavam a última fila com dois e um
+   buraco do tamanho de um cartão — a rasura mais visível da página.
+   Quatro colunas fecham 2×4: retângulo inteiro, sem sobra. */
 .modalidades-grid {
   display: grid;
   /* minmax(0,…): nenhuma célula pode ficar maior que a sua fatia */
-  grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: 1.25rem;
-  margin-top: 2.25rem;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: var(--s2);
+  margin-top: 0;
 }
 
 .modalidade-item {
   display: flex;
   flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  gap: 0.9rem;
-  padding: 2.25rem 1.25rem;
+  align-items: flex-start;
+  justify-content: flex-start;
+  gap: var(--s2);
+  padding: var(--s4) var(--s3);
+  text-align: left;
   border: 1px solid var(--gray-subtle);
-  border-radius: 16px;
+  border-radius: 14px;
   background: var(--white);
   transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
 }
@@ -689,8 +846,8 @@ section {
 }
 
 .modalidade-icon {
-  width: 56px;
-  height: 56px;
+  width: 44px;
+  height: 44px;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -757,21 +914,21 @@ section {
 }
 
 .grade-head {
-  text-align: center;
-  margin-bottom: 2.25rem;
+  margin-bottom: var(--s4);
 }
 
 .grade-head .section-subtitle {
-  margin: 0 auto;
-  max-width: 620px;
+  margin: 0;
+  max-width: 38rem;
 }
 
 /* --- filtros --- */
-/* 88px = altura do cabeçalho já encolhido (83) + folga. Menos que
-   isso e a barra de filtros desliza por baixo dele. */
+/* 74px = altura do mastro já encolhido (64) + folga. Menos que isso e a
+   barra de filtros desliza por baixo dele. O mastro agora tem altura
+   CRAVADA justamente para este número poder ser confiável. */
 .filtros {
   position: sticky;
-  top: 88px;
+  top: 74px;
   z-index: 40;
   display: flex;
   flex-wrap: wrap;
@@ -883,11 +1040,28 @@ section {
 }
 
 .grade-contador {
-  font-size: 0.75rem;
-  letter-spacing: 0.12em;
+  font-size: 0.72rem;
+  letter-spacing: 0.16em;
   text-transform: uppercase;
   color: var(--gray);
-  padding: 0.9rem 0.2rem 0;
+  padding: var(--s3) 0.2rem var(--s2);
+}
+
+/* A PLANILHA. As 54 linhas estavam soltas sobre o creme da seção, como
+   texto derramado; agora vivem dentro de uma folha branca com margem,
+   fio e sombra rasa — o objeto mais denso da página finalmente parece um
+   objeto. Como brinde, todo cinza fino da tabela ganha contraste (o
+   horário de término sobe de 4,97:1 no creme para 5,33:1 no branco). */
+.grade-corpo {
+  background: var(--white);
+  border: 1px solid var(--gray-subtle);
+  border-radius: 20px;
+  padding: 0.2rem var(--s4) var(--s4);
+  box-shadow: 0 18px 50px rgba(0, 0, 0, 0.05);
+}
+
+.grade-corpo > .familia:first-child {
+  padding-top: var(--s3);
 }
 
 .grade-contador b {
@@ -899,29 +1073,35 @@ section {
 /* Os cartões de modalidade apontam para cá. Sem scroll-margin o
    título da família parava atrás do cabeçalho + barra de filtros. */
 .familia {
-  padding: 2rem 0 0;
-  scroll-margin-top: 172px;
+  padding: var(--s4) 0 0;
+  scroll-margin-top: 146px;
 }
 
 .familia[hidden] {
   display: none;
 }
 
+/* Nome numa ponta, contagem na outra, fio entre os dois: cabeçalho de
+   tabela impressa. Antes os dois vinham colados à esquerda e a linha
+   morria no meio da largura. */
 .familia-titulo {
   display: flex;
   flex-wrap: wrap;
   align-items: baseline;
+  justify-content: space-between;
   gap: 0.35rem 0.9rem;
   font-family: var(--font-display);
-  font-size: 1.35rem;
+  font-size: 1.45rem;
   font-weight: 500;
+  letter-spacing: -0.015em;
   color: var(--black);
-  padding-bottom: 0.7rem;
-  border-bottom: 1px solid var(--gray-subtle);
+  padding-bottom: 0.55rem;
+  border-bottom: 1px solid var(--tinta-media);
   margin-bottom: 0.35rem;
 }
 
 .familia-conta {
+  margin-left: auto;
   font-family: var(--font-body);
   font-size: 0.68rem;
   font-weight: 500;
@@ -944,7 +1124,8 @@ section {
     "nome zap"
     "meta zap";
   padding: 0.8rem 0.2rem;
-  border-bottom: 1px solid rgba(0, 0, 0, 0.055);
+  border-bottom: 1px solid rgba(0, 0, 0, 0.07);
+  transition: background-color 0.15s ease;
 }
 
 .turma[hidden] {
@@ -1008,7 +1189,7 @@ section {
   height: 40px;
   border-radius: 50px;
   border: 1px solid var(--gray-subtle);
-  background: var(--white);
+  background: var(--cream);
   color: var(--zap-ink);
   flex-shrink: 0;
   transition: all 0.25s ease;
@@ -1058,9 +1239,10 @@ section {
 }
 
 .grade-nota {
-  margin-top: 2.5rem;
-  padding-top: 1.5rem;
-  border-top: 1px solid var(--gray-subtle);
+  margin-top: var(--s4);
+  padding-top: 0;
+  border-top: 0;
+  max-width: 44rem;
   font-size: 0.82rem;
   color: var(--gray);
   font-weight: 300;
@@ -1079,17 +1261,31 @@ section {
   color: var(--white);
 }
 
+/* Mesma composição de duas colunas do resto da página: título à
+   esquerda, o que ele explica à direita, e o botão embaixo do texto que
+   o justifica — não no meio da tela. */
 .adultos-head {
-  text-align: center;
-  margin-bottom: 2.5rem;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  gap: var(--s3) var(--s6);
+  align-items: start;
+  margin-bottom: 0;
+  text-align: left;
+}
+
+.adultos-head .section-title {
+  grid-column: 1;
+  grid-row: 1;
 }
 
 .adultos-head p {
-  max-width: 600px;
-  margin: 0 auto;
+  grid-column: 2;
+  grid-row: 1;
+  max-width: 34rem;
+  margin: 0;
   color: var(--gray-light);
   font-weight: 300;
-  line-height: 1.8;
+  line-height: 1.75;
 }
 
 /* Esta seção listava as 9 turmas de adulto de novo, uma a uma — as
@@ -1100,8 +1296,11 @@ section {
 .adultos-cta {
   display: inline-flex;
   align-items: center;
+  grid-column: 2;
+  grid-row: 2;
+  justify-self: start;
   gap: 0.7rem;
-  margin-top: 2.2rem;
+  margin-top: var(--s2);
   padding: 0.95rem 2.1rem;
   border: 1px solid var(--gold);
   border-radius: 50px;
@@ -1133,16 +1332,16 @@ section {
 }
 
 .escola-head {
-  text-align: center;
-  max-width: 720px;
-  margin: 0 auto 3rem;
+  max-width: none;
+  margin: 0 0 var(--s5);
 }
 
 .escola-head p {
   font-size: 1rem;
   color: var(--gray);
   font-weight: 300;
-  line-height: 1.85;
+  line-height: 1.8;
+  margin: 0;
 }
 
 .escola-head p strong {
@@ -1162,23 +1361,28 @@ section {
   align-items: stretch;
 }
 
+/* A barra desce até o RODAPÉ do cartão, de canto a canto, em vez de
+   flutuar dentro dele com 0,85rem de margem dos dois lados. Com o degrau
+   encostado na borda, os oito lidos juntos desenham uma escada de
+   verdade; recuados, desenhavam oito tracinhos soltos. */
 .degrau {
   display: flex;
   flex-direction: column;
   gap: 0.45rem;
-  padding: 0.9rem 0.85rem 1rem;
+  padding: 0.9rem 0.85rem 0;
   background: var(--cream);
   border-radius: 12px;
   border: 1px solid var(--gray-subtle);
+  overflow: hidden;
 }
 
 .degrau-barra {
   order: 3;
   display: block;
-  width: 100%;
-  margin-top: auto;
-  height: calc(0.3rem + var(--n) * 0.34rem);
-  border-radius: 4px;
+  width: auto;
+  margin: auto -0.85rem 0;
+  height: calc(0.5rem + var(--n) * 0.42rem);
+  border-radius: 0;
   background: linear-gradient(180deg, var(--gold) 0%, var(--gold-fade) 100%);
 }
 
@@ -1234,12 +1438,12 @@ section {
 }
 
 .escada-nota {
-  margin-top: 1.6rem;
+  margin-top: var(--s3);
   font-size: 0.85rem;
   color: var(--gray);
   font-weight: 300;
   line-height: 1.75;
-  text-align: center;
+  max-width: 44rem;
 }
 
 .escada-nota a {
@@ -1247,15 +1451,60 @@ section {
   border-bottom: 1px solid var(--gold-soft);
 }
 
-/* A partir de 820px a linha da turma vira tabela de verdade:
+/* A partir de 960px a linha da turma vira tabela de verdade:
    hora | turma | dias | frequência | ação. O .turma-meta some como
-   caixa (display:contents) e os três filhos viram células. */
-@media (min-width: 820px) {
+   caixa (display:contents) e os três filhos viram células.
+
+   Era 820px, e 820 mentia: as quatro colunas fixas somavam 581px e
+   sobravam 169 para o nome — "Ballet Intermediate Foundation" quebrava em
+   duas linhas. Com a folha branca em volta sobraram 103, e aí quebravam
+   várias. O piso agora é a largura em que a coluna do nome cabe INTEIRA
+   (280px em 960), e as colunas fixas encolheram para o tamanho do seu
+   texto mais largo, medido, não chutado. Abaixo disso vale a linha de
+   duas alturas do celular, que nessa largura lê melhor do que uma tabela
+   espremida. */
+@media (min-width: 960px) {
+  /* A margem negativa é o que faz o realce da linha sangrar até a margem
+     da folha; o padding a devolve, então as colunas continuam começando
+     exatamente em 0 da <ul> — que é o que permite ao fio vertical abaixo
+     ser um número fixo e não um chute. */
   .turma {
-    grid-template-columns: 6.8rem minmax(0, 1fr) 6.5rem 8.5rem 10.5rem;
+    grid-template-columns: 6.4rem minmax(0, 1fr) 6.2rem 7.8rem 9.6rem;
     grid-template-areas: "hora nome dias freq zap";
     gap: 0 1rem;
-    padding: 0.62rem 0.2rem;
+    padding: 0.58rem 0.5rem;
+    margin: 0 -0.5rem;
+  }
+
+  .turma:hover {
+    background: var(--cream);
+  }
+
+  /* O FIO. Cinquenta e quatro horários já estavam em algarismos de
+     largura fixa e mesmo assim a coluna não existia: faltava a linha
+     que a fecha. Desenhada no fundo da <ul> — e não em cada <li> — ela
+     é UMA linha contínua da primeira turma à última, e não 20 tracinhos
+     com furo entre eles. É a espinha da página. */
+  .turmas {
+    background-image:
+      linear-gradient(to right,
+        transparent 0 6.9rem,
+        var(--gray-subtle) 6.9rem calc(6.9rem + 1px),
+        transparent calc(6.9rem + 1px) 100%),
+      linear-gradient(to right,
+        transparent 0 calc(100% - 10.1rem),
+        var(--gray-subtle) calc(100% - 10.1rem) calc(100% - 10.1rem + 1px),
+        transparent calc(100% - 10.1rem + 1px) 100%);
+  }
+
+  /* O fio do cabeçalho da família tinha 7px a menos de cada lado que os
+     fios das linhas — o desencontro clássico, invisível de nomear e
+     visível de olhar. Mesma sangria, mesmo padding, mesma largura. */
+  .familia-titulo {
+    margin-left: -0.5rem;
+    margin-right: -0.5rem;
+    padding-left: 0.5rem;
+    padding-right: 0.5rem;
   }
 
   .turma-meta {
@@ -1265,6 +1514,17 @@ section {
   .turma-hora {
     grid-area: hora;
     font-size: 0.86rem;
+  }
+
+  /* A hora de início é o dado que a pessoa varre com o olho: ela ganha
+     corpo e tinta cheia, e o fim da aula fica um degrau abaixo. */
+  .turma-hora b {
+    font-size: 0.95rem;
+    color: var(--black);
+  }
+
+  .turma-hora i {
+    font-size: 0.78rem;
   }
 
   .turma-dias {
@@ -1288,7 +1548,12 @@ section {
     width: auto;
     height: auto;
     justify-content: flex-start;
-    padding: 0.45rem 1.05rem;
+    padding: 0.42rem 1.05rem;
+    background: var(--white);
+  }
+
+  .turma:hover .turma-zap {
+    border-color: var(--gold-soft);
   }
 
   .turma-zap span {
@@ -1305,15 +1570,16 @@ section {
 
 .loc-wrapper {
   display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 3rem;
-  align-items: center;
+  grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.1fr);
+  gap: var(--s6);
+  align-items: stretch;
 }
 
 .loc-info {
   display: flex;
   flex-direction: column;
-  gap: 1.5rem;
+  justify-content: center;
+  gap: var(--s3);
 }
 
 .loc-address {
@@ -1388,7 +1654,11 @@ section {
   height: 16px;
 }
 
+/* O mapa deixa de ser um retângulo de altura arbitrária ao lado do
+   endereço e passa a acompanhar a coluna inteira: as duas metades da
+   seção terminam na mesma linha. */
 .loc-map {
+  display: grid;
   border-radius: 16px;
   overflow: hidden;
   box-shadow: 0 10px 40px rgba(0, 0, 0, 0.08);
@@ -1396,7 +1666,8 @@ section {
 
 .loc-map iframe {
   width: 100%;
-  height: 350px;
+  height: 100%;
+  min-height: 360px;
   border: none;
   display: block;
 }
@@ -1419,9 +1690,8 @@ section {
 }
 
 .exp-head {
-  text-align: center;
-  max-width: 660px;
-  margin: 0 auto 2.25rem;
+  max-width: none;
+  margin: 0 0 var(--s4);
 }
 
 /* Seis fatos, seis caixas, duas colunas: a mãe com pressa varre os títulos
@@ -1430,10 +1700,10 @@ section {
 .exp-lista {
   list-style: none;
   display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 0.75rem;
-  max-width: 880px;
-  margin: 0 auto;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: var(--s2);
+  max-width: none;
+  margin: 0;
 }
 
 .exp-item {
@@ -1461,8 +1731,11 @@ section {
 }
 
 .exp-acao {
-  margin-top: 1.9rem;
-  text-align: center;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: var(--s2) var(--s4);
+  margin-top: var(--s4);
 }
 
 .exp-cta {
@@ -1493,7 +1766,7 @@ section {
 }
 
 .exp-nota {
-  margin-top: 0.9rem;
+  margin-top: 0;
   font-size: 0.82rem;
   color: var(--gray);
   font-weight: 300;
@@ -1506,15 +1779,27 @@ section {
 .cta-final {
   background: var(--black);
   color: var(--white);
-  text-align: center;
+}
+
+/* O fecho da página é o único lugar em que a coluna da direita não é
+   texto: são as duas maneiras de falar com a escola, empilhadas e do
+   mesmo tamanho, à altura do olho de quem acabou de ler o título. */
+.cta-final .section-inner {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, auto);
+  align-items: center;
+  gap: var(--s3) var(--s6);
 }
 
 .cta-final h2 {
+  grid-column: 1;
+  grid-row: 1;
   font-family: var(--font-display);
-  font-size: clamp(1.8rem, 4vw, 2.8rem);
+  font-size: clamp(1.85rem, 3.6vw, 3rem);
   font-weight: 500;
-  line-height: 1.2;
-  margin-bottom: 1rem;
+  line-height: 1.05;
+  letter-spacing: -0.02em;
+  margin: 0;
 }
 
 .cta-final h2 em {
@@ -1523,18 +1808,27 @@ section {
 }
 
 .cta-final p {
+  grid-column: 1;
+  grid-row: 2;
   color: var(--gray-light);
   font-weight: 300;
-  max-width: 520px;
-  margin: 0 auto 2.5rem;
-  line-height: 1.8;
+  max-width: 30rem;
+  margin: 0;
+  line-height: 1.75;
 }
 
 .cta-final-actions {
+  grid-column: 2;
+  grid-row: 1 / 3;
   display: flex;
-  gap: 1rem;
+  flex-direction: column;
+  gap: var(--s2);
+  align-items: stretch;
   justify-content: center;
-  flex-wrap: wrap;
+}
+
+.cta-final-actions a {
+  justify-content: center;
 }
 
 .cta-white {
@@ -1596,21 +1890,24 @@ section {
   right: 1.25rem;
   bottom: 1.25rem;
   z-index: 90;
-  width: 56px;
-  height: 56px;
+  width: 54px;
+  height: 54px;
   border-radius: 50%;
-  background: var(--zap);
+  background: var(--black);
   color: var(--white);
+  border: 1px solid var(--gold-fade);
   display: flex;
   align-items: center;
   justify-content: center;
-  box-shadow: 0 8px 28px rgba(0, 0, 0, 0.22);
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+  transition: transform 0.3s ease, background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease;
 }
 
 .zap-flutuante:hover {
-  transform: scale(1.08);
-  box-shadow: 0 12px 34px var(--zap-brilho-forte);
+  transform: scale(1.06);
+  background: var(--gold);
+  color: var(--black);
+  border-color: var(--gold);
 }
 
 .zap-flutuante svg {
@@ -1624,7 +1921,7 @@ section {
 footer {
   background: var(--black);
   color: var(--white);
-  padding: 3.5rem 2rem 2rem;
+  padding: var(--s6) var(--margem) var(--s4);
 }
 
 /* Duas colunas, não quatro. As colunas "Navegação" e "Modalidades"
@@ -1632,11 +1929,11 @@ footer {
    fixo, sempre à mão) e dos 8 cartões de modalidade. Rodapé de site
    de uma página só não é lugar de repetir o menu. */
 .footer-inner {
-  max-width: 1100px;
+  max-width: var(--medida);
   margin: 0 auto;
   display: grid;
   grid-template-columns: 1.4fr 1fr;
-  gap: 2.5rem 4rem;
+  gap: var(--s4) var(--s6);
   align-items: start;
 }
 
@@ -1701,9 +1998,9 @@ footer {
 }
 
 .footer-bottom {
-  max-width: 1100px;
-  margin: 2.5rem auto 0;
-  padding-top: 1.5rem;
+  max-width: var(--medida);
+  margin: var(--s5) auto 0;
+  padding-top: var(--s3);
   border-top: 1px solid rgba(255, 255, 255, 0.08);
   display: flex;
   justify-content: space-between;
@@ -1734,10 +2031,10 @@ footer {
   width: 38px;
   height: 38px;
   flex-shrink: 0;
-  border: 1px solid var(--tinta-fina);
+  border: 1px solid rgba(255, 255, 255, 0.3);
   border-radius: 50px;
-  background: rgba(255, 255, 255, 0.7);
-  color: var(--black);
+  background: transparent;
+  color: var(--white);
   cursor: pointer;
   transition: all 0.25s ease;
 }
@@ -1787,10 +2084,15 @@ body.menu-aberto .menu-btn .linhas {
     visibility: hidden;
   }
 
+  /* Dentro do painel branco a navegação deixa de ser versalete de mastro
+     e vira lista de leitura: caixa-baixa, corpo cheio, tinta escura. */
   .nav a {
     display: block;
     padding: 0.85rem 0;
     font-size: 1rem;
+    text-transform: none;
+    letter-spacing: 0.01em;
+    color: var(--dark);
     border-bottom: 1px solid var(--gray-subtle);
   }
 
@@ -1819,23 +2121,148 @@ body.menu-aberto .menu-btn .linhas {
   }
 }
 
-@media (max-width: 860px) {
+@media (max-width: 1080px) {
   .modalidades-grid {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
+    grid-template-columns: repeat(3, minmax(0, 1fr));
   }
 }
 
+/* Abaixo de 900px não cabem duas colunas de texto lado a lado sem que
+   uma delas vire uma coluna de jornal de três palavras. Todo par
+   título/apoio da página empilha aqui — e continua ALINHADO À ESQUERDA,
+   que é o ponto: o eixo não muda de tela para tela. */
+@media (max-width: 900px) {
+
+  .section-head,
+  .adultos-head,
+  .cta-final .section-inner {
+    grid-template-columns: minmax(0, 1fr);
+    gap: var(--s2);
+    align-items: start;
+  }
+
+  .adultos-head .section-title,
+  .adultos-head p,
+  .adultos-cta,
+  .cta-final h2,
+  .cta-final p,
+  .cta-final-actions {
+    grid-column: 1;
+  }
+
+  .adultos-head .section-title {
+    grid-row: auto;
+  }
+
+  .adultos-head p,
+  .adultos-cta,
+  .cta-final h2,
+  .cta-final p,
+  .cta-final-actions {
+    grid-row: auto;
+  }
+
+  .cta-final-actions {
+    margin-top: var(--s2);
+    align-items: flex-start;
+  }
+
+  .cta-final-actions a {
+    justify-content: flex-start;
+  }
+
+  .loc-wrapper {
+    gap: var(--s5);
+  }
+
+  .modalidades-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 0.6rem;
+  }
+
+  .exp-lista {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  /* Cartão deitado: o ícone sai de cima do nome e vai para o lado dele.
+     As quatro informações (ícone, nome, "N turmas", dias, e o selo de
+     adulto quando existe) são as mesmas — muda só a direção em que se
+     empilham. Vertical eram 214px por cartão; deitado, ~105px.
+     Isto valia só abaixo de 480px, e entre 480 e 900 o cartão em pé
+     ficava com 240px de altura para quatro linhas de texto: metade da
+     caixa era ar preso, porque a linha da grade estica todos os cartões
+     até o mais alto. Deitado a partir de 900 o ar some sozinho. */
+  .modalidade-item {
+    display: grid;
+    grid-template-columns: 30px minmax(0, 1fr);
+    grid-template-areas:
+      "ico nome"
+      "ico meta"
+      "tag tag";
+    justify-content: start;
+    align-content: center;
+    column-gap: 0.5rem;
+    row-gap: 0.1rem;
+    padding: 0.7rem 0.6rem;
+    text-align: left;
+  }
+
+  .modalidade-icon {
+    grid-area: ico;
+    align-self: center;
+    width: 30px;
+    height: 30px;
+  }
+
+  .modalidade-icon svg {
+    width: 17px;
+    height: 17px;
+  }
+
+  .modalidade-name {
+    grid-area: nome;
+    font-size: 0.9rem;
+    line-height: 1.25;
+  }
+
+  .modalidade-meta {
+    grid-area: meta;
+    font-size: 0.76rem;
+    line-height: 1.35;
+  }
+
+  .tag-adulto {
+    grid-area: tag;
+    justify-self: start;
+    margin-top: 0.25rem;
+    font-size: 0.6rem;
+    padding: 0.1rem 0.45rem;
+  }
+}
+
+
+
 @media (max-width: 768px) {
+
+  /* A margem da página encolhe REDEFININDO O TOKEN, e não espalhando
+     1.25rem por sete regras. Foi assim que a chapa da foto no tablet
+     acabou 20px fora do eixo do texto: dois números diferentes para a
+     mesma coisa. Um token só, e todo mundo encolhe junto. */
+  :root {
+    --margem: 1.25rem;
+  }
+
   html {
-    scroll-padding-top: 76px;
+    scroll-padding-top: 72px;
   }
 
   header {
-    padding: 1rem 1.5rem;
+    height: 64px;
+    padding: 0 var(--margem);
   }
 
   header.scrolled {
-    padding: 0.6rem 1.5rem;
+    height: 58px;
   }
 
   .header-cta span {
@@ -1855,25 +2282,26 @@ body.menu-aberto .menu-btn .linhas {
   }
 
   .hero-content {
-    margin-top: 2rem;
-    padding: 1.5rem 1.25rem;
+    margin-top: 0;
+    padding: 5.5rem var(--margem) var(--s4);
   }
 
   .hero-badge {
     font-size: 0.6rem;
-    letter-spacing: 0.12em;
+    letter-spacing: 0.16em;
     padding: 0.35rem 0.9rem;
-    margin-bottom: 1.5rem;
+    margin-bottom: var(--s3);
   }
 
   .hero-subtitle {
     line-height: 1.55;
-    margin-bottom: 1.4rem;
+    margin: 0 0 var(--s4);
   }
 
   .hero-actions {
     flex-direction: column;
-    gap: 0.75rem;
+    align-items: stretch;
+    gap: var(--s2);
   }
 
   .hero-cta,
@@ -1886,18 +2314,26 @@ body.menu-aberto .menu-btn .linhas {
   }
 
   section {
-    padding: 2.5rem 1.25rem;
-  }
-
-  /* O herói tinha 780px de caixa para 440px de conteúdo: 340px em que a
-     foto só empurrava a grade para baixo. A foto continua sendo a
-     primeira coisa; ela só para de cobrar aluguel. */
-  .hero {
-    min-height: 505px;
+    padding: var(--s5) var(--margem);
   }
 
   .hero h1 {
-    margin-bottom: 1rem;
+    margin-bottom: var(--s2);
+  }
+
+  /* No celular a folha SANGRA até as duas bordas da tela em vez de ser um
+     cartão com margem. Não é estilo: é largura. Emoldurada, a linha da
+     turma perdia 27px e "09:00–10:00 · Seg e Qua · 2× por semana" voltava
+     a quebrar em duas — vezes 54 linhas, 1.242px de página. Sangrando,
+     a linha ganha 5px em relação ao que tinha antes de existir folha
+     nenhuma, e nenhuma quebra volta. */
+  .grade-corpo {
+    margin: 0 calc(-1 * var(--margem));
+    padding: 0.2rem 1.1rem var(--s3);
+    border-radius: 0;
+    border-left: 0;
+    border-right: 0;
+    box-shadow: none;
   }
 
   /* No celular a barra quebra em três linhas (188px): grudada no
@@ -1919,7 +2355,7 @@ body.menu-aberto .menu-btn .linhas {
   }
 
   .modalidades-grid {
-    margin-top: 1.5rem;
+    margin-top: 0;
   }
 
   .grade-head {
@@ -1943,8 +2379,8 @@ body.menu-aberto .menu-btn .linhas {
   }
 
   .familia {
-    scroll-margin-top: 92px;
-    padding-top: 1.1rem;
+    scroll-margin-top: 76px;
+    padding-top: var(--s3);
   }
 
   .familia-titulo {
@@ -2008,8 +2444,17 @@ body.menu-aberto .menu-btn .linhas {
 
   .escola-head p,
   .adultos-head p {
-    text-align: left;
     font-size: 0.96rem;
+  }
+
+  .exp-lista {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .exp-acao {
+    flex-direction: column;
+    align-items: stretch;
+    gap: var(--s2);
   }
 
   .footer-col li {
@@ -2056,18 +2501,18 @@ body.menu-aberto .menu-btn .linhas {
      no celular, é caro; 200px mostram a mesma esquina. */
   .loc-map iframe {
     height: 200px;
+    min-height: 200px;
   }
 
   /* Coluna única: as seis caixas viram uma lista que se lê de cima para
      baixo. O ar entre elas encolhe porque o que separa duas respostas aqui
      é a moldura, não o vazio. */
   .exp-lista {
-    grid-template-columns: 1fr;
     gap: 0.5rem;
   }
 
   .exp-head {
-    margin-bottom: 1.3rem;
+    margin-bottom: var(--s3);
   }
 
   .exp-item {
@@ -2075,7 +2520,7 @@ body.menu-aberto .menu-btn .linhas {
   }
 
   .exp-acao {
-    margin-top: 1.4rem;
+    margin-top: var(--s3);
   }
 
   .exp-cta {
@@ -2095,7 +2540,7 @@ body.menu-aberto .menu-btn .linhas {
   }
 
   footer {
-    padding: 2.25rem 1.25rem 1.5rem;
+    padding: var(--s5) var(--margem) var(--s3);
   }
 
   .footer-bottom {
@@ -2103,35 +2548,32 @@ body.menu-aberto .menu-btn .linhas {
     padding-top: 1rem;
   }
 
+  /* Estas seis regras eram o resto do desenho antigo: no celular, TUDO
+     voltava para o meio — endereço, rodapé, botões. Um eixo que muda de
+     lugar quando a tela encolhe não é eixo. Fica o mesmo da esquerda. */
   .footer-inner {
     grid-template-columns: 1fr;
-    text-align: center;
-    gap: 1.5rem;
+    gap: var(--s4);
   }
 
   .footer-col ul {
     display: flex;
     flex-direction: column;
-    align-items: center;
+    align-items: flex-start;
   }
 
   .footer-bottom {
     flex-direction: column;
+    align-items: flex-start;
     gap: 0.5rem;
-    text-align: center;
   }
 
   .loc-btn {
-    margin: 0 auto;
+    margin: 0;
   }
 
   .loc-info {
-    text-align: center;
-    align-items: center;
-  }
-
-  .cta-final-actions {
-    flex-direction: column;
+    align-items: flex-start;
   }
 
   .cta-white,
@@ -2153,60 +2595,19 @@ body.menu-aberto .menu-btn .linhas {
   }
 }
 
-@media (max-width: 480px) {
-  .modalidades-grid {
-    gap: 0.6rem;
+/* Entre 620 e 768 há largura de sobra para os dois botões da dobra na
+   mesma linha; empilhados e esticados de borda a borda eles viravam duas
+   faixas do tamanho da tela. A regra mora DEPOIS do bloco de 768 porque
+   é ele que ela corrige. */
+@media (min-width: 620px) and (max-width: 768px) {
+  .hero-actions {
+    flex-direction: row;
+    align-items: center;
   }
 
-  /* Cartão deitado: o ícone sai de cima do nome e vai para o lado dele.
-     As quatro informações (ícone, nome, "N turmas", dias, e o selo de
-     adulto quando existe) são as mesmas — muda só a direção em que se
-     empilham. Vertical eram 214px por cartão; deitado, ~105px. */
-  .modalidade-item {
-    display: grid;
-    grid-template-columns: 30px minmax(0, 1fr);
-    grid-template-areas:
-      "ico nome"
-      "ico meta"
-      "tag tag";
-    justify-content: start;
-    align-content: center;
-    column-gap: 0.5rem;
-    row-gap: 0.1rem;
-    padding: 0.7rem 0.6rem;
-    text-align: left;
-  }
-
-  .modalidade-icon {
-    grid-area: ico;
-    align-self: center;
-    width: 30px;
-    height: 30px;
-  }
-
-  .modalidade-icon svg {
-    width: 17px;
-    height: 17px;
-  }
-
-  .modalidade-name {
-    grid-area: nome;
-    font-size: 0.9rem;
-    line-height: 1.25;
-  }
-
-  .modalidade-meta {
-    grid-area: meta;
-    font-size: 0.76rem;
-    line-height: 1.35;
-  }
-
-  .tag-adulto {
-    grid-area: tag;
-    justify-self: start;
-    margin-top: 0.25rem;
-    font-size: 0.6rem;
-    padding: 0.1rem 0.45rem;
+  .hero-cta,
+  .hero-cta-ghost {
+    width: auto;
   }
 }
 
@@ -2286,7 +2687,7 @@ body.menu-aberto .menu-btn .linhas {
         </a>
 
         <nav class="nav" id="nav" aria-label="Navegação principal">
-            <a href="#grade">Grade de horários</a>
+            <a href="#grade">Grade</a>
             <a href="#experimental">Aula experimental</a>
             <a href="#modalidades">Modalidades</a>
             <a href="#adultos">Adultos</a>
@@ -2368,9 +2769,9 @@ body.menu-aberto .menu-btn .linhas {
         ========================================== -->
         <section class="modalidades" id="modalidades">
             <div class="section-inner">
-                <div class="animate-on-scroll">
+                <div class="section-head animate-on-scroll">
                     <h2 class="section-title">Oito modalidades</h2>
-                    <p class="section-subtitle" style="margin:0 auto;">Cada cartão leva direto ao pedaço da grade
+                    <p class="section-subtitle">Cada cartão leva direto ao pedaço da grade
                         com as turmas dessa modalidade — dia e horário.</p>
                 </div>
 
@@ -2530,7 +2931,7 @@ body.menu-aberto .menu-btn .linhas {
         ========================================== -->
         <section class="grade" id="grade">
             <div class="section-inner">
-                <div class="grade-head animate-on-scroll">
+                <div class="grade-head section-head animate-on-scroll">
                     <h2 class="section-title">Todas as turmas, com dia e hora</h2>
                     <p class="section-subtitle">Esta é a grade que roda hoje na escola — as 54 turmas, o dia e o
                         horário. <strong>Toda aula tem 1 hora</strong>; as de dois dias na semana são 2× por semana,
@@ -2571,7 +2972,7 @@ body.menu-aberto .menu-btn .linhas {
                     Mostrando <b>54</b> de 54 turmas
                 </p>
 
-                <div id="gradeCorpo">
+                <div id="gradeCorpo" class="grade-corpo">
 <section class="familia" id="grade-ballet">
 <h3 class="familia-titulo">Ballet Clássico<span class="familia-conta">20 turmas · Seg a Sáb</span></h3>
 <ul class="turmas">
@@ -2707,7 +3108,7 @@ body.menu-aberto .menu-btn .linhas {
         ========================================== -->
         <section class="escola" id="escola">
             <div class="section-inner">
-                <div class="escola-head animate-on-scroll">
+                <div class="escola-head section-head section-head--alto animate-on-scroll">
                     <h2 class="section-title">O syllabus não é um selo.<br>É o nome das turmas.</h2>
                     <p>No ballet da Ballance ninguém fica na “turma da tarde”. Fica em um <strong>nível</strong> —
                         e em <strong>cinco dos oito degraus</strong> esse nível é o do syllabus da <strong>Royal
@@ -2806,7 +3207,7 @@ aria-label="Níveis de ballet na grade, do primeiro contato ao avançado">
              resposta é não, e o verificador reprova a página se um preço aparecer. -->
         <section class="experimental" id="experimental">
             <div class="section-inner">
-                <div class="exp-head animate-on-scroll">
+                <div class="exp-head section-head animate-on-scroll">
                     <h2 class="section-title">Antes de decidir, você faz a aula.</h2>
                     <p class="section-subtitle">Vale para qualquer uma das 54 turmas da grade — você
                         escolhe qual.</p>
